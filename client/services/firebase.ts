@@ -312,7 +312,7 @@ export class SettingsService {
   static async updateSettings(settings: AppSettings): Promise<void> {
     try {
       const docRef = doc(settingsCollection, "app");
-      await updateDoc(docRef, settings);
+      await updateDoc(docRef, { ...settings });
     } catch (error: any) {
       throw new Error(`Failed to update settings: ${error.message}`);
     }
