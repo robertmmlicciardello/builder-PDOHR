@@ -79,8 +79,8 @@ export class EncryptionService {
         derivedKey,
         {
           iv: iv,
-          mode: CryptoJS.mode.GCM,
-          padding: CryptoJS.pad.NoPadding,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7,
         },
       );
 
