@@ -253,11 +253,36 @@ export class PersonnelService {
   }
 }
 
+// Helper function to sanitize data for Firestore (remove undefined values)
+function sanitizeForFirestore(obj: any): any {
+  if (obj === null || obj === undefined) {
+    return null;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizeForFirestore);
+  }
+
+  if (typeof obj === "object") {
+    const sanitized: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      if (value !== undefined) {
+        sanitized[key] = sanitizeForFirestore(value);
+      }
+    }
+    return sanitized;
+  }
+
+  return obj;
+}
+
 // Audit logging service
 export class AuditService {
   static async logAction(auditLog: Omit<AuditLog, "id">): Promise<void> {
     try {
-      await addDoc(auditLogsCollection, auditLog);
+      // Sanitize the audit log data to remove undefined values
+      const sanitizedAuditLog = sanitizeForFirestore(auditLog);
+      await addDoc(auditLogsCollection, sanitizedAuditLog);
     } catch (error: any) {
       console.error("Failed to log audit action:", error);
       // Don't throw error for audit logging to avoid blocking main operations
