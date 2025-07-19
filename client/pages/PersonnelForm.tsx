@@ -50,6 +50,8 @@ export default function PersonnelForm() {
             ? existing.dateOfLeaving.split("T")[0]
             : "",
           assignedDuties: existing.assignedDuties,
+          status: existing.status,
+          organization: existing.organization,
         });
       } else {
         navigate("/dashboard");
