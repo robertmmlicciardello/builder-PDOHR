@@ -43,40 +43,39 @@ export default function Login() {
             <div className="text-white text-3xl font-bold">✊</div>
           </div>
           <h1 className="text-3xl font-bold text-myanmar-black mb-2">
-            PDF-Tech
+            {translations.appName}
           </h1>
-          <p className="text-myanmar-gray-dark">
-            People's Defence Force Technology Workshop
-          </p>
+          <p className="text-myanmar-gray-dark">{translations.subtitle}</p>
         </div>
 
         <Card className="border-myanmar-red/20">
           <CardHeader className="text-center pb-4">
             <h2 className="text-xl font-semibold text-myanmar-black">
-              Personnel Management System
+              {translations.personnel.personnelManagement}
             </h2>
             <p className="text-sm text-myanmar-gray-dark">
-              Secure access required
+              {translations.auth.secureAccess}
             </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-myanmar-black">
-                  Username
+                <Label htmlFor="email" className="text-myanmar-black">
+                  အီးမေးလ်လိပ်စာ
                 </Label>
                 <Input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="border-myanmar-red/30 focus:border-myanmar-red"
+                  placeholder="admin@pdf.gov.mm"
                   required
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-myanmar-black">
-                  Password
+                  {translations.auth.password}
                 </Label>
                 <Input
                   id="password"
@@ -84,6 +83,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="border-myanmar-red/30 focus:border-myanmar-red"
+                  placeholder="စကားဝှက်"
                   required
                 />
               </div>
@@ -101,13 +101,18 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full bg-myanmar-red hover:bg-myanmar-red-dark text-white"
               >
-                {isLoading ? "Signing in..." : "Sign In"}
+                {isLoading
+                  ? translations.common.loading
+                  : translations.auth.signIn}
               </Button>
             </form>
 
             <div className="mt-6 pt-4 border-t border-myanmar-red/20">
               <p className="text-xs text-myanmar-gray-dark text-center">
-                Demo credentials: admin / pdf2024
+                စီမံခန့်ခွဲသူ: admin@pdf.gov.mm / pdf2024
+              </p>
+              <p className="text-xs text-myanmar-gray-dark text-center mt-1">
+                အသုံးပြုသူ: user@pdf.gov.mm / user2024
               </p>
             </div>
           </CardContent>
