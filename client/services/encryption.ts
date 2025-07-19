@@ -3,7 +3,7 @@ import { ENCRYPTION_CONFIG } from "@shared/personnel";
 
 // Encryption key should be stored securely in environment variables
 const ENCRYPTION_KEY =
-  process.env.REACT_APP_ENCRYPTION_KEY || "default-key-change-this";
+  import.meta.env.VITE_ENCRYPTION_KEY || "default-key-change-this";
 
 export class EncryptionService {
   private static key = CryptoJS.SHA256(ENCRYPTION_KEY);
