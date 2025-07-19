@@ -30,6 +30,8 @@ export default function PersonnelForm() {
     dateOfJoining: "",
     dateOfLeaving: "",
     assignedDuties: "",
+    status: "active",
+    organization: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
