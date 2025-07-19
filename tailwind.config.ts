@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        myanmar: {
+          red: "#dc2626",
+          black: "#000000",
+          white: "#ffffff",
+          "red-dark": "#b91c1c",
+          "gray-dark": "#1f2937",
+          "gray-light": "#f3f4f6",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
