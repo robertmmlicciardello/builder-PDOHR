@@ -69,9 +69,13 @@ export default function Settings() {
   const [isAddingOrg, setIsAddingOrg] = useState(false);
 
   const [rankForm, setRankForm] = useState({ name: "", order: 1 });
-  const [orgForm, setOrgForm] = useState({
+  const [orgForm, setOrgForm] = useState<{
+    name: string;
+    type: OrganizationType;
+    parentId: string;
+  }>({
     name: "",
-    type: "headquarters" as const,
+    type: "headquarters",
     parentId: "",
   });
 
@@ -464,7 +468,7 @@ export default function Settings() {
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="org-name">အဖွဲ့အစည်းအမည်</Label>
+                        <Label htmlFor="org-name">���ဖွဲ့အစည်းအမည်</Label>
                         <Input
                           id="org-name"
                           value={orgForm.name}
