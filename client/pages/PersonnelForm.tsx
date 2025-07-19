@@ -240,9 +240,9 @@ export default function PersonnelForm() {
                       <SelectValue placeholder="Select rank" />
                     </SelectTrigger>
                     <SelectContent>
-                      {RANKS.map((rank) => (
-                        <SelectItem key={rank} value={rank}>
-                          {rank}
+                      {DEFAULT_RANKS.map((rank) => (
+                        <SelectItem key={rank.name} value={rank.name}>
+                          {rank.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
