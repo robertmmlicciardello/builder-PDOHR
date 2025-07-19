@@ -27,8 +27,8 @@ export class EncryptionService {
       // Encrypt the data
       const encrypted = CryptoJS.AES.encrypt(plaintext, derivedKey, {
         iv: iv,
-        mode: CryptoJS.mode.GCM,
-        padding: CryptoJS.pad.NoPadding,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
       });
 
       // Combine salt, iv, and encrypted data
