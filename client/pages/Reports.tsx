@@ -52,11 +52,34 @@ export default function Reports() {
       {} as Record<string, number>,
     );
 
+    const byOrganization = state.personnel.reduce(
+      (acc, person) => {
+        if (!person.dateOfLeaving) {
+          // Only count active personnel
+          acc[person.organization] = (acc[person.organization] || 0) + 1;
+        }
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+    const activeMembers = activePersonnel.length;
+    const resignedMembers = state.personnel.filter(
+      (p) => p.status === "resigned",
+    ).length;
+    const deceasedMembers = state.personnel.filter(
+      (p) => p.status === "deceased",
+    ).length;
+
     return {
       totalMembers: state.personnel.length,
+      activeMembers,
+      resignedMembers,
+      deceasedMembers,
       newEntries,
       resignations,
       byRank,
+      byOrganization,
       dateGenerated: now.toISOString(),
     };
   }, [state.personnel]);
