@@ -120,7 +120,7 @@ export default function Login() {
 
         <div className="mt-8 text-center">
           <p className="text-xs text-myanmar-gray-dark">
-            Authorized personnel only. All activities are monitored and logged.
+            {translations.auth.monitoring}
           </p>
         </div>
       </div>
