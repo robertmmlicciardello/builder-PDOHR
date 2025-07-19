@@ -9,7 +9,7 @@ import { Card, CardHeader, CardContent } from "../components/ui/card";
 import { Alert, AlertDescription } from "../components/ui/alert";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,14 +22,14 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const success = await login(username, password);
+      const success = await login(email, password);
       if (success) {
         navigate("/dashboard");
       } else {
-        setError("Invalid credentials. Use admin/pdf2024");
+        setError(translations.auth.invalidCredentials);
       }
     } catch (err) {
-      setError("Login failed. Please try again.");
+      setError(translations.messages.error);
     } finally {
       setIsLoading(false);
     }
