@@ -265,7 +265,7 @@ export class AuditService {
   }
 
   static async getAuditLogs(
-    limit: number = 100,
+    limitCount: number = 100,
     lastDoc?: DocumentSnapshot,
   ): Promise<PaginatedResult<AuditLog>> {
     try {
@@ -274,7 +274,7 @@ export class AuditService {
       if (lastDoc) {
         q = query(q, startAfter(lastDoc));
       }
-      q = query(q, limit(limit));
+      q = query(q, limit(limitCount));
 
       const snapshot = await getDocs(q);
       const data = snapshot.docs.map(
