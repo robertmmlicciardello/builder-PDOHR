@@ -191,7 +191,7 @@ export class PersonnelService {
         data: filteredData,
         lastDoc: snapshot.docs[snapshot.docs.length - 1] || null,
         hasMore: snapshot.docs.length === pageSize,
-        total: filteredData.length, // This would need a separate count query for accuracy
+        total: filteredData.length,
       };
     } catch (error: any) {
       throw new Error(`Failed to fetch personnel: ${error.message}`);
