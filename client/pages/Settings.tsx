@@ -4,6 +4,7 @@ import { useApp } from "../context/AppContext";
 import {
   Rank,
   Organization,
+  OrganizationType,
   DEFAULT_RANKS,
   DEFAULT_ORGANIZATIONS,
 } from "@shared/personnel";
@@ -468,7 +469,7 @@ export default function Settings() {
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="org-name">���ဖွဲ့အစည်းအမည်</Label>
+                        <Label htmlFor="org-name">အဖွဲ့အစည်းအမည်</Label>
                         <Input
                           id="org-name"
                           value={orgForm.name}
