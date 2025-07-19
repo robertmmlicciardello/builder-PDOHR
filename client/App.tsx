@@ -37,70 +37,70 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-const AppContent = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <PublicRoute>
-            <Navigate to="/login" replace />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/add-personnel"
-        element={
-          <ProtectedRoute>
-            <PersonnelForm />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/edit-personnel/:id"
-        element={
-          <ProtectedRoute>
-            <PersonnelForm />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/reports"
-        element={
-          <ProtectedRoute>
-            <Reports />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+const AppRoutes = () => (
+  <Routes>
+    <Route
+      path="/"
+      element={
+        <PublicRoute>
+          <Navigate to="/login" replace />
+        </PublicRoute>
+      }
+    />
+    <Route
+      path="/login"
+      element={
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      }
+    />
+    <Route
+      path="/dashboard"
+      element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/add-personnel"
+      element={
+        <ProtectedRoute>
+          <PersonnelForm />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/edit-personnel/:id"
+      element={
+        <ProtectedRoute>
+          <PersonnelForm />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/reports"
+      element={
+        <ProtectedRoute>
+          <Reports />
+        </ProtectedRoute>
+      }
+    />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
 );
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AppProvider>
-        <Toaster />
-        <Sonner />
-        <AppContent />
-      </AppProvider>
+      <BrowserRouter>
+        <AppProvider>
+          <Toaster />
+          <Sonner />
+          <AppRoutes />
+        </AppProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
