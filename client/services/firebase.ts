@@ -228,7 +228,8 @@ export class PersonnelService {
   ): Promise<void> {
     try {
       const docRef = doc(personnelCollection, id);
-      await updateDoc(docRef, personnel);
+      const sanitizedPersonnel = sanitizeForFirestore(personnel);
+      await updateDoc(docRef, sanitizedPersonnel);
     } catch (error: any) {
       throw new Error(`Failed to update personnel: ${error.message}`);
     }
