@@ -214,7 +214,8 @@ export class PersonnelService {
 
   static async addPersonnel(personnel: Omit<Personnel, "id">): Promise<string> {
     try {
-      const docRef = await addDoc(personnelCollection, personnel);
+      const sanitizedPersonnel = sanitizeForFirestore(personnel);
+      const docRef = await addDoc(personnelCollection, sanitizedPersonnel);
       return docRef.id;
     } catch (error: any) {
       throw new Error(`Failed to add personnel: ${error.message}`);
