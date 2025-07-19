@@ -284,7 +284,7 @@ export class AuditService {
       return {
         data,
         lastDoc: snapshot.docs[snapshot.docs.length - 1] || null,
-        hasMore: snapshot.docs.length === limit,
+        hasMore: snapshot.docs.length === limitCount,
         total: data.length,
       };
     } catch (error: any) {
