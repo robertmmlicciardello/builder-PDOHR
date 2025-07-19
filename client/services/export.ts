@@ -3,6 +3,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import {
   Personnel,
+  PersonnelFormData,
   PersonnelReport,
   PersonnelFilters,
 } from "@shared/personnel";
