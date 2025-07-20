@@ -713,7 +713,7 @@ export const PositionManagement: React.FC = () => {
                     <SelectValue placeholder="Select position" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
                     {positions
                       .filter((p) => p.id !== editingPosition?.id)
                       .map((position) => (
