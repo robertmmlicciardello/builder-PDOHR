@@ -94,7 +94,7 @@ interface TransactionFormData {
   descriptionMyanmar: string;
   source?: string;
   sourceMyanmar?: string;
-  expenseCategory?: string; // For expenses
+  outcomeCategory?: string; // For outcomes
   dateReceived: string;
   receivedBy: string;
   categoryId?: string; // For income with predefined categories
