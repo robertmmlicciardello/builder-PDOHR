@@ -241,7 +241,7 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    စုစုပေါင်း ဝန်ထမ်းများ
+                    {t.personnel.totalPersonnel}
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.totalEmployees}
@@ -334,7 +334,7 @@ export default function HRDashboard() {
               <div className="flex items-center space-x-2">
                 <AlertTriangle className="w-5 h-5 text-orange-600" />
                 <h3 className="font-semibold text-orange-800">
-                  လပ်ရက်အတည်ပြုရန်
+                  လပ်ရက်အတည်ပ��ုရန်
                 </h3>
               </div>
             </CardHeader>
@@ -395,7 +395,7 @@ export default function HRDashboard() {
               </p>
               <p className="text-sm text-blue-600">ယ���ုလအတွင်း</p>
               <Button size="sm" className="mt-2 bg-blue-600 hover:bg-blue-700">
-                စာရင်းကြည့်ရှုရန်
+                ���ာရင်းကြည့်ရှုရန်
               </Button>
             </CardContent>
           </Card>
@@ -488,7 +488,7 @@ export default function HRDashboard() {
             <Card className="border-myanmar-red/20">
               <CardHeader>
                 <h3 className="text-lg font-semibold">
-                  လ��်ရှိမှု အသေးစိတ်ခွဲခြမ်းစိတ်ဖြာမှု
+                  လ��်���ှိမှု အသေးစိတ်ခွဲခြမ်းစိတ်ဖြာမှု
                 </h3>
               </CardHeader>
               <CardContent>
@@ -539,7 +539,7 @@ export default function HRDashboard() {
             <Card className="border-myanmar-red/20">
               <CardHeader>
                 <h3 className="text-lg font-semibold">
-                  အ��ုပ်ခန့်ထားမှု နှင့် ထွက်ခွာမှု ခွဲခြမ်းစိတ်ဖြာမှု
+                  အ�����ပ်ခန့်ထားမှု နှင့် ထွက်ခွာမှု ခွဲခြမ်းစိတ်ဖြာမှု
                 </h3>
               </CardHeader>
               <CardContent>
@@ -740,7 +740,7 @@ export default function HRDashboard() {
                   className="w-full border-myanmar-red text-myanmar-red"
                 >
                   <DollarSign className="w-4 h-4 mr-2" />
-                  လစာစာရင်းများ
+                  လစာစာရင်းမျာ���
                 </Button>
               </Link>
             </div>
