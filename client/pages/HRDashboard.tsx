@@ -246,6 +246,16 @@ export default function HRDashboard() {
                   {t.hr.performance}
                 </Button>
               </Link>
+              <Link to="/income-management">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-myanmar-red text-myanmar-red"
+                >
+                  <DollarSign className="w-4 h-4 mr-2" />
+                  Income Management
+                </Button>
+              </Link>
               <Link to="/admin-settings">
                 <Button
                   variant="outline"
@@ -430,7 +440,7 @@ export default function HRDashboard() {
                 {dashboardStats.overdueReviews}
               </p>
               <p className="text-sm text-red-600">
-                လုပ်ငန်းစ���မ်းရ���် သုံး���ပ်ချက်များ
+                လုပ်ငန်းစွမ်းရ���် သုံး���ပ်ချက်များ
               </p>
               <Link to="/performance">
                 <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
