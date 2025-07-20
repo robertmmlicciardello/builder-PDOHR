@@ -30,6 +30,10 @@ export interface Employee extends Personnel {
   // Status and Tracking
   workStatus: WorkStatus;
   lastWorkingDay?: string;
+  terminationDate?: string;
+  terminationReason?: TerminationReason;
+  terminationNotes?: string;
+  exitInterviewCompleted?: boolean;
   rehirable: boolean;
 
   // HR Specific Fields
@@ -392,8 +396,22 @@ export type WorkStatus =
   | "active"
   | "inactive"
   | "terminated"
+  | "resigned"
+  | "deceased"
   | "on-leave"
   | "suspended";
+
+export type TerminationReason =
+  | "voluntary-resignation"
+  | "involuntary-termination"
+  | "retirement"
+  | "end-of-contract"
+  | "death"
+  | "abandonment"
+  | "disciplinary"
+  | "performance"
+  | "redundancy"
+  | "other";
 export type OnboardingStatus =
   | "pending"
   | "in-progress"
