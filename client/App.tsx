@@ -147,6 +147,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/personnel-list"
+      element={
+        <ProtectedRoute>
+          <PersonnelList />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/add-personnel"
       element={
         <ProtectedRoute>
