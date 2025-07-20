@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useLanguage, useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
 import {
   HRMetrics,
   AttendanceRecord,
@@ -82,6 +83,7 @@ export default function HRDashboard() {
   const { state } = useApp();
   const { currentLanguage } = useLanguage();
   const t = useTranslation();
+  const { customization, getText } = useDashboardCustomization();
   const [selectedPeriod, setSelectedPeriod] = useState("thisMonth");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
 
@@ -183,14 +185,32 @@ export default function HRDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-myanmar-red rounded-lg flex items-center justify-center">
-                <span className="text-white text-xl font-bold">✊</span>
+                {customization.logoUrl ? (
+                  <img
+                    src={customization.logoUrl}
+                    alt="Logo"
+                    className="w-8 h-8 object-contain"
+                  />
+                ) : (
+                  <span className="text-white text-xl font-bold">
+                    {customization.logoEmoji}
+                  </span>
+                )}
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-myanmar-black">
-                  {t.hr.dashboard}
+                  {getText(
+                    "dashboardTitle",
+                    "dashboardTitleMyanmar",
+                    currentLanguage,
+                  )}
                 </h1>
                 <p className="text-sm text-myanmar-gray-dark">
-                  {t.personnel.personnelManagement}
+                  {getText(
+                    "dashboardSubtitle",
+                    "dashboardSubtitleMyanmar",
+                    currentLanguage,
+                  )}
                 </p>
               </div>
             </div>
@@ -213,6 +233,16 @@ export default function HRDashboard() {
                 >
                   <Building className="w-4 h-4 mr-2" />
                   {t.settings.manageDepartments}
+                </Button>
+              </Link>
+              <Link to="/admin-settings">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-myanmar-red text-myanmar-red"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Admin Settings
                 </Button>
               </Link>
               <Button
@@ -251,7 +281,11 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    {t.personnel.totalPersonnel}
+                    {getText(
+                      "totalPersonnelLabel",
+                      "totalPersonnelLabelMyanmar",
+                      currentLanguage,
+                    )}
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.totalEmployees}
@@ -276,7 +310,11 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    {t.personnel.activePersonnel}
+                    {getText(
+                      "activePersonnelLabel",
+                      "activePersonnelLabelMyanmar",
+                      currentLanguage,
+                    )}
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.activeEmployees}
@@ -461,7 +499,7 @@ export default function HRDashboard() {
                 <CardHeader>
                   <h3 className="text-lg font-semibold flex items-center">
                     <PieChartIcon className="w-5 h-5 mr-2 text-myanmar-red" />
-                    ဌာနအလိုက် ဝန်ထမ်းဖြန့်ဝ�����မှု
+                    ဌာနအလိုက် ဝန်ထမ်းဖြန့်ဝ���မှု
                   </h3>
                 </CardHeader>
                 <CardContent>
@@ -597,7 +635,7 @@ export default function HRDashboard() {
                         className="h-2"
                       />
                       <div className="flex justify-between text-xs text-myanmar-gray-dark">
-                        <span>ပျမ်းမျှ အသက်: 32 နှစ်</span>
+                        <span>ပျမ်းမျှ အ���က်: 32 နှစ်</span>
                         <span>ပျမ်းမျှ အတွေ့အကြုံ: 5 နှစ်</span>
                       </div>
                     </div>
