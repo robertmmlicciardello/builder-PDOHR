@@ -4,6 +4,7 @@ import { useApp } from "../context/AppContext";
 import { useLanguage, useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { DatabaseStatus } from "../components/DatabaseStatus";
+import { IncomeSummaryWidget } from "../components/IncomeSummaryWidget";
 import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
 import {
   HRMetrics,
@@ -601,7 +602,7 @@ export default function HRDashboard() {
                       dataKey="attendance"
                       stroke="#dc2626"
                       strokeWidth={3}
-                      name="လက်ရှိမှုနှုန်း %"
+                      name="လက်ရှ��မှုနှုန်း %"
                     />
                   </LineChart>
                 </ResponsiveContainer>
