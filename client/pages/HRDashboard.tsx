@@ -187,21 +187,31 @@ export default function HRDashboard() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-myanmar-black">
-                  HR မန်နေဂျာမင့် စနစ်
+                  {t.hr.dashboard}
                 </h1>
                 <p className="text-sm text-myanmar-gray-dark">
-                  ပြည့်စုံတဲ့ လူ့စွမ်းအားရင်းမြစ် စီမံခန့်ခွဲမှုစနစ်
+                  {t.personnel.personnelManagement}
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link to="/position-management">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-myanmar-red text-myanmar-red"
+                >
+                  <Briefcase className="w-4 h-4 mr-2" />
+                  {t.positions.management}
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="sm"
                 className="border-myanmar-red text-myanmar-red"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Refresh
+                {t.actions.generate}
               </Button>
               <Button
                 variant="outline"
@@ -209,8 +219,9 @@ export default function HRDashboard() {
                 className="border-myanmar-red text-myanmar-red"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Export
+                {t.actions.export}
               </Button>
+              <LanguageSwitcher />
               <div className="relative">
                 <Bell className="w-6 h-6 text-myanmar-red cursor-pointer" />
                 <span className="absolute -top-1 -right-1 bg-myanmar-red text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
@@ -281,7 +292,7 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    ပျမ်းမျှ လက်ရှိမှုနှုန်း
+                    ပျမ်းမျှ လက်ရှိမှုနှုန���း
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.averageAttendance}%
@@ -599,7 +610,7 @@ export default function HRDashboard() {
                   <div className="space-y-4">
                     {[
                       {
-                        rating: "5 ⭐ (ထူးခြား)",
+                        rating: "5 ⭐ (ထူးခ���ား)",
                         count: 8,
                         color: "bg-green-500",
                       },
@@ -691,7 +702,7 @@ export default function HRDashboard() {
           <CardHeader>
             <h3 className="text-lg font-semibold flex items-center">
               <Settings className="w-5 h-5 mr-2 text-myanmar-red" />
-              မြန်ဆန်သော လုပ်ဆောင်ချက်များ
+              မြန်ဆန်သော လုပ်ဆေ���င်ချက်များ
             </h3>
           </CardHeader>
           <CardContent>
