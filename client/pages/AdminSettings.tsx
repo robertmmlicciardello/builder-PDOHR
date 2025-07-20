@@ -8,7 +8,9 @@ import {
   Palette,
   Type,
   Image,
+  ArrowLeft,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
@@ -133,7 +135,7 @@ const defaultCustomization: DashboardCustomization = {
   activePersonnelLabel: "Active Personnel",
   activePersonnelLabelMyanmar: "လက်ရှိ အလုပ်လုပ်နေသူများ",
   averageAttendanceLabel: "Average Attendance",
-  averageAttendanceLabelMyanmar: "ပျမ်းမျှ လက်ရှိမှုနှုန်း",
+  averageAttendanceLabelMyanmar: "ပျမ်းမျှ လက်���ှိမှုနှုန်း",
   totalPayrollLabel: "Total Payroll",
   totalPayrollLabelMyanmar: "လစာစုစုပေါင်း",
 
@@ -281,11 +283,21 @@ export const AdminSettings: React.FC = () => {
       <div className="container mx-auto p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">Admin Settings</h1>
-            <p className="text-gray-600 mt-1">
-              Customize dashboard appearance and content
-            </p>
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to Dashboard
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">
+                Admin Settings
+              </h1>
+              <p className="text-gray-600 mt-1">
+                Customize dashboard appearance and content
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <LanguageSwitcher />
@@ -529,7 +541,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="စုစုပေါင်း ဝန်ထမ်းများ"
+                      placeholder="စုစု��ေါင်း ဝန်ထမ်းများ"
                     />
                   </div>
                 </div>
@@ -673,7 +685,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="လပ်ရက်အတည်ပြုရ��်"
+                      placeholder="လပ်ရက်အတည်ပြုရန်"
                     />
                   </div>
                 </div>
