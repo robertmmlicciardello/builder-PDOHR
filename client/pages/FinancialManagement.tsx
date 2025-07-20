@@ -269,7 +269,7 @@ export default function FinancialManagement() {
         descriptionMyanmar: formData.descriptionMyanmar,
         source: formData.source,
         sourceMyanmar: formData.sourceMyanmar,
-        expenseCategory: formData.expenseCategory,
+        outcomeCategory: formData.outcomeCategory,
         dateReceived: formData.dateReceived,
         receivedBy: formData.receivedBy,
         category: selectedCategory,
