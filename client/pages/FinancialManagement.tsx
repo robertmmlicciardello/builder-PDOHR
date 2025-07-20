@@ -467,7 +467,7 @@ export default function FinancialManagement() {
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="income">Income</SelectItem>
-                  <SelectItem value="expense">Expense</SelectItem>
+                  <SelectItem value="outcome">Outcome</SelectItem>
                 </SelectContent>
               </Select>
 
