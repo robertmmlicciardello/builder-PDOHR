@@ -263,6 +263,16 @@ export default function HRDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Link to="/personnel-list">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-myanmar-red text-myanmar-red"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Personnel List
+                </Button>
+              </Link>
               <Link to="/position-management">
                 <Button
                   variant="outline"
@@ -567,7 +577,7 @@ export default function HRDashboard() {
               <div className="flex items-center space-x-2">
                 <Heart className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold text-blue-800">
-                  မွေးနေ့များ လာမည်
+                  မွေးနေ့များ လာ��ည်
                 </h3>
               </div>
             </CardHeader>
@@ -796,7 +806,7 @@ export default function HRDashboard() {
                   <div className="space-y-4">
                     {[
                       {
-                        rating: "5 ⭐ (ထူးခ���ား)",
+                        rating: "5 ⭐ (ထ���းခ���ား)",
                         count: 8,
                         color: "bg-green-500",
                       },
