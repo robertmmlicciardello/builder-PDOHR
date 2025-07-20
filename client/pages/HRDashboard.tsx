@@ -465,7 +465,11 @@ export default function HRDashboard() {
                 <CardHeader>
                   <h3 className="text-lg font-semibold flex items-center">
                     <BarChart3 className="w-5 h-5 mr-2 text-myanmar-red" />
-                    လစဉ် လက်ရှိမှုနှုန်း
+                    {getText(
+                      "monthlyAttendanceChartTitle",
+                      "monthlyAttendanceChartTitleMyanmar",
+                      currentLanguage,
+                    )}
                   </h3>
                 </CardHeader>
                 <CardContent>
@@ -750,7 +754,7 @@ export default function HRDashboard() {
           <CardHeader>
             <h3 className="text-lg font-semibold flex items-center">
               <Settings className="w-5 h-5 mr-2 text-myanmar-red" />
-              မြန်ဆန်သော လုပ်ဆေ���င်ချက်များ
+              မြန်ဆန်��ော လုပ်ဆေ���င်ချက်များ
             </h3>
           </CardHeader>
           <CardContent>
