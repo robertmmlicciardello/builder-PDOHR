@@ -577,7 +577,7 @@ export default function HRDashboard() {
               <div className="flex items-center space-x-2">
                 <Heart className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold text-blue-800">
-                  မွေးနေ့များ လာ��ည်
+                  ��ွေးနေ့များ လာ��ည်
                 </h3>
               </div>
             </CardHeader>
@@ -592,6 +592,56 @@ export default function HRDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Quick Actions */}
+        <Card className="border-myanmar-red/20 mb-8">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-myanmar-black flex items-center">
+              <UserPlus className="w-5 h-5 text-myanmar-red mr-2" />
+              Quick Actions
+            </h3>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Link to="/personnel-list">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Users className="w-6 h-6" />
+                  <span className="text-sm font-medium">View Personnel</span>
+                </Button>
+              </Link>
+              <Link to="/add-personnel">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <UserPlus className="w-6 h-6" />
+                  <span className="text-sm font-medium">Add Personnel</span>
+                </Button>
+              </Link>
+              <Link to="/attendance">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Clock className="w-6 h-6" />
+                  <span className="text-sm font-medium">Attendance</span>
+                </Button>
+              </Link>
+              <Link to="/admin-settings">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Settings className="w-6 h-6" />
+                  <span className="text-sm font-medium">Settings</span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Charts and Analytics */}
         <Tabs defaultValue="overview" className="space-y-6">
