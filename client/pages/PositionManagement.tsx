@@ -340,7 +340,7 @@ export const PositionManagement: React.FC = () => {
       titleMyanmar: position.titleMyanmar,
       departmentId: position.departmentId,
       level: position.level,
-      reportsTo: position.reportsTo || "",
+      reportsTo: position.reportsTo || "none",
       responsibilities: position.responsibilities,
       requirements: position.requirements,
       salaryRange: position.salaryRange,
