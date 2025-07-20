@@ -750,7 +750,7 @@ export default function HRDashboard() {
                     <Progress value={(78 / 95) * 100} className="h-2" />
 
                     <div className="flex justify-between items-center">
-                      <span>လက်ရှိ လေ့ကျင့်နေသူများ</span>
+                      <span>လ���်ရှိ လေ့ကျင့်နေသူများ</span>
                       <Badge className="bg-blue-100 text-blue-800">12</Badge>
                     </div>
 
@@ -770,60 +770,65 @@ export default function HRDashboard() {
               </Card>
             </div>
           </TabsContent>
-                </Tabs>
+        </Tabs>
 
         {/* Income Summary */}
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            {/* Quick Actions */}
-        <Card className="border-myanmar-red/20 mt-8">
-          <CardHeader>
-            <h3 className="text-lg font-semibold flex items-center">
-              <Settings className="w-5 h-5 mr-2 text-myanmar-red" />
-              မြန်ဆန်သော လုပ်ဆေ���င်ချက်များ
-            </h3>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link to="/add-personnel">
-                <Button className="w-full bg-myanmar-red hover:bg-myanmar-red-dark">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  ဝန်ထမ်းအသစ်ထည့်ရန်
-                </Button>
-              </Link>
+            <Card className="border-myanmar-red/20">
+              <CardHeader>
+                <h3 className="text-lg font-semibold flex items-center">
+                  <Settings className="w-5 h-5 mr-2 text-myanmar-red" />
+                  မြန်ဆန်သော လုပ်ဆေ���င်ချက်များ
+                </h3>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Link to="/add-personnel">
+                    <Button className="w-full bg-myanmar-red hover:bg-myanmar-red-dark">
+                      <UserPlus className="w-4 h-4 mr-2" />
+                      ဝန်ထမ်းအသစ်ထည့်ရန်
+                    </Button>
+                  </Link>
 
-              <Link to="/attendance">
-                <Button
-                  variant="outline"
-                  className="w-full border-myanmar-red text-myanmar-red"
-                >
-                  <Clock className="w-4 h-4 mr-2" />
-                  လက်ရှိမှုမှတ်တမ်း
-                </Button>
-              </Link>
+                  <Link to="/attendance">
+                    <Button
+                      variant="outline"
+                      className="w-full border-myanmar-red text-myanmar-red"
+                    >
+                      <Clock className="w-4 h-4 mr-2" />
+                      လက်ရှိမှုမှတ်တမ်း
+                    </Button>
+                  </Link>
 
-              <Link to="/leave-management">
-                <Button
-                  variant="outline"
-                  className="w-full border-myanmar-red text-myanmar-red"
-                >
-                  <Calendar className="w-4 h-4 mr-2" />
-                  လပ်ရက်စီမံခန့်ခွဲမှု
-                </Button>
-              </Link>
+                  <Link to="/leave-management">
+                    <Button
+                      variant="outline"
+                      className="w-full border-myanmar-red text-myanmar-red"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      လပ်ရက်စီမံခန့်ခွဲမှု
+                    </Button>
+                  </Link>
 
-              <Link to="/payroll">
-                <Button
-                  variant="outline"
-                  className="w-full border-myanmar-red text-myanmar-red"
-                >
-                  <DollarSign className="w-4 h-4 mr-2" />
-                  လစာစာရင်းများ
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+                  <Link to="/income-management">
+                    <Button
+                      variant="outline"
+                      className="w-full border-myanmar-red text-myanmar-red"
+                    >
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Income Management
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div>
+            <IncomeSummaryWidget />
+          </div>
+        </div>
       </div>
     </div>
   );
