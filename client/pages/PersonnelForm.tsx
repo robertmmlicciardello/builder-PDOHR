@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { PersonnelFormData, DEFAULT_RANKS } from "@shared/personnel";
+import {
+  PersonnelFormData,
+  DEFAULT_RANKS,
+  DEFAULT_ORGANIZATIONS,
+  PersonnelStatus,
+  getStatusInEnglish,
+} from "@shared/personnel";
+import { TerminationReason } from "../../shared/hr-system";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -32,6 +39,11 @@ export default function PersonnelForm() {
     assignedDuties: "",
     status: "active",
     organization: "",
+  });
+
+  const [terminationData, setTerminationData] = useState({
+    terminationReason: "" as TerminationReason | "",
+    terminationNotes: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -87,12 +99,32 @@ export default function PersonnelForm() {
       newErrors.assignedDuties = "Assigned duties are required";
     }
 
+    if (!formData.organization.trim()) {
+      newErrors.organization = "Organization is required";
+    }
+
     if (
       formData.dateOfLeaving &&
       formData.dateOfJoining &&
       new Date(formData.dateOfLeaving) < new Date(formData.dateOfJoining)
     ) {
       newErrors.dateOfLeaving = "Date of leaving cannot be before joining date";
+    }
+
+    // Validation for terminated or deceased status
+    if (
+      (formData.status === "terminated" || formData.status === "deceased") &&
+      !formData.dateOfLeaving
+    ) {
+      newErrors.dateOfLeaving =
+        "Date of leaving is required for terminated or deceased personnel";
+    }
+
+    if (
+      formData.status === "terminated" &&
+      !terminationData.terminationReason
+    ) {
+      newErrors.terminationReason = "Termination reason is required";
     }
 
     setErrors(newErrors);
@@ -192,6 +224,74 @@ export default function PersonnelForm() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
+                  <Label htmlFor="status" className="text-myanmar-black">
+                    Status *
+                  </Label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value) =>
+                      handleChange("status", value as PersonnelStatus)
+                    }
+                  >
+                    <SelectTrigger
+                      className={`border-myanmar-red/30 focus:border-myanmar-red ${
+                        errors.status ? "border-red-500" : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="active">
+                        {getStatusInEnglish("active")}
+                      </SelectItem>
+                      <SelectItem value="resigned">
+                        {getStatusInEnglish("resigned")}
+                      </SelectItem>
+                      <SelectItem value="terminated">
+                        {getStatusInEnglish("terminated")}
+                      </SelectItem>
+                      <SelectItem value="deceased">
+                        {getStatusInEnglish("deceased")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.status && (
+                    <p className="text-sm text-red-500">{errors.status}</p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="organization" className="text-myanmar-black">
+                    Organization *
+                  </Label>
+                  <Select
+                    value={formData.organization}
+                    onValueChange={(value) =>
+                      handleChange("organization", value)
+                    }
+                  >
+                    <SelectTrigger
+                      className={`border-myanmar-red/30 focus:border-myanmar-red ${
+                        errors.organization ? "border-red-500" : ""
+                      }`}
+                    >
+                      <SelectValue placeholder="Select organization" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {DEFAULT_ORGANIZATIONS.map((org) => (
+                        <SelectItem key={org.name} value={org.name}>
+                          {org.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.organization && (
+                    <p className="text-sm text-red-500">
+                      {errors.organization}
+                    </p>
+                  )}
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="id" className="text-myanmar-black">
                     Personnel ID *
                   </Label>
@@ -278,9 +378,13 @@ export default function PersonnelForm() {
                   )}
                 </div>
 
-                <div className="space-y-2 md:col-span-2">
+                <div className="space-y-2">
                   <Label htmlFor="dateOfLeaving" className="text-myanmar-black">
-                    Date of Leaving (Optional)
+                    Date of Leaving{" "}
+                    {(formData.status === "terminated" ||
+                      formData.status === "deceased" ||
+                      formData.status === "resigned") &&
+                      "*"}
                   </Label>
                   <Input
                     id="dateOfLeaving"
@@ -299,9 +403,60 @@ export default function PersonnelForm() {
                     </p>
                   )}
                   <p className="text-sm text-myanmar-gray-dark">
-                    Leave blank if person is still active
+                    {formData.status === "active"
+                      ? "Leave blank if person is still active"
+                      : "Required for non-active personnel"}
                   </p>
                 </div>
+
+                {formData.status === "terminated" && (
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="terminationReason"
+                      className="text-myanmar-black"
+                    >
+                      Termination Reason *
+                    </Label>
+                    <Select
+                      value={terminationData.terminationReason}
+                      onValueChange={(value) =>
+                        setTerminationData((prev) => ({
+                          ...prev,
+                          terminationReason: value as TerminationReason,
+                        }))
+                      }
+                    >
+                      <SelectTrigger
+                        className={`border-myanmar-red/30 focus:border-myanmar-red ${
+                          errors.terminationReason ? "border-red-500" : ""
+                        }`}
+                      >
+                        <SelectValue placeholder="Select termination reason" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="disciplinary">
+                          Disciplinary Action
+                        </SelectItem>
+                        <SelectItem value="performance">
+                          Performance Issues
+                        </SelectItem>
+                        <SelectItem value="redundancy">Redundancy</SelectItem>
+                        <SelectItem value="end-of-contract">
+                          End of Contract
+                        </SelectItem>
+                        <SelectItem value="abandonment">
+                          Job Abandonment
+                        </SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.terminationReason && (
+                      <p className="text-sm text-red-500">
+                        {errors.terminationReason}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -326,6 +481,33 @@ export default function PersonnelForm() {
                   </p>
                 )}
               </div>
+
+              {formData.status === "terminated" && (
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="terminationNotes"
+                    className="text-myanmar-black"
+                  >
+                    Termination Notes (Optional)
+                  </Label>
+                  <Textarea
+                    id="terminationNotes"
+                    value={terminationData.terminationNotes}
+                    onChange={(e) =>
+                      setTerminationData((prev) => ({
+                        ...prev,
+                        terminationNotes: e.target.value,
+                      }))
+                    }
+                    placeholder="Additional notes about the termination..."
+                    rows={3}
+                    className="border-myanmar-red/30 focus:border-myanmar-red"
+                  />
+                  <p className="text-sm text-myanmar-gray-dark">
+                    Provide additional context or details about the termination
+                  </p>
+                </div>
+              )}
 
               {errors.submit && (
                 <Alert className="border-red-500 bg-red-50">
