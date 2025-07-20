@@ -71,6 +71,7 @@ export interface IncomeTarget {
 }
 
 // Enums
+export type TransactionType = "income" | "expense";
 export type IncomeType = "tax" | "donation";
 export type IncomeStatus = "pending" | "verified" | "approved" | "rejected";
 
@@ -110,7 +111,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "Import/Export Tax",
-    nameMyanmar: "တင���သွင်း/တင်ပို့ခွန်",
+    nameMyanmar: "တင်သွင်း/တင်ပို့ခွန်",
     description: "Customs and trade taxes",
     incomeType: "tax",
     isActive: true,
