@@ -6,7 +6,6 @@ import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { DatabaseStatus } from "../components/DatabaseStatus";
 import { IncomeSummaryWidget } from "../components/IncomeSummaryWidget";
 import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
-import Layout from "../components/Layout";
 import {
   HRMetrics,
   AttendanceRecord,
@@ -566,7 +565,7 @@ export default function HRDashboard() {
               </p>
               <Link to="/performance">
                 <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
-                  အရေးပေါ်ကြည့်ရှုရန်
+                  အရေးပေါ်ကြည့��ရှုရန်
                 </Button>
               </Link>
             </CardContent>
@@ -650,7 +649,7 @@ export default function HRDashboard() {
             <TabsTrigger value="attendance">လက်ရှိမှု</TabsTrigger>
             <TabsTrigger value="hiring">အလုပ်ခန့်ထားမှု</TabsTrigger>
             <TabsTrigger value="departments">ဌာနများ</TabsTrigger>
-            <TabsTrigger value="performance">စွမ်းရည်</TabsTrigger>
+            <TabsTrigger value="performance">စွမ်���ရည်</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
