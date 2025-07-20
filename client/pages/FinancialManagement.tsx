@@ -348,7 +348,7 @@ export default function FinancialManagement() {
                   Financial Management
                 </h1>
                 <p className="text-sm text-myanmar-gray-dark">
-                  Manage income and expenses
+                  Manage income and outcomes
                 </p>
               </div>
             </div>
