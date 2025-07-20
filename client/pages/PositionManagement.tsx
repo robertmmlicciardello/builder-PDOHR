@@ -65,7 +65,7 @@ const initialFormData: PositionFormData = {
   titleMyanmar: "",
   departmentId: "",
   level: 1,
-  reportsTo: "",
+  reportsTo: "none",
   responsibilities: [],
   requirements: [],
   salaryRange: {
