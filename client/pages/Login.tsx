@@ -106,9 +106,7 @@ export default function Login() {
                 disabled={isLoading}
                 className="w-full bg-myanmar-red hover:bg-myanmar-red-dark text-white"
               >
-                {isLoading
-                  ? translations.common.loading
-                  : translations.auth.signIn}
+                {isLoading ? t.common.loading : t.auth.signIn}
               </Button>
             </form>
 
@@ -124,9 +122,7 @@ export default function Login() {
         </Card>
 
         <div className="mt-8 text-center">
-          <p className="text-xs text-myanmar-gray-dark">
-            {translations.auth.monitoring}
-          </p>
+          <p className="text-xs text-myanmar-gray-dark">{t.auth.monitoring}</p>
         </div>
       </div>
     </div>
