@@ -134,7 +134,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "International Donations",
-    nameMyanmar: "နိုင်ငံတကာအလှူ",
+    nameMyanmar: "နိုင်ငံတက���အလှူ",
     description: "Donations from international organizations",
     incomeType: "donation",
     isActive: true,
@@ -293,7 +293,7 @@ export function getIncomeStatusLabel(
     },
     approved: {
       en: "Approved",
-      mm: "���ွင့်ပြုပြီး",
+      mm: "ခ��င့်ပြုပြီး",
     },
     rejected: {
       en: "Rejected",
@@ -324,12 +324,12 @@ export function getTransactionTypeLabel(
 
 export function groupTransactionsByType(records: IncomeRecord[]): {
   incomeRecords: IncomeRecord[];
-  expenseRecords: IncomeRecord[];
+  outcomeRecords: IncomeRecord[];
 } {
   const incomeRecords = records.filter((record) => record.type === "income");
-  const expenseRecords = records.filter((record) => record.type === "expense");
+  const outcomeRecords = records.filter((record) => record.type === "outcome");
 
-  return { incomeRecords, expenseRecords };
+  return { incomeRecords, outcomeRecords };
 }
 
 export function calculateBalance(records: IncomeRecord[]): {
