@@ -119,9 +119,8 @@ export default function PersonnelList() {
     return new Date(dateString).toLocaleDateString("en-GB");
   };
 
-    return (
-    <Layout>
-      <div className="min-h-screen bg-myanmar-gray-light">
+      return (
+    <div className="min-h-screen bg-myanmar-gray-light">
       {/* Header */}
       <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
