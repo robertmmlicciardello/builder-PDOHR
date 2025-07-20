@@ -2,16 +2,18 @@
 
 export interface IncomeRecord {
   id: string;
-  incomeType: IncomeType;
+  type: TransactionType; // Income or Expense
+  incomeType?: IncomeType; // Only for income records
   amount: number;
   currency: string;
   description: string;
   descriptionMyanmar: string;
-  source: string; // Source of income
-  sourceMyanmar: string;
-  dateReceived: string; // ISO date
+  source?: string; // Source of income
+  sourceMyanmar?: string;
+  expenseCategory?: string; // For expenses - free text field
+  dateReceived: string; // ISO date (or expense date)
   receivedBy: string; // Employee who received/recorded
-  category: IncomeCategory;
+  category?: IncomeCategory; // Only for predefined income categories
   status: IncomeStatus;
   documentUrl?: string; // Receipt or document
   notes?: string;
@@ -108,7 +110,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "Import/Export Tax",
-    nameMyanmar: "တင်သွင်း/တင်ပို့ခွန်",
+    nameMyanmar: "တင���သွင်း/တင်ပို့ခွန်",
     description: "Customs and trade taxes",
     incomeType: "tax",
     isActive: true,
