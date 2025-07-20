@@ -45,8 +45,8 @@ import {
 import { format } from "date-fns";
 import {
   Clock,
-  ClockIn,
-  ClockOut,
+  LogIn,
+  LogOut,
   Calendar as CalendarIcon,
   Users,
   TrendingUp,
@@ -286,7 +286,7 @@ export default function AttendanceSystem() {
           <CardHeader>
             <h3 className="text-lg font-semibold flex items-center">
               <Clock className="w-5 h-5 mr-2 text-myanmar-red" />
-              မြန်ဆန်သော ချိန်မှတ်တမ်���
+              မြန်ဆန်သော ချိန်မှတ်တမ်း
             </h3>
           </CardHeader>
           <CardContent>
@@ -649,7 +649,7 @@ export default function AttendanceSystem() {
                     className="w-full border-myanmar-red text-myanmar-red"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    လစဉ် အစီရင်���ံစာ
+                    လစဉ် အစီရင်ခံစာ
                   </Button>
                 </CardContent>
               </Card>
