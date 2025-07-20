@@ -587,7 +587,6 @@ export class CustomizationService {
         await updateDoc(docRef, sanitizedCustomization);
       } else {
         // Create new document with specific ID
-        const { setDoc } = await import("firebase/firestore");
         await setDoc(docRef, sanitizedCustomization);
       }
     } catch (error: any) {
