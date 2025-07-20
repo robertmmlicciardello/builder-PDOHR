@@ -6,6 +6,7 @@ import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { DatabaseStatus } from "../components/DatabaseStatus";
 import { IncomeSummaryWidget } from "../components/IncomeSummaryWidget";
 import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
+import Layout from "../components/Layout";
 import {
   HRMetrics,
   AttendanceRecord,
@@ -224,10 +225,11 @@ export default function HRDashboard() {
 
   const colors = ["#dc2626", "#b91c1c", "#991b1b", "#7f1d1d", "#450a0a"];
 
-  return (
-    <div className="min-h-screen bg-myanmar-gray-light">
-      {/* Header */}
-      <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
+    return (
+    <Layout>
+      <div className="min-h-screen bg-myanmar-gray-light">
+        {/* Header */}
+        <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -773,7 +775,7 @@ export default function HRDashboard() {
                       />
                       <div className="flex justify-between text-xs text-myanmar-gray-dark">
                         <span>ပျမ်းမျှ အ���က်: 32 နှစ်</span>
-                        <span>ပျမ်းမျှ အတွေ့အကြုံ: 5 နှစ်</span>
+                        <span>ပျမ်းမျှ အတွေ့အကြုံ: 5 နှ��်</span>
                       </div>
                     </div>
                   </CardContent>
@@ -805,7 +807,7 @@ export default function HRDashboard() {
                         color: "bg-blue-500",
                       },
                       {
-                        rating: "3 ⭐ (ပျမ်းမျှ)",
+                        rating: "3 ⭐ (ပ���မ်းမျှ)",
                         count: 35,
                         color: "bg-yellow-500",
                       },
