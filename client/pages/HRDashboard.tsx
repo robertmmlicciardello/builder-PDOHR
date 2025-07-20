@@ -223,12 +223,12 @@ export default function HRDashboard() {
     },
   ];
 
-    const colors = ["#dc2626", "#b91c1c", "#991b1b", "#7f1d1d", "#450a0a"];
+  const colors = ["#dc2626", "#b91c1c", "#991b1b", "#7f1d1d", "#450a0a"];
 
-    return (
+  return (
     <div className="min-h-screen bg-myanmar-gray-light">
-        {/* Header */}
-        <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
+      {/* Header */}
+      <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -939,8 +939,8 @@ export default function HRDashboard() {
           <div>
             <IncomeSummaryWidget />
           </div>
-                </div>
+        </div>
       </div>
-    </Layout>
+    </div>
   );
 }
