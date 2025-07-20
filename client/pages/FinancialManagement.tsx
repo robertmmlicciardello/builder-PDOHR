@@ -803,18 +803,18 @@ export default function FinancialManagement() {
               </>
             ) : (
               <>
-                {/* Expense Category (free text) */}
+                {/* Outcome Category (free text) */}
                 <div>
-                  <Label>Expense Category *</Label>
+                  <Label>Outcome Category *</Label>
                   <Input
-                    value={formData.expenseCategory || ""}
+                    value={formData.outcomeCategory || ""}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        expenseCategory: e.target.value,
+                        outcomeCategory: e.target.value,
                       })
                     }
-                    placeholder="What was this expense for? (e.g., Office supplies, Utilities, etc.)"
+                    placeholder="What was this outcome for? (e.g., Office supplies, Utilities, etc.)"
                   />
                 </div>
               </>
