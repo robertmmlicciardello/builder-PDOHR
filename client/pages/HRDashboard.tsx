@@ -164,8 +164,8 @@ export default function HRDashboard() {
     { month: "May", hires: 18, terminations: 4 },
     {
       month: "Jun",
-      hires: newHiresThisMonth,
-      terminations: terminationsThisMonth,
+      hires: dashboardStats.newHiresThisMonth,
+      terminations: dashboardStats.terminationsThisMonth,
     },
   ];
 
@@ -539,7 +539,7 @@ export default function HRDashboard() {
                     <Bar
                       dataKey="terminations"
                       fill="#dc2626"
-                      name="ထွက်ခွာသူများ"
+                      name="ထွက်ခွာသူမ��ား"
                     />
                   </BarChart>
                 </ResponsiveContainer>
