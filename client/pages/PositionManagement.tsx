@@ -174,6 +174,25 @@ export const PositionManagement: React.FC = () => {
   const [formData, setFormData] = useState<PositionFormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<string[]>([]);
 
+  // Helper function to get department name
+  const getDepartmentName = (departmentId: string): string => {
+    const department = departments.find((d) => d.id === departmentId);
+    if (!department) return "Unknown";
+    return currentLanguage === "mm" ? department.nameMyanmar : department.name;
+  };
+
+  // Helper function to get position title
+  const getPositionTitle = (position: Position): string => {
+    return currentLanguage === "mm" ? position.titleMyanmar : position.title;
+  };
+
+  // Helper function to get reports to position title
+  const getReportsToTitle = (positionId: string): string => {
+    const position = positions.find((p) => p.id === positionId);
+    if (!position) return "";
+    return getPositionTitle(position);
+  };
+
   // Filtered and sorted positions
   const filteredPositions = useMemo(() => {
     return positions
@@ -203,26 +222,14 @@ export const PositionManagement: React.FC = () => {
         }
         return b.level - a.level;
       });
-  }, [positions, searchTerm, filterDepartment, filterLevel]);
-
-  // Helper function to get department name
-  const getDepartmentName = (departmentId: string): string => {
-    const department = departments.find((d) => d.id === departmentId);
-    if (!department) return "Unknown";
-    return currentLanguage === "mm" ? department.nameMyanmar : department.name;
-  };
-
-  // Helper function to get position title
-  const getPositionTitle = (position: Position): string => {
-    return currentLanguage === "mm" ? position.titleMyanmar : position.title;
-  };
-
-  // Helper function to get reports to position title
-  const getReportsToTitle = (positionId: string): string => {
-    const position = positions.find((p) => p.id === positionId);
-    if (!position) return "";
-    return getPositionTitle(position);
-  };
+  }, [
+    positions,
+    searchTerm,
+    filterDepartment,
+    filterLevel,
+    departments,
+    currentLanguage,
+  ]);
 
   // Form handling
   const handleInputChange = (field: keyof PositionFormData, value: any) => {
