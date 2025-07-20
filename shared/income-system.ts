@@ -71,7 +71,7 @@ export interface IncomeTarget {
 }
 
 // Enums
-export type TransactionType = "income" | "expense";
+export type TransactionType = "income" | "outcome";
 export type IncomeType = "tax" | "donation";
 export type IncomeStatus = "pending" | "verified" | "approved" | "rejected";
 
@@ -90,14 +90,14 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "Commercial Tax",
-    nameMyanmar: "စီးပွားရေးခွန်",
+    nameMyanmar: "စ���းပွားရေးခွန်",
     description: "Commercial tax from businesses",
     incomeType: "tax",
     isActive: true,
   },
   {
     name: "Property Tax",
-    nameMyanmar: "ပစ္���ည်းခွန်",
+    nameMyanmar: "ပစ္စည်းခွန်",
     description: "Tax from property ownership",
     incomeType: "tax",
     isActive: true,
@@ -293,7 +293,7 @@ export function getIncomeStatusLabel(
     },
     approved: {
       en: "Approved",
-      mm: "ခွင့်ပြုပြီး",
+      mm: "ခွင့်ပြ���ပြီး",
     },
     rejected: {
       en: "Rejected",
