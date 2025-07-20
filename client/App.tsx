@@ -141,6 +141,22 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/financial-management"
+      element={
+        <ProtectedRoute>
+          <FinancialManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/income-category-settings"
+      element={
+        <ProtectedRoute>
+          <IncomeCategorySettings />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/old-dashboard"
       element={
         <ProtectedRoute>
