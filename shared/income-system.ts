@@ -10,7 +10,7 @@ export interface IncomeRecord {
   descriptionMyanmar: string;
   source?: string; // Source of income
   sourceMyanmar?: string;
-  expenseCategory?: string; // For expenses - free text field
+  outcomeCategory?: string; // For outcomes - free text field
   dateReceived: string; // ISO date (or expense date)
   receivedBy: string; // Employee who received/recorded
   category?: IncomeCategory; // Only for predefined income categories
@@ -90,7 +90,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "Commercial Tax",
-    nameMyanmar: "စ���းပွားရေးခွန်",
+    nameMyanmar: "စီးပွားရေးခွန်",
     description: "Commercial tax from businesses",
     incomeType: "tax",
     isActive: true,
@@ -293,7 +293,7 @@ export function getIncomeStatusLabel(
     },
     approved: {
       en: "Approved",
-      mm: "ခွင့်ပြ���ပြီး",
+      mm: "ခွင့်ပြုပြီး",
     },
     rejected: {
       en: "Rejected",
