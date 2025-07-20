@@ -80,6 +80,8 @@ interface DashboardStats {
 
 export default function HRDashboard() {
   const { state } = useApp();
+  const { currentLanguage } = useLanguage();
+  const t = useTranslation();
   const [selectedPeriod, setSelectedPeriod] = useState("thisMonth");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
 
@@ -475,7 +477,7 @@ export default function HRDashboard() {
             <Card className="border-myanmar-red/20">
               <CardHeader>
                 <h3 className="text-lg font-semibold">
-                  လက်ရှိမှု အသေးစိတ်ခွဲခြမ်းစိတ်ဖြာမှု
+                  လ��်ရှိမှု အသေးစိတ်ခွဲခြမ်းစိတ်ဖြာမှု
                 </h3>
               </CardHeader>
               <CardContent>
@@ -526,7 +528,7 @@ export default function HRDashboard() {
             <Card className="border-myanmar-red/20">
               <CardHeader>
                 <h3 className="text-lg font-semibold">
-                  အလုပ်ခန့်ထားမှု နှင့် ထွက်ခွာမှု ခွဲခြမ်းစိတ်ဖြာမှု
+                  အ��ုပ်ခန့်ထားမှု နှင့် ထွက်ခွာမှု ခွဲခြမ်းစိတ်ဖြာမှု
                 </h3>
               </CardHeader>
               <CardContent>
