@@ -404,7 +404,7 @@ export default function PersonnelList() {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
-    </div>
+            </Dialog>
+    </Layout>
   );
 }
