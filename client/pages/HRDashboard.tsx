@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useLanguage, useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { DatabaseStatus } from "../components/DatabaseStatus";
 import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
 import {
   HRMetrics,
@@ -271,6 +272,7 @@ export default function HRDashboard() {
                 <Download className="w-4 h-4 mr-2" />
                 {t.actions.export}
               </Button>
+              <DatabaseStatus />
               <LanguageSwitcher />
               <div className="relative">
                 <Bell className="w-6 h-6 text-myanmar-red cursor-pointer" />
@@ -428,7 +430,7 @@ export default function HRDashboard() {
                 {dashboardStats.overdueReviews}
               </p>
               <p className="text-sm text-red-600">
-                လုပ်ငန်းစွမ်းရ���် သုံး���ပ်ချက်များ
+                လုပ်ငန်းစ���မ်းရ���် သုံး���ပ်ချက်များ
               </p>
               <Link to="/performance">
                 <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
@@ -729,7 +731,7 @@ export default function HRDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span>လ��့ကျင့်ရေး ပြီးစီးသူများ</span>
+                      <span>လေ့ကျင့်ရေး ပြီးစီးသူများ</span>
                       <Badge className="bg-green-100 text-green-800">
                         78/95
                       </Badge>
