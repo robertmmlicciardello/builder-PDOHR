@@ -9,6 +9,9 @@ import {
   Type,
   Image,
   ArrowLeft,
+  DollarSign,
+  Users,
+  Building,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
