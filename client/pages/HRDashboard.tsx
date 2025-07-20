@@ -363,7 +363,7 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    ပျမ်းမျှ လက်ရှိမှုနှုန���း
+                    ပ��မ်းမျှ လက်ရှိမှုနှုန���း
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.averageAttendance}%
@@ -770,9 +770,12 @@ export default function HRDashboard() {
               </Card>
             </div>
           </TabsContent>
-        </Tabs>
+                </Tabs>
 
-        {/* Quick Actions */}
+        {/* Income Summary */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            {/* Quick Actions */}
         <Card className="border-myanmar-red/20 mt-8">
           <CardHeader>
             <h3 className="text-lg font-semibold flex items-center">
