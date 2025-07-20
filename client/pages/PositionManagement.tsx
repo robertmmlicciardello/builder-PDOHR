@@ -300,6 +300,12 @@ export const PositionManagement: React.FC = () => {
 
     const now = new Date().toISOString();
 
+    // Convert 'none' to undefined for reportsTo field
+    const processedFormData = {
+      ...formData,
+      reportsTo: formData.reportsTo === "none" ? undefined : formData.reportsTo,
+    };
+
     if (editingPosition) {
       // Update existing position
       setPositions((prev) =>
@@ -307,7 +313,7 @@ export const PositionManagement: React.FC = () => {
           pos.id === editingPosition.id
             ? {
                 ...pos,
-                ...formData,
+                ...processedFormData,
                 updatedAt: now,
               }
             : pos,
@@ -317,7 +323,7 @@ export const PositionManagement: React.FC = () => {
       // Create new position
       const newPosition: Position = {
         id: `pos-${Date.now()}`,
-        ...formData,
+        ...processedFormData,
         createdAt: now,
         updatedAt: now,
       };
