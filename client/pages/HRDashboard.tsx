@@ -276,7 +276,7 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    လက်ရှိ အလုပ်လုပ်နေသူများ
+                    {t.personnel.activePersonnel}
                   </p>
                   <p className="text-3xl font-bold text-myanmar-black">
                     {dashboardStats.activeEmployees}
@@ -395,7 +395,7 @@ export default function HRDashboard() {
               <div className="flex items-center space-x-2">
                 <Heart className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold text-blue-800">
-                  မွေးနေ့များ လာမည်
+                  မွေးနေ့များ လ��မည်
                 </h3>
               </div>
             </CardHeader>
@@ -537,7 +537,7 @@ export default function HRDashboard() {
                       dataKey="attendance"
                       stroke="#dc2626"
                       strokeWidth={3}
-                      name="လက်ရှိမှုနှုန်း %"
+                      name="လက်ရှ���မှုနှုန်း %"
                     />
                   </LineChart>
                 </ResponsiveContainer>
