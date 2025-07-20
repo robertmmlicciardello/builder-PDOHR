@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { CustomizationService } from "../services/hrDatabase";
 
 // Interface for dashboard customization settings
 export interface DashboardCustomization {
@@ -159,16 +160,48 @@ export const useDashboardCustomization = () => {
     useState<DashboardCustomization>(defaultCustomization);
 
   useEffect(() => {
-    // Load saved customization from localStorage
-    const saved = localStorage.getItem("dashboard-customization");
-    if (saved) {
+    const loadCustomization = async () => {
       try {
-        const parsed = JSON.parse(saved);
-        setCustomization({ ...defaultCustomization, ...parsed });
+        // First try to load from Firebase
+        const firebaseCustomization =
+          await CustomizationService.getCustomization();
+        if (firebaseCustomization) {
+          setCustomization({
+            ...defaultCustomization,
+            ...firebaseCustomization,
+          });
+          // Sync with localStorage for offline access
+          localStorage.setItem(
+            "dashboard-customization",
+            JSON.stringify(firebaseCustomization),
+          );
+        } else {
+          // Fallback to localStorage
+          const saved = localStorage.getItem("dashboard-customization");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            setCustomization({ ...defaultCustomization, ...parsed });
+          }
+        }
       } catch (error) {
-        console.error("Failed to load customization:", error);
+        console.error("Failed to load customization from Firebase:", error);
+        // Fallback to localStorage
+        const saved = localStorage.getItem("dashboard-customization");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            setCustomization({ ...defaultCustomization, ...parsed });
+          } catch (parseError) {
+            console.error(
+              "Failed to parse localStorage customization:",
+              parseError,
+            );
+          }
+        }
       }
-    }
+    };
+
+    loadCustomization();
 
     // Listen for customization updates
     const handleCustomizationUpdate = (event: CustomEvent) => {
