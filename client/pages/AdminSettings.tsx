@@ -376,6 +376,57 @@ export const AdminSettings: React.FC = () => {
           </div>
         </div>
 
+        {/* Quick Management Links */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>System Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Link to="/income-category-settings">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <DollarSign className="w-6 h-6" />
+                  <span className="text-sm font-medium">Income Categories</span>
+                  <span className="text-xs text-gray-500">
+                    Manage income types and categories
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/personnel-list">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Users className="w-6 h-6" />
+                  <span className="text-sm font-medium">
+                    Personnel Management
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Manage staff records
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/department-management">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Building className="w-6 h-6" />
+                  <span className="text-sm font-medium">
+                    Department Settings
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Manage departments
+                  </span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="branding">
