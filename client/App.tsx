@@ -14,6 +14,7 @@ import HRDashboard from "./pages/HRDashboard";
 import AttendanceSystem from "./pages/AttendanceSystem";
 import LeaveManagement from "./pages/LeaveManagement";
 import PositionManagement from "./pages/PositionManagement";
+import DepartmentManagement from "./pages/DepartmentManagement";
 import PersonnelForm from "./pages/PersonnelForm";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
@@ -98,6 +99,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <PositionManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/department-management"
+      element={
+        <ProtectedRoute>
+          <DepartmentManagement />
         </ProtectedRoute>
       }
     />
