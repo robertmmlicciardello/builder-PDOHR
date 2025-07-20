@@ -17,6 +17,7 @@ import PositionManagement from "./pages/PositionManagement";
 import DepartmentManagement from "./pages/DepartmentManagement";
 import PerformanceManagement from "./pages/PerformanceManagement";
 import AdminSettings from "./pages/AdminSettings";
+import IncomeManagement from "./pages/IncomeManagement";
 import PersonnelForm from "./pages/PersonnelForm";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
@@ -125,6 +126,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <AdminSettings />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/income-management"
+      element={
+        <ProtectedRoute>
+          <IncomeManagement />
         </ProtectedRoute>
       }
     />
