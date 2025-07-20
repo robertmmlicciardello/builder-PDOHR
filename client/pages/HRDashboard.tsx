@@ -940,8 +940,8 @@ export default function HRDashboard() {
           <div>
             <IncomeSummaryWidget />
           </div>
-        </div>
+                </div>
       </div>
-    </div>
+    </Layout>
   );
 }
