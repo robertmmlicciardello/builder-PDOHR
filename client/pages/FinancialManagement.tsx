@@ -216,8 +216,8 @@ export default function FinancialManagement() {
     if (formData.type === "income" && !formData.source?.trim()) {
       validationErrors.push("Income source is required");
     }
-    if (formData.type === "expense" && !formData.expenseCategory?.trim()) {
-      validationErrors.push("Expense category is required");
+    if (formData.type === "outcome" && !formData.outcomeCategory?.trim()) {
+      validationErrors.push("Outcome category is required");
     }
 
     if (validationErrors.length > 0) {
