@@ -223,42 +223,44 @@ export default function PersonnelForm() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="status" className="text-myanmar-black">
-                    Status *
-                  </Label>
-                  <Select
-                    value={formData.status}
-                    onValueChange={(value) =>
-                      handleChange("status", value as PersonnelStatus)
-                    }
-                  >
-                    <SelectTrigger
-                      className={`border-myanmar-red/30 focus:border-myanmar-red ${
-                        errors.status ? "border-red-500" : ""
-                      }`}
+                {isEditing && (
+                  <div className="space-y-2">
+                    <Label htmlFor="status" className="text-myanmar-black">
+                      Status *
+                    </Label>
+                    <Select
+                      value={formData.status}
+                      onValueChange={(value) =>
+                        handleChange("status", value as PersonnelStatus)
+                      }
                     >
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">
-                        {getStatusInEnglish("active")}
-                      </SelectItem>
-                      <SelectItem value="resigned">
-                        {getStatusInEnglish("resigned")}
-                      </SelectItem>
-                      <SelectItem value="terminated">
-                        {getStatusInEnglish("terminated")}
-                      </SelectItem>
-                      <SelectItem value="deceased">
-                        {getStatusInEnglish("deceased")}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.status && (
-                    <p className="text-sm text-red-500">{errors.status}</p>
-                  )}
-                </div>
+                      <SelectTrigger
+                        className={`border-myanmar-red/30 focus:border-myanmar-red ${
+                          errors.status ? "border-red-500" : ""
+                        }`}
+                      >
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">
+                          {getStatusInEnglish("active")}
+                        </SelectItem>
+                        <SelectItem value="resigned">
+                          {getStatusInEnglish("resigned")}
+                        </SelectItem>
+                        <SelectItem value="terminated">
+                          {getStatusInEnglish("terminated")}
+                        </SelectItem>
+                        <SelectItem value="deceased">
+                          {getStatusInEnglish("deceased")}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.status && (
+                      <p className="text-sm text-red-500">{errors.status}</p>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="organization" className="text-myanmar-black">
