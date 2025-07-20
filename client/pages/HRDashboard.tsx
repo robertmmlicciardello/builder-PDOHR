@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { translations } from "@shared/translations";
+import { useLanguage, useTranslation } from "../context/LanguageContext";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import {
   HRMetrics,
   AttendanceRecord,
@@ -48,6 +49,7 @@ import {
   CheckCircle,
   XCircle,
   Settings,
+  Briefcase,
   Bell,
   Search,
   Filter,
@@ -355,7 +357,7 @@ export default function HRDashboard() {
                 {dashboardStats.overdueReviews}
               </p>
               <p className="text-sm text-red-600">
-                လုပ်ငန်းစွမ်းရည် သုံးသပ်ချက်များ
+                လုပ်ငန်းစွမ်းရည် သုံး���ပ်ချက်များ
               </p>
               <Link to="/performance">
                 <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
@@ -389,7 +391,7 @@ export default function HRDashboard() {
         {/* Charts and Analytics */}
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
-            <TabsTrigger value="overview">ခြုံငုံကြည့်ရှုရန်</TabsTrigger>
+            <TabsTrigger value="overview">ခြုံငုံက��ည့်ရှုရန်</TabsTrigger>
             <TabsTrigger value="attendance">လက်ရှိမှု</TabsTrigger>
             <TabsTrigger value="hiring">အလုပ်ခန့်ထားမှု</TabsTrigger>
             <TabsTrigger value="departments">ဌာနများ</TabsTrigger>
