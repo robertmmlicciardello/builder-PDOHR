@@ -304,7 +304,7 @@ export default function AttendanceSystem() {
                     </div>
                   ) : (
                     <>
-                      <ClockIn className="w-6 h-6 mr-2" />
+                      <LogIn className="w-6 h-6 mr-2" />
                       အလုပ်ဝင်ချိန်
                     </>
                   )}
@@ -320,7 +320,7 @@ export default function AttendanceSystem() {
                   disabled={isClockingIn}
                   className="w-full h-16 bg-red-600 hover:bg-red-700 text-white text-lg"
                 >
-                  <ClockOut className="w-6 h-6 mr-2" />
+                  <LogOut className="w-6 h-6 mr-2" />
                   အလုပ်ထွက်ချိန်
                 </Button>
                 <p className="text-sm text-myanmar-gray-dark mt-2">
@@ -358,7 +358,7 @@ export default function AttendanceSystem() {
         <Tabs defaultValue="today" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
             <TabsTrigger value="today">ယနေ့</TabsTrigger>
-            <TabsTrigger value="weekly">အပတ်စဉ်</TabsTrigger>
+            <TabsTrigger value="weekly">အပတ်စဉ���</TabsTrigger>
             <TabsTrigger value="monthly">လစဉ်</TabsTrigger>
             <TabsTrigger value="reports">အစီရင်ခံစာများ</TabsTrigger>
           </TabsList>
@@ -502,7 +502,7 @@ export default function AttendanceSystem() {
                     "တနင်္လာ",
                     "အင်္ဂါ",
                     "ဗုဒ္ဓဟူး",
-                    "ကြာသပတေး",
+                    "ကြာသပတေ���",
                     "သောကြာ",
                     "စနေ",
                     "တနင်္ဂနွေ",
