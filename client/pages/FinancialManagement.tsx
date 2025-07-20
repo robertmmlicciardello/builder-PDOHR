@@ -188,7 +188,7 @@ export default function FinancialManagement() {
         descriptionMyanmar: transaction.descriptionMyanmar,
         source: transaction.source || "",
         sourceMyanmar: transaction.sourceMyanmar || "",
-        expenseCategory: transaction.expenseCategory || "",
+        outcomeCategory: transaction.outcomeCategory || "",
         dateReceived: transaction.dateReceived.split("T")[0],
         receivedBy: transaction.receivedBy,
         categoryId: transaction.category?.id || "",
