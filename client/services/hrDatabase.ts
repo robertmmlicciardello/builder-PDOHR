@@ -596,6 +596,16 @@ export class CustomizationService {
         await setDoc(docRef, sanitizedCustomization);
       }
     } catch (error: any) {
+      // Check if this is an offline error
+      if (error.message.includes("offline") || error.code === "unavailable") {
+        // Save to localStorage as backup when offline
+        localStorage.setItem(
+          "dashboard-customization",
+          JSON.stringify(customization),
+        );
+        console.warn("Firebase is offline, saved to localStorage instead");
+        return;
+      }
       throw new Error(`Failed to save customization: ${error.message}`);
     }
   }
