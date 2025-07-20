@@ -71,7 +71,7 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
       children: [
         {
           label: "Personnel List",
-          labelMyanmar: "ဝန်ထမ်းစာရင်း",
+          labelMyanmar: "ဝန်ထ��်းစာရင်း",
           icon: List,
           href: "/personnel-list",
         },
@@ -104,7 +104,7 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
     },
     {
       label: "Attendance & Leave",
-      labelMyanmar: "လက်ရှိမှုနှင့်���ပ်ရက်",
+      labelMyanmar: "လက်ရှိမှုနှင့်လပ်ရက်",
       icon: Clock,
       children: [
         {
@@ -115,7 +115,7 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
         },
         {
           label: "Leave Management",
-          labelMyanmar: "လပ်ရက်စီမံခန့်ခွဲမှု",
+          labelMyanmar: "လပ်ရက်စီမံခန့်ခွဲမ���ု",
           icon: Calendar,
           href: "/leave-management",
           badge: 5,
@@ -135,10 +135,16 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
       icon: DollarSign,
       children: [
         {
-          label: "Income Management",
-          labelMyanmar: "ဝင်ငွေစီမံခန့်ခွဲမှု",
+          label: "Financial Management",
+          labelMyanmar: "ငွေကြေးစီမံခန့်ခွဲမှု",
           icon: DollarSign,
-          href: "/income-management",
+          href: "/financial-management",
+        },
+        {
+          label: "Income Categories",
+          labelMyanmar: "ဝင်ငွေအမျိုးအစားများ",
+          icon: Settings,
+          href: "/income-category-settings",
         },
       ],
     },
@@ -155,7 +161,7 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
       children: [
         {
           label: "Admin Settings",
-          labelMyanmar: "အက်ဒမင်ဆက်တင်များ",
+          labelMyanmar: "အက်ဒမင်ဆက်တင်မျာ��",
           icon: Settings,
           href: "/admin-settings",
         },
