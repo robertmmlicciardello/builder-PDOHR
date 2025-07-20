@@ -41,6 +41,7 @@ import {
   Users,
   UserPlus,
   UserMinus,
+  UserX,
   Clock,
   Calendar,
   TrendingUp,
@@ -48,6 +49,7 @@ import {
   Award,
   DollarSign,
   FileText,
+  Skull,
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -71,8 +73,13 @@ import {
 interface DashboardStats {
   totalEmployees: number;
   activeEmployees: number;
+  resignedEmployees: number;
+  terminatedEmployees: number;
+  deceasedEmployees: number;
   newHiresThisMonth: number;
   terminationsThisMonth: number;
+  resignationsThisMonth: number;
+  actualTerminationsThisMonth: number;
   averageAttendance: number;
   pendingLeaves: number;
   overdueReviews: number;
@@ -99,6 +106,18 @@ export default function HRDashboard() {
       (p) => p.status === "active",
     );
 
+    const resignedEmployees = state.personnel.filter(
+      (p) => p.status === "resigned",
+    );
+
+    const terminatedEmployees = state.personnel.filter(
+      (p) => p.status === "terminated",
+    );
+
+    const deceasedEmployees = state.personnel.filter(
+      (p) => p.status === "deceased",
+    );
+
     const newHiresThisMonth = state.personnel.filter((p) => {
       const joinDate = new Date(p.dateOfJoining);
       return (
@@ -113,6 +132,27 @@ export default function HRDashboard() {
       const leaveDate = new Date(p.dateOfLeaving);
       return (
         leaveDate.getMonth() === thisMonth &&
+        leaveDate.getFullYear() === thisYear &&
+        (p.status === "resigned" ||
+          p.status === "terminated" ||
+          p.status === "deceased")
+      );
+    }).length;
+
+    const resignationsThisMonth = state.personnel.filter((p) => {
+      if (!p.dateOfLeaving || p.status !== "resigned") return false;
+      const leaveDate = new Date(p.dateOfLeaving);
+      return (
+        leaveDate.getMonth() === thisMonth &&
+        leaveDate.getFullYear() === thisYear
+      );
+    }).length;
+
+    const actualTerminationsThisMonth = state.personnel.filter((p) => {
+      if (!p.dateOfLeaving || p.status !== "terminated") return false;
+      const leaveDate = new Date(p.dateOfLeaving);
+      return (
+        leaveDate.getMonth() === thisMonth &&
         leaveDate.getFullYear() === thisYear
       );
     }).length;
@@ -124,8 +164,13 @@ export default function HRDashboard() {
     return {
       totalEmployees: state.personnel.length,
       activeEmployees: activeEmployees.length,
+      resignedEmployees: resignedEmployees.length,
+      terminatedEmployees: terminatedEmployees.length,
+      deceasedEmployees: deceasedEmployees.length,
       newHiresThisMonth,
       terminationsThisMonth,
+      resignationsThisMonth,
+      actualTerminationsThisMonth,
       averageAttendance: 92.5, // Mock percentage
       pendingLeaves: 8, // Mock count
       overdueReviews: 3, // Mock count
@@ -297,6 +342,71 @@ export default function HRDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Personnel Status Overview */}
+        <Card className="border-myanmar-red/20 mb-6">
+          <CardHeader>
+            <h3 className="text-lg font-semibold text-myanmar-black">
+              Personnel Status Overview
+            </h3>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
+                  <Users className="w-6 h-6 text-green-600" />
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  {dashboardStats.activeEmployees}
+                </p>
+                <p className="text-sm text-gray-600">Active</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-lg mx-auto mb-2">
+                  <UserMinus className="w-6 h-6 text-yellow-600" />
+                </div>
+                <p className="text-2xl font-bold text-yellow-600">
+                  {dashboardStats.resignedEmployees}
+                </p>
+                <p className="text-sm text-gray-600">Resigned</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-lg mx-auto mb-2">
+                  <UserX className="w-6 h-6 text-red-600" />
+                </div>
+                <p className="text-2xl font-bold text-red-600">
+                  {dashboardStats.terminatedEmployees}
+                </p>
+                <p className="text-sm text-gray-600">Terminated</p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-lg mx-auto mb-2">
+                  <Skull className="w-6 h-6 text-gray-600" />
+                </div>
+                <p className="text-2xl font-bold text-gray-600">
+                  {dashboardStats.deceasedEmployees}
+                </p>
+                <p className="text-sm text-gray-600">Deceased</p>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t">
+              <div className="flex justify-between text-sm text-gray-600">
+                <span>This Month Activity:</span>
+                <div className="flex space-x-4">
+                  <span className="text-green-600">
+                    +{dashboardStats.newHiresThisMonth} hires
+                  </span>
+                  <span className="text-yellow-600">
+                    -{dashboardStats.resignationsThisMonth} resigned
+                  </span>
+                  <span className="text-red-600">
+                    -{dashboardStats.actualTerminationsThisMonth} terminated
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="border-myanmar-red/20">
