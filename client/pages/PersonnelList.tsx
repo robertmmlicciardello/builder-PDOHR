@@ -119,7 +119,7 @@ export default function PersonnelList() {
     return new Date(dateString).toLocaleDateString("en-GB");
   };
 
-      return (
+  return (
     <div className="min-h-screen bg-myanmar-gray-light">
       {/* Header */}
       <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
@@ -403,7 +403,7 @@ export default function PersonnelList() {
             </Button>
           </DialogFooter>
         </DialogContent>
-            </Dialog>
-    </Layout>
+      </Dialog>
+    </div>
   );
 }
