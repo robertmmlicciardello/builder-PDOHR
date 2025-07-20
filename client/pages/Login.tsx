@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { translations } from "@shared/translations";
+import { useTranslation } from "../context/LanguageContext";
+import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -15,6 +16,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useApp();
   const navigate = useNavigate();
+  const t = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,10 +28,10 @@ export default function Login() {
       if (success) {
         navigate("/dashboard");
       } else {
-        setError(translations.auth.invalidCredentials);
+        setError(t.auth.invalidCredentials);
       }
     } catch (err) {
-      setError(translations.messages.error);
+      setError(t.messages.error);
     } finally {
       setIsLoading(false);
     }
@@ -43,9 +45,12 @@ export default function Login() {
             <div className="text-white text-3xl font-bold">✊</div>
           </div>
           <h1 className="text-3xl font-bold text-myanmar-black mb-2">
-            {translations.appName}
+            {t.appName}
           </h1>
-          <p className="text-myanmar-gray-dark">{translations.subtitle}</p>
+          <p className="text-myanmar-gray-dark">{t.subtitle}</p>
+          <div className="flex justify-center mt-4">
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <Card className="border-myanmar-red/20">
