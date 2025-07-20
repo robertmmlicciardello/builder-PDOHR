@@ -293,7 +293,7 @@ export function getIncomeStatusLabel(
     },
     approved: {
       en: "Approved",
-      mm: "ခွင့်ပြုပြီး",
+      mm: "���ွင့်ပြုပြီး",
     },
     rejected: {
       en: "Rejected",
@@ -313,9 +313,9 @@ export function getTransactionTypeLabel(
       en: "Income",
       mm: "ဝင်ငွေ",
     },
-    expense: {
-      en: "Expense",
-      mm: "သုံးငွေ",
+    outcome: {
+      en: "Outcome",
+      mm: "ထွက်ငွေ",
     },
   };
 
