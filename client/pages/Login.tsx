@@ -56,17 +56,17 @@ export default function Login() {
         <Card className="border-myanmar-red/20">
           <CardHeader className="text-center pb-4">
             <h2 className="text-xl font-semibold text-myanmar-black">
-              {translations.personnel.personnelManagement}
+              {t.personnel.personnelManagement}
             </h2>
             <p className="text-sm text-myanmar-gray-dark">
-              {translations.auth.secureAccess}
+              {t.auth.secureAccess}
             </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-myanmar-black">
-                  အီးမေးလ်လိပ်စာ
+                  {t.common.email}
                 </Label>
                 <Input
                   id="email"
@@ -80,7 +80,7 @@ export default function Login() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-myanmar-black">
-                  {translations.auth.password}
+                  {t.auth.password}
                 </Label>
                 <Input
                   id="password"
@@ -88,7 +88,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="border-myanmar-red/30 focus:border-myanmar-red"
-                  placeholder="စကားဝှက်"
+                  placeholder={t.auth.password}
                   required
                 />
               </div>
