@@ -396,9 +396,9 @@ export default function FinancialManagement() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Expenses</p>
+                  <p className="text-sm text-gray-600">Total Outcomes</p>
                   <p className="text-2xl font-bold text-red-600">
-                    {formatCurrency(financialSummary.totalExpenses)}
+                    {formatCurrency(financialSummary.totalOutcomes)}
                   </p>
                 </div>
                 <TrendingDown className="w-8 h-8 text-red-600" />
