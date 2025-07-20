@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import Layout from "../components/Layout";
 import { useLanguage, useTranslation } from "../context/LanguageContext";
 import {
   Personnel,
