@@ -654,7 +654,7 @@ export default function FinancialManagement() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="income">Income (ဝင်ငွေ)</SelectItem>
-                  <SelectItem value="expense">Expense (သုံးငွေ)</SelectItem>
+                  <SelectItem value="outcome">Outcome (ထွက်ငွေ)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
