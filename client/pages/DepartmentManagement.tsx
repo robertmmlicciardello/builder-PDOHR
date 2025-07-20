@@ -1,5 +1,14 @@
 import React, { useState, useMemo } from "react";
-import { Plus, Edit, Trash2, Search, Users, Building } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Search,
+  Users,
+  Building,
+  ArrowLeft,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import {
@@ -243,11 +252,21 @@ export const DepartmentManagement: React.FC = () => {
       <div className="container mx-auto p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              {t.settings.manageDepartments}
-            </h1>
-            <p className="text-gray-600 mt-1">{t.organizations.departments}</p>
+          <div className="flex items-center gap-4">
+            <Link to="/dashboard">
+              <Button variant="outline" size="sm" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                {t.nav.back}
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-800">
+                {t.settings.manageDepartments}
+              </h1>
+              <p className="text-gray-600 mt-1">
+                {t.organizations.departments}
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <LanguageSwitcher />
