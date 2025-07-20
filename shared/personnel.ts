@@ -39,9 +39,11 @@ export interface PersonnelReport {
   totalMembers: number;
   activeMembers: number;
   resignedMembers: number;
+  terminatedMembers: number;
   deceasedMembers: number;
   newEntries: number;
   resignations: number;
+  terminations: number;
   byRank: Record<string, number>;
   byOrganization: Record<string, number>;
   dateGenerated: string;
@@ -94,7 +96,7 @@ export interface Organization {
   updatedAt: string;
 }
 
-export type PersonnelStatus = "active" | "resigned" | "deceased";
+export type PersonnelStatus = "active" | "resigned" | "terminated" | "deceased";
 
 export type UserRole = "admin" | "user";
 
@@ -135,7 +137,7 @@ export const DEFAULT_ORGANIZATIONS: Omit<
   "id" | "createdAt" | "updatedAt"
 >[] = [
   { name: "ပကဖ နည်းပညာလက်ရုံးတပ်", type: "headquarters" },
-  { name: "ရန်ကုန်တိုင်း", type: "region" },
+  { name: "ရန်ကုန်တိ��င်း", type: "region" },
   { name: "မန္တလေးတိုင်း", type: "region" },
   { name: "စစ်ကိုင်းတိုင်း", type: "region" },
   { name: "ရှမ်းပြည်နယ်", type: "region" },
@@ -169,7 +171,18 @@ export const getStatusInBurmese = (status: PersonnelStatus): string => {
   const statusMap = {
     active: "ဆက်ရှိနေသူ",
     resigned: "နှုတ်ထွက်သူ",
+    terminated: "ထု��်ပယ်ခံရသူ",
     deceased: "ကျဆုံးသူ",
+  };
+  return statusMap[status];
+};
+
+export const getStatusInEnglish = (status: PersonnelStatus): string => {
+  const statusMap = {
+    active: "Active",
+    resigned: "Resigned",
+    terminated: "Terminated",
+    deceased: "Deceased",
   };
   return statusMap[status];
 };
