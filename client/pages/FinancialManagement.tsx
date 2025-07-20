@@ -564,7 +564,7 @@ export default function FinancialManagement() {
                           </div>
                         ) : (
                           <p className="text-sm">
-                            {transaction.expenseCategory}
+                            {transaction.outcomeCategory}
                           </p>
                         )}
                       </TableCell>
