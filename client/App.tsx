@@ -19,6 +19,7 @@ import PerformanceManagement from "./pages/PerformanceManagement";
 import AdminSettings from "./pages/AdminSettings";
 import IncomeManagement from "./pages/IncomeManagement";
 import PersonnelForm from "./pages/PersonnelForm";
+import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
