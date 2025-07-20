@@ -36,6 +36,7 @@ import {
 } from "../components/ui/select";
 import { useLanguage, useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
+import { CustomizationService } from "../services/hrDatabase";
 
 // Interface for dashboard customization settings
 interface DashboardCustomization {
@@ -203,15 +204,53 @@ export const AdminSettings: React.FC = () => {
 
   // Load saved customization on component mount
   useEffect(() => {
-    const saved = localStorage.getItem("dashboard-customization");
-    if (saved) {
+    const loadCustomization = async () => {
       try {
-        const parsed = JSON.parse(saved);
-        setCustomization({ ...defaultCustomization, ...parsed });
+        // First try to load from Firebase
+        const firebaseCustomization =
+          await CustomizationService.getCustomization();
+        if (firebaseCustomization) {
+          setCustomization({
+            ...defaultCustomization,
+            ...firebaseCustomization,
+          });
+          // Sync with localStorage for backward compatibility
+          localStorage.setItem(
+            "dashboard-customization",
+            JSON.stringify(firebaseCustomization),
+          );
+        } else {
+          // Fallback to localStorage if Firebase data doesn't exist
+          const saved = localStorage.getItem("dashboard-customization");
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            setCustomization({ ...defaultCustomization, ...parsed });
+            // Save to Firebase for future use
+            await CustomizationService.saveCustomization({
+              ...defaultCustomization,
+              ...parsed,
+            });
+          }
+        }
       } catch (error) {
         console.error("Failed to load customization:", error);
+        // Fallback to localStorage
+        const saved = localStorage.getItem("dashboard-customization");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            setCustomization({ ...defaultCustomization, ...parsed });
+          } catch (parseError) {
+            console.error(
+              "Failed to parse localStorage customization:",
+              parseError,
+            );
+          }
+        }
       }
-    }
+    };
+
+    loadCustomization();
   }, []);
 
   // Handle input changes
@@ -230,6 +269,10 @@ export const AdminSettings: React.FC = () => {
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      // Save to Firebase first
+      await CustomizationService.saveCustomization(customization);
+
+      // Also save to localStorage for offline access
       localStorage.setItem(
         "dashboard-customization",
         JSON.stringify(customization),
@@ -244,10 +287,22 @@ export const AdminSettings: React.FC = () => {
 
       setHasChanges(false);
       // Show success message
-      alert("Settings saved successfully!");
+      alert("Settings saved successfully to database!");
     } catch (error) {
       console.error("Failed to save customization:", error);
-      alert("Failed to save settings. Please try again.");
+      // Try to save to localStorage as fallback
+      try {
+        localStorage.setItem(
+          "dashboard-customization",
+          JSON.stringify(customization),
+        );
+        alert(
+          "Settings saved locally (database connection failed). Changes will sync when connection is restored.",
+        );
+        setHasChanges(false);
+      } catch (localError) {
+        alert("Failed to save settings. Please try again.");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -397,7 +452,7 @@ export const AdminSettings: React.FC = () => {
                       onChange={(e) =>
                         handleInputChange("subtitleMyanmar", e.target.value)
                       }
-                      placeholder="ပြည်သူ့ကာကွယ်ရေးတပ်ဖွဲ့ နည်းပညာလက်ရုံးတပ်"
+                      placeholder="ပြည်သူ့ကာကွယ်��ေးတပ်ဖွဲ့ နည်းပညာလက်ရုံးတပ်"
                     />
                   </div>
                 </div>
