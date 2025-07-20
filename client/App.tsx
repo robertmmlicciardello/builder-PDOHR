@@ -63,6 +63,38 @@ const AppRoutes = () => (
       path="/dashboard"
       element={
         <ProtectedRoute>
+          <HRDashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/hr-dashboard"
+      element={
+        <ProtectedRoute>
+          <HRDashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/attendance"
+      element={
+        <ProtectedRoute>
+          <AttendanceSystem />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/leave-management"
+      element={
+        <ProtectedRoute>
+          <LeaveManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/old-dashboard"
+      element={
+        <ProtectedRoute>
           <Dashboard />
         </ProtectedRoute>
       }
