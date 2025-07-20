@@ -568,6 +568,12 @@ export class CustomizationService {
       }
       return null;
     } catch (error: any) {
+      // Check if this is an offline error
+      if (error.message.includes("offline") || error.code === "unavailable") {
+        // Return null to indicate offline state, let caller handle fallback
+        console.warn("Firebase is offline, will use local fallback");
+        return null;
+      }
       throw new Error(`Failed to fetch customization: ${error.message}`);
     }
   }
