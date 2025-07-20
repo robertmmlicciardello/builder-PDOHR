@@ -322,7 +322,7 @@ export default function HRDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-myanmar-gray-dark">
-                    လစာစုစုပေါင်း
+                    {t.common.total} {t.hr.payroll}
                   </p>
                   <p className="text-2xl font-bold text-myanmar-black">
                     {(dashboardStats.totalPayroll / 1000000).toFixed(1)}M
@@ -395,7 +395,7 @@ export default function HRDashboard() {
               <div className="flex items-center space-x-2">
                 <Heart className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold text-blue-800">
-                  မွေးနေ့များ လ��မည်
+                  မွေးနေ့များ လာမည်
                 </h3>
               </div>
             </CardHeader>
@@ -461,7 +461,7 @@ export default function HRDashboard() {
                 <CardHeader>
                   <h3 className="text-lg font-semibold flex items-center">
                     <PieChartIcon className="w-5 h-5 mr-2 text-myanmar-red" />
-                    ဌာနအလိုက် ဝန်ထမ်းဖြန့်ဝ���မှု
+                    ဌာနအလိုက် ဝန်ထမ်းဖြန့်ဝ�����မှု
                   </h3>
                 </CardHeader>
                 <CardContent>
@@ -537,7 +537,7 @@ export default function HRDashboard() {
                       dataKey="attendance"
                       stroke="#dc2626"
                       strokeWidth={3}
-                      name="လက်ရှ���မှုနှုန်း %"
+                      name="လက်ရှိမှုနှုန်း %"
                     />
                   </LineChart>
                 </ResponsiveContainer>
