@@ -15,6 +15,7 @@ import AttendanceSystem from "./pages/AttendanceSystem";
 import LeaveManagement from "./pages/LeaveManagement";
 import PositionManagement from "./pages/PositionManagement";
 import DepartmentManagement from "./pages/DepartmentManagement";
+import PerformanceManagement from "./pages/PerformanceManagement";
 import PersonnelForm from "./pages/PersonnelForm";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
@@ -107,6 +108,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <DepartmentManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/performance"
+      element={
+        <ProtectedRoute>
+          <PerformanceManagement />
         </ProtectedRoute>
       }
     />
