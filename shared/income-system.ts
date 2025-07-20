@@ -120,7 +120,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   // Donation Categories
   {
     name: "Individual Donations",
-    nameMyanmar: "ကိုယ်တိုင်အလှူ",
+    nameMyanmar: "ကိုယ်တိုင��အလှူ",
     description: "Donations from individuals",
     incomeType: "donation",
     isActive: true,
@@ -134,7 +134,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "International Donations",
-    nameMyanmar: "နိုင်ငံတက���အလှူ",
+    nameMyanmar: "နိုင်ငံတကာအလှူ",
     description: "Donations from international organizations",
     incomeType: "donation",
     isActive: true,
@@ -293,7 +293,7 @@ export function getIncomeStatusLabel(
     },
     approved: {
       en: "Approved",
-      mm: "ခ��င့်ပြုပြီး",
+      mm: "ခွင့်ပြုပြီး",
     },
     rejected: {
       en: "Rejected",
@@ -334,13 +334,13 @@ export function groupTransactionsByType(records: IncomeRecord[]): {
 
 export function calculateBalance(records: IncomeRecord[]): {
   totalIncome: number;
-  totalExpenses: number;
+  totalOutcomes: number;
   balance: number;
 } {
-  const { incomeRecords, expenseRecords } = groupTransactionsByType(records);
+  const { incomeRecords, outcomeRecords } = groupTransactionsByType(records);
 
   const totalIncome = calculateTotalIncome(incomeRecords);
-  const totalExpenses = expenseRecords.reduce((total, record) => {
+  const totalOutcomes = outcomeRecords.reduce((total, record) => {
     if (record.status === "approved") {
       return total + record.amount;
     }
@@ -349,8 +349,8 @@ export function calculateBalance(records: IncomeRecord[]): {
 
   return {
     totalIncome,
-    totalExpenses,
-    balance: totalIncome - totalExpenses,
+    totalOutcomes,
+    balance: totalIncome - totalOutcomes,
   };
 }
 
