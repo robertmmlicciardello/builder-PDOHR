@@ -7,11 +7,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppProvider, useApp } from "./context/AppContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import HRDashboard from "./pages/HRDashboard";
 import AttendanceSystem from "./pages/AttendanceSystem";
 import LeaveManagement from "./pages/LeaveManagement";
+import PositionManagement from "./pages/PositionManagement";
 import PersonnelForm from "./pages/PersonnelForm";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
@@ -92,6 +94,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/position-management"
+      element={
+        <ProtectedRoute>
+          <PositionManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/old-dashboard"
       element={
         <ProtectedRoute>
@@ -139,11 +149,13 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <BrowserRouter>
-        <AppProvider>
-          <Toaster />
-          <Sonner />
-          <AppRoutes />
-        </AppProvider>
+        <LanguageProvider>
+          <AppProvider>
+            <Toaster />
+            <Sonner />
+            <AppRoutes />
+          </AppProvider>
+        </LanguageProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
