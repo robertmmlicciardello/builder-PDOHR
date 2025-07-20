@@ -235,6 +235,16 @@ export default function HRDashboard() {
                   {t.settings.manageDepartments}
                 </Button>
               </Link>
+              <Link to="/performance">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-myanmar-red text-myanmar-red"
+                >
+                  <Award className="w-4 h-4 mr-2" />
+                  {t.hr.performance}
+                </Button>
+              </Link>
               <Link to="/admin-settings">
                 <Button
                   variant="outline"
@@ -719,7 +729,7 @@ export default function HRDashboard() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span>လေ့ကျင့်ရေး ပြီးစီးသူများ</span>
+                      <span>လ��့ကျင့်ရေး ပြီးစီးသူများ</span>
                       <Badge className="bg-green-100 text-green-800">
                         78/95
                       </Badge>
@@ -754,7 +764,7 @@ export default function HRDashboard() {
           <CardHeader>
             <h3 className="text-lg font-semibold flex items-center">
               <Settings className="w-5 h-5 mr-2 text-myanmar-red" />
-              မြန်ဆန်��ော လုပ်ဆေ���င်ချက်များ
+              မြန်ဆန်သော လုပ်ဆေ���င်ချက်များ
             </h3>
           </CardHeader>
           <CardContent>
