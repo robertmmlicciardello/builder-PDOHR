@@ -112,7 +112,7 @@ const initialFormData: TransactionFormData = {
   descriptionMyanmar: "",
   source: "",
   sourceMyanmar: "",
-  expenseCategory: "",
+  outcomeCategory: "",
   dateReceived: new Date().toISOString().split("T")[0],
   receivedBy: "",
   categoryId: "",
