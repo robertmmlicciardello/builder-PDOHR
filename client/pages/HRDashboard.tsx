@@ -225,9 +225,8 @@ export default function HRDashboard() {
 
     const colors = ["#dc2626", "#b91c1c", "#991b1b", "#7f1d1d", "#450a0a"];
 
-  return (
-    <Layout>
-      <div className="min-h-screen bg-myanmar-gray-light">
+    return (
+    <div className="min-h-screen bg-myanmar-gray-light">
         {/* Header */}
         <header className="bg-white border-b border-myanmar-red/20 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -553,7 +552,7 @@ export default function HRDashboard() {
                 {dashboardStats.overdueReviews}
               </p>
               <p className="text-sm text-red-600">
-                လ���ပ်ငန်းစွမ်းရ���် သုံး���ပ်ချက်များ
+                လုပ်ငန်းစွမ်းရ���် သုံး���ပ်ချက်များ
               </p>
               <Link to="/performance">
                 <Button size="sm" className="mt-2 bg-red-600 hover:bg-red-700">
