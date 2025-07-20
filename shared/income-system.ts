@@ -97,7 +97,7 @@ export const DEFAULT_INCOME_CATEGORIES: Omit<
   },
   {
     name: "Property Tax",
-    nameMyanmar: "ပစ္စည်းခွန်",
+    nameMyanmar: "ပစ္���ည်းခွန်",
     description: "Tax from property ownership",
     incomeType: "tax",
     isActive: true,
@@ -302,4 +302,75 @@ export function getIncomeStatusLabel(
   };
 
   return labels[status][language];
+}
+
+export function getTransactionTypeLabel(
+  type: TransactionType,
+  language: "en" | "mm" = "en",
+): string {
+  const labels = {
+    income: {
+      en: "Income",
+      mm: "ဝင်ငွေ",
+    },
+    expense: {
+      en: "Expense",
+      mm: "သုံးငွေ",
+    },
+  };
+
+  return labels[type][language];
+}
+
+export function groupTransactionsByType(records: IncomeRecord[]): {
+  incomeRecords: IncomeRecord[];
+  expenseRecords: IncomeRecord[];
+} {
+  const incomeRecords = records.filter((record) => record.type === "income");
+  const expenseRecords = records.filter((record) => record.type === "expense");
+
+  return { incomeRecords, expenseRecords };
+}
+
+export function calculateBalance(records: IncomeRecord[]): {
+  totalIncome: number;
+  totalExpenses: number;
+  balance: number;
+} {
+  const { incomeRecords, expenseRecords } = groupTransactionsByType(records);
+
+  const totalIncome = calculateTotalIncome(incomeRecords);
+  const totalExpenses = expenseRecords.reduce((total, record) => {
+    if (record.status === "approved") {
+      return total + record.amount;
+    }
+    return total;
+  }, 0);
+
+  return {
+    totalIncome,
+    totalExpenses,
+    balance: totalIncome - totalExpenses,
+  };
+}
+
+// Category Management Functions
+export function validateIncomeCategory(
+  category: Partial<IncomeCategory>,
+): string[] {
+  const errors: string[] = [];
+
+  if (!category.name?.trim()) {
+    errors.push("Category name is required");
+  }
+
+  if (!category.nameMyanmar?.trim()) {
+    errors.push("Myanmar name is required");
+  }
+
+  if (!category.incomeType) {
+    errors.push("Income type is required");
+  }
+
+  return errors;
 }
