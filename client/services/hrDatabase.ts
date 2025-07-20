@@ -577,17 +577,20 @@ export class CustomizationService {
     try {
       const docRef = doc(customizationCollection, "dashboard");
       const sanitizedCustomization = sanitizeForFirestore(customization);
-      await updateDoc(docRef, sanitizedCustomization);
-    } catch (error: any) {
-      // If document doesn't exist, create it
-      try {
-        await addDoc(customizationCollection, {
-          id: "dashboard",
-          ...sanitizedCustomization,
-        });
-      } catch (createError: any) {
-        throw new Error(`Failed to save customization: ${createError.message}`);
+
+      // Check if document exists
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        // Update existing document
+        await updateDoc(docRef, sanitizedCustomization);
+      } else {
+        // Create new document with specific ID
+        const { setDoc } = await import("firebase/firestore");
+        await setDoc(docRef, sanitizedCustomization);
       }
+    } catch (error: any) {
+      throw new Error(`Failed to save customization: ${error.message}`);
     }
   }
 }
