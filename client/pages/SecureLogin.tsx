@@ -246,21 +246,40 @@ export default function SecureLogin() {
     // Clear validation errors
     setValidationErrors({ email: [], password: [] });
 
-    // Add device to trusted list on successful login
-    const deviceFingerprint = await generateDeviceFingerprint();
+    try {
+      // Try AppContext login first (for compatibility with existing system)
+      const appSuccess = await appLogin(emailValidation.sanitized, formData.password);
 
-    const success = await auth.login({
-      email: emailValidation.sanitized,
-      password: formData.password,
-      rememberMe: formData.rememberMe,
-    });
+      if (appSuccess) {
+        // Also update secure auth state
+        await auth.login({
+          email: emailValidation.sanitized,
+          password: formData.password,
+          rememberMe: formData.rememberMe,
+        });
 
-    if (success) {
-      // Add device to trusted devices
-      const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
-      if (!trustedDevices.includes(deviceFingerprint)) {
-        trustedDevices.push(deviceFingerprint);
-        localStorage.setItem('trusted-devices', JSON.stringify(trustedDevices));
+        // Add device to trusted devices
+        const deviceFingerprint = await generateDeviceFingerprint();
+        const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
+        if (!trustedDevices.includes(deviceFingerprint)) {
+          trustedDevices.push(deviceFingerprint);
+          localStorage.setItem('trusted-devices', JSON.stringify(trustedDevices));
+        }
+
+        // Navigate to dashboard
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      // Fallback to secure auth only
+      const success = await auth.login({
+        email: emailValidation.sanitized,
+        password: formData.password,
+        rememberMe: formData.rememberMe,
+      });
+
+      if (success) {
+        navigate("/dashboard");
       }
     }
   };
