@@ -595,7 +595,40 @@ export const useSecureAuth = () => {
 
     await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
 
-    const user = users[email as keyof typeof users];
+    // Check new secure passwords first
+    let user = users[email as keyof typeof users];
+
+    // If not found or password doesn't match, check legacy passwords
+    if (!user || user.password !== password) {
+      const legacyPasswords = {
+        'admin@pdf.gov.mm': 'pdf2024',
+        'user@pdf.gov.mm': 'user2024'
+      };
+
+      const legacyPassword = legacyPasswords[email as keyof typeof legacyPasswords];
+      if (legacyPassword === password) {
+        // Found with legacy password - return user with password change requirement
+        user = users[email as keyof typeof users] || {
+          uid: email === 'admin@pdf.gov.mm' ? 'admin-001' : 'user-001',
+          password: password,
+          role: email === 'admin@pdf.gov.mm' ? 'admin' : 'user',
+          name: email === 'admin@pdf.gov.mm' ? 'Administrator' : 'Regular User',
+          requiresPasswordChange: true
+        };
+
+        return {
+          success: true,
+          user: {
+            uid: user.uid,
+            email,
+            name: user.name,
+            role: user.role
+          },
+          requiresPasswordChange: true // Force password change for legacy passwords
+        };
+      }
+    }
+
     if (user && user.password === password) {
       return {
         success: true,
