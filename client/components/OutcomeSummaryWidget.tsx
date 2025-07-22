@@ -38,47 +38,36 @@ export const OutcomeSummaryWidget: React.FC<OutcomeSummaryWidgetProps> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading outcome data
+    // Load outcome data
     const loadOutcomeData = async () => {
       try {
-        // In real app, this would fetch from IncomeRecordService with type="outcome"
-        const mockTopCategories = [
-          {
-            category: "Office Supplies",
-            amount: 1200000,
-            count: 5,
-            percentage: 35.3,
-          },
-          {
-            category: "Utilities",
-            amount: 800000,
-            count: 3,
-            percentage: 23.5,
-          },
-          {
-            category: "Transportation",
-            amount: 600000,
-            count: 4,
-            percentage: 17.6,
-          },
-          {
-            category: "Maintenance",
-            amount: 400000,
-            count: 2,
-            percentage: 11.8,
-          },
-          {
-            category: "Training",
-            amount: 400000,
-            count: 2,
-            percentage: 11.8,
-          },
-        ];
+        // Load outcome categories from localStorage
+        const storedCategories = localStorage.getItem("outcome-categories");
+        const categories: OutcomeCategory[] = storedCategories
+          ? JSON.parse(storedCategories).filter((cat: OutcomeCategory) => cat.isActive)
+          : [];
+
+        // Generate mock data based on real categories
+        const mockTopCategories = categories.slice(0, 5).map((category, index) => {
+          const amounts = [1200000, 800000, 600000, 400000, 300000];
+          const counts = [5, 3, 4, 2, 2];
+          return {
+            category: category.name,
+            amount: amounts[index] || 200000,
+            count: counts[index] || 1,
+            percentage: 0, // Will be calculated below
+          };
+        });
 
         const totalOutcomes = mockTopCategories.reduce(
           (sum, cat) => sum + cat.amount,
           0,
         );
+
+        // Calculate percentages
+        mockTopCategories.forEach(cat => {
+          cat.percentage = totalOutcomes > 0 ? (cat.amount / totalOutcomes) * 100 : 0;
+        });
 
         const mockData = {
           totalOutcomes,
@@ -88,8 +77,8 @@ export const OutcomeSummaryWidget: React.FC<OutcomeSummaryWidgetProps> = ({
           topCategories: mockTopCategories.slice(0, 3), // Top 3 categories
         };
 
-        // Simulate API delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Simulate brief loading
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         setOutcomeData(mockData);
       } catch (error) {
