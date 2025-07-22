@@ -137,7 +137,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Statistics Labels
   totalPersonnelLabel: "Total Personnel",
-  totalPersonnelLabelMyanmar: "စုစုပေါင်း ဝန်ထမ်းများ",
+  totalPersonnelLabelMyanmar: "စုစုပေါင်း ���န်ထမ်းများ",
   activePersonnelLabel: "Active Personnel",
   activePersonnelLabelMyanmar: "လက်ရှိ အလုပ်လုပ်နေသူများ",
   averageAttendanceLabel: "Average Attendance",
@@ -180,7 +180,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Quick Actions
   quickActionsTitle: "Quick Actions",
-  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
+  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်��ျက်များ",
   addPersonnelAction: "Add Personnel",
   addPersonnelActionMyanmar: "ဝန်ထမ်းအသစ်ထည့်ရန်",
   attendanceRecordAction: "Attendance Records",
@@ -387,7 +387,7 @@ export const AdminSettings: React.FC = () => {
             <CardTitle>System Management</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <Link to="/income-category-settings">
                 <Button
                   variant="outline"
@@ -766,7 +766,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="လစာစုစုပေါင်း"
+                      placeholder="လ��ာစုစုပေါင်း"
                     />
                   </div>
                 </div>
