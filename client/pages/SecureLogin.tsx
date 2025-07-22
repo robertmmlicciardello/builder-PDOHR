@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSecureAuth } from "../hooks/useSecureAuth";
+import { useApp } from "../context/AppContext";
 import { SecurityUtils, SECURITY_CONFIG } from "../lib/security";
 import { useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
