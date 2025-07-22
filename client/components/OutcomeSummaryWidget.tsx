@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../../shared/income-system";
+import { OutcomeCategory } from "../pages/OutcomeCategorySettings";
 
 interface OutcomeSummaryWidgetProps {
   className?: string;
