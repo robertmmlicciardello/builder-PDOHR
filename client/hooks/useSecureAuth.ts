@@ -569,19 +569,27 @@ export const useSecureAuth = () => {
   const authenticateUser = async (email: string, password: string) => {
     // Mock users for demo
     const users = {
-      'admin@pdf.gov.mm': { 
-        password: 'pdf2024', 
-        uid: 'admin-001', 
-        role: 'admin', 
+      'admin@pdf.gov.mm': {
+        password: 'PDF2024!',
+        uid: 'admin-001',
+        role: 'admin',
         name: 'Administrator',
         requiresPasswordChange: false
       },
-      'user@pdf.gov.mm': { 
-        password: 'user2024', 
-        uid: 'user-001', 
-        role: 'user', 
+      'user@pdf.gov.mm': {
+        password: 'User2024!',
+        uid: 'user-001',
+        role: 'user',
         name: 'Regular User',
-        requiresPasswordChange: true
+        requiresPasswordChange: false
+      },
+      // Keep old passwords for compatibility
+      'admin@pdf.gov.mm.old': {
+        password: 'pdf2024',
+        uid: 'admin-001',
+        role: 'admin',
+        name: 'Administrator',
+        requiresPasswordChange: false
       }
     };
 
