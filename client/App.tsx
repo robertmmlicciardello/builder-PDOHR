@@ -219,7 +219,11 @@ const AppRoutes = () => (
     <Route
       path="/add-personnel"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_personnel"]}
+        >
           <PersonnelForm />
         </ProtectedRoute>
       }
@@ -227,7 +231,11 @@ const AppRoutes = () => (
     <Route
       path="/edit-personnel/:id"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_personnel"]}
+        >
           <PersonnelForm />
         </ProtectedRoute>
       }
