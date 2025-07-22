@@ -698,7 +698,7 @@ export default function FinancialManagement() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="tax">
-                      Tax Income (အခွန���ဝင်ငွေ)
+                      Tax Income (အခွန်ဝင်ငွေ)
                     </SelectItem>
                     <SelectItem value="donation">Donation (အလှူငွေ)</SelectItem>
                   </SelectContent>
@@ -824,19 +824,40 @@ export default function FinancialManagement() {
               </>
             ) : (
               <>
-                {/* Outcome Category (free text) */}
+                {/* Outcome Category (dropdown) */}
                 <div>
                   <Label>Outcome Category *</Label>
-                  <Input
+                  <Select
                     value={formData.outcomeCategory || ""}
-                    onChange={(e) =>
+                    onValueChange={(value) =>
                       setFormData({
                         ...formData,
-                        outcomeCategory: e.target.value,
+                        outcomeCategory: value,
                       })
                     }
-                    placeholder="What was this outcome for? (e.g., Office supplies, Utilities, etc.)"
-                  />
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select outcome category..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {outcomeCategories.length === 0 ? (
+                        <SelectItem value="no-categories" disabled>
+                          No categories available - Configure in Settings
+                        </SelectItem>
+                      ) : (
+                        outcomeCategories.map((category) => (
+                          <SelectItem key={category.id} value={category.name}>
+                            {category.name} ({category.nameMyanmar})
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  {outcomeCategories.length === 0 && (
+                    <p className="text-xs text-amber-600 mt-1">
+                      Configure outcome categories in Admin Settings to enable selection
+                    </p>
+                  )}
                 </div>
               </>
             )}
