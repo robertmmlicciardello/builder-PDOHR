@@ -597,8 +597,8 @@ export const useSecureAuth = () => {
         'user@pdf.gov.mm': ['user2024', 'User2024!']
       };
 
-      const legacyPassword = legacyPasswords[email as keyof typeof legacyPasswords];
-      if (legacyPassword === password) {
+      const possiblePasswords = legacyPasswords[email as keyof typeof legacyPasswords];
+      if (possiblePasswords && possiblePasswords.includes(password)) {
         // Found with legacy password - return user with password change requirement
         user = users[email as keyof typeof users] || {
           uid: email === 'admin@pdf.gov.mm' ? 'admin-001' : 'user-001',
