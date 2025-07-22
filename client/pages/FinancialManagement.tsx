@@ -136,6 +136,9 @@ export default function FinancialManagement() {
       updatedAt: new Date().toISOString(),
     })),
   );
+  const [outcomeCategories, setOutcomeCategories] = useState<OutcomeCategory[]>(
+    [],
+  );
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTransaction, setEditingTransaction] =
