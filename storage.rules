@@ -1,0 +1,93 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.role == 'admin';
+    }
+    
+    function isValidFileSize() {
+      return resource.size < 10 * 1024 * 1024; // 10MB limit
+    }
+    
+    function isValidFileType() {
+      return request.resource.contentType.matches('image/.*') ||
+             request.resource.contentType.matches('application/pdf') ||
+             request.resource.contentType.matches('application/msword') ||
+             request.resource.contentType.matches('application/vnd.openxmlformats-officedocument.*') ||
+             request.resource.contentType.matches('application/vnd.ms-excel') ||
+             request.resource.contentType.matches('text/csv');
+    }
+    
+    // Personnel profile pictures
+    match /personnel-photos/{userId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() && isValidFileSize() && 
+                      request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin();
+    }
+    
+    // Meeting attachments
+    match /meeting-attachments/{meetingId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() && isValidFileSize() && isValidFileType();
+      allow delete: if isAdmin();
+    }
+    
+    // Personnel documents (contracts, certificates, etc.)
+    match /personnel-documents/{userId}/{fileName} {
+      allow read: if isAdmin() || request.auth.uid == userId;
+      allow write: if isAdmin() && isValidFileSize() && isValidFileType();
+      allow delete: if isAdmin();
+    }
+    
+    // Financial documents (receipts, invoices, etc.)
+    match /financial-documents/{year}/{month}/{fileName} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && isValidFileSize() && isValidFileType();
+      allow delete: if isAdmin();
+    }
+    
+    // Training materials
+    match /training-materials/{trainingId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() && isValidFileSize() && isValidFileType();
+      allow delete: if isAdmin();
+    }
+    
+    // Reports and exports
+    match /reports/{reportType}/{fileName} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && isValidFileSize();
+      allow delete: if isAdmin();
+    }
+    
+    // System backups
+    match /backups/{backupId}/{fileName} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server functions can write backups
+      allow delete: if isAdmin();
+    }
+    
+    // Logo and branding assets
+    match /branding/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin() && isValidFileSize() && 
+                      request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin();
+    }
+    
+    // Temporary uploads (24-hour expiry)
+    match /temp-uploads/{userId}/{fileName} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && request.auth.uid == userId && 
+                      isValidFileSize() && isValidFileType();
+      allow delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}
