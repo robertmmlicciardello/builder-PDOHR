@@ -159,7 +159,11 @@ const AppRoutes = () => (
     <Route
       path="/financial-management"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_finances"]}
+        >
           <FinancialManagement />
         </ProtectedRoute>
       }
