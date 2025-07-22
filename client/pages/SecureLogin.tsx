@@ -504,9 +504,12 @@ export default function SecureLogin() {
                 Demo Credentials:
               </p>
               <div className="grid grid-cols-1 gap-1 text-xs text-myanmar-gray-dark text-center">
-                <p>Admin: admin@pdf.gov.mm / pdf2024</p>
-                <p>User: user@pdf.gov.mm / user2024</p>
+                <p>Admin: admin@pdf.gov.mm / PDF2024!</p>
+                <p>User: user@pdf.gov.mm / User2024!</p>
               </div>
+              <p className="text-xs text-gray-500 text-center mt-2">
+                (Secure passwords meet all security requirements)
+              </p>
             </div>
           </CardContent>
         </Card>
