@@ -83,6 +83,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/simple-login"
+      element={
+        <PublicRoute>
+          <SimpleLogin />
+        </PublicRoute>
+      }
+    />
+    <Route
       path="/dashboard"
       element={
         <ProtectedRoute minSecurityLevel="medium">
