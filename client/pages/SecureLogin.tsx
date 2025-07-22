@@ -505,10 +505,9 @@ export default function SecureLogin() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={auth.isLoading || auth.isAccountLocked || 
-                         validationErrors.email.length > 0 || 
-                         validationErrors.password.length > 0}
-                className="w-full bg-myanmar-red hover:bg-myanmar-red-dark text-white"
+                disabled={auth.isLoading || auth.isAccountLocked ||
+                         !formData.email || !formData.password}
+                className="w-full bg-myanmar-red hover:bg-myanmar-red-dark text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {auth.isLoading ? (
                   <div className="flex items-center space-x-2">
