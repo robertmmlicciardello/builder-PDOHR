@@ -150,22 +150,22 @@ export const useSecureAuth = () => {
 
       // Input validation
       const emailValidation = SecurityUtils.validateInput(email, 'email');
-      const passwordValidation = SecurityUtils.validateInput(password, 'password');
 
       if (!emailValidation.isValid) {
-        setState(prev => ({ 
-          ...prev, 
+        setState(prev => ({
+          ...prev,
           error: emailValidation.errors.join(', '),
-          isLoading: false 
+          isLoading: false
         }));
         return false;
       }
 
-      if (!passwordValidation.isValid) {
-        setState(prev => ({ 
-          ...prev, 
-          error: 'Invalid password format',
-          isLoading: false 
+      // Basic password validation for login (not creation)
+      if (!password || password.length < 6) {
+        setState(prev => ({
+          ...prev,
+          error: 'Password must be at least 6 characters',
+          isLoading: false
         }));
         return false;
       }
