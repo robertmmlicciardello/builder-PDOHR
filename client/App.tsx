@@ -28,6 +28,7 @@ import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import { ProtectedRoute } from "./components/SecurityWrapper";
 
 const queryClient = new QueryClient();
 
