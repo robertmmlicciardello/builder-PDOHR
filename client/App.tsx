@@ -139,7 +139,11 @@ const AppRoutes = () => (
     <Route
       path="/admin-settings"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_settings"]}
+        >
           <AdminSettings />
         </ProtectedRoute>
       }
