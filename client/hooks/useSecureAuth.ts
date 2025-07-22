@@ -593,8 +593,8 @@ export const useSecureAuth = () => {
     // If not found or password doesn't match, check legacy passwords
     if (!user || user.password !== password) {
       const legacyPasswords = {
-        'admin@pdf.gov.mm': 'pdf2024',
-        'user@pdf.gov.mm': 'user2024'
+        'admin@pdf.gov.mm': ['pdf2024', 'PDF2024!'],
+        'user@pdf.gov.mm': ['user2024', 'User2024!']
       };
 
       const legacyPassword = legacyPasswords[email as keyof typeof legacyPasswords];
