@@ -20,6 +20,7 @@ import AdminSettings from "./pages/AdminSettings";
 import IncomeManagement from "./pages/IncomeManagement";
 import FinancialManagement from "./pages/FinancialManagement";
 import IncomeCategorySettings from "./pages/IncomeCategorySettings";
+import OutcomeCategorySettings from "./pages/OutcomeCategorySettings";
 import PersonnelForm from "./pages/PersonnelForm";
 import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
