@@ -247,40 +247,38 @@ export default function SecureLogin() {
     setValidationErrors({ email: [], password: [] });
 
     try {
+      console.log('Attempting login with:', emailValidation.sanitized);
+
       // Try AppContext login first (for compatibility with existing system)
       const appSuccess = await appLogin(emailValidation.sanitized, formData.password);
 
-      if (appSuccess) {
-        // Also update secure auth state
-        await auth.login({
-          email: emailValidation.sanitized,
-          password: formData.password,
-          rememberMe: formData.rememberMe,
-        });
+      console.log('AppContext login result:', appSuccess);
 
+      if (appSuccess) {
         // Add device to trusted devices
-        const deviceFingerprint = await generateDeviceFingerprint();
-        const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
-        if (!trustedDevices.includes(deviceFingerprint)) {
-          trustedDevices.push(deviceFingerprint);
-          localStorage.setItem('trusted-devices', JSON.stringify(trustedDevices));
+        try {
+          const deviceFingerprint = await generateDeviceFingerprint();
+          const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
+          if (!trustedDevices.includes(deviceFingerprint)) {
+            trustedDevices.push(deviceFingerprint);
+            localStorage.setItem('trusted-devices', JSON.stringify(trustedDevices));
+          }
+        } catch (deviceError) {
+          console.warn('Device fingerprinting failed:', deviceError);
         }
 
-        // Navigate to dashboard
-        navigate("/dashboard");
+        // Small delay to ensure state is updated
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 100);
+
+        return;
+      } else {
+        // If AppContext login failed, show error
+        console.error('Login failed - invalid credentials');
       }
     } catch (error) {
       console.error('Login error:', error);
-      // Fallback to secure auth only
-      const success = await auth.login({
-        email: emailValidation.sanitized,
-        password: formData.password,
-        rememberMe: formData.rememberMe,
-      });
-
-      if (success) {
-        navigate("/dashboard");
-      }
     }
   };
 
