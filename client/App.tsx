@@ -83,7 +83,7 @@ const AppRoutes = () => (
     <Route
       path="/dashboard"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute minSecurityLevel="medium">
           <HRDashboard />
         </ProtectedRoute>
       }
