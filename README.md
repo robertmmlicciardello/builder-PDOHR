@@ -276,6 +276,318 @@ npm run typecheck
 
 ## 🚀 Deployment / Deploy လုပ်ခြင်း
 
+### VPS Server Deployment / VPS Server မှာ Deploy လုပ်ခြင်း
+
+#### Prerequisites / လိုအပ်ချက်များ
+
+- Ubuntu 20.04+ or CentOS 8+
+- Root or sudo access
+- Domain name (optional but recommended)
+- At least 2GB RAM and 20GB storage
+
+#### Step 1: Server Setup / Server ပြင်ဆင်ခြင်း
+
+```bash
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Install Node.js 18+
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install Git
+sudo apt install git -y
+
+# Install Nginx
+sudo apt install nginx -y
+
+# Install PM2 for process management
+sudo npm install -g pm2
+
+# Install Firebase CLI (optional)
+sudo npm install -g firebase-tools
+```
+
+#### Step 2: Clone and Setup Project / Project ကူးယူပြီး ပြင်ဆင်ခြင်း
+
+```bash
+# Clone your repository
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env
+nano .env
+```
+
+Add your Firebase configuration:
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+#### Step 3: Build and Start Application / Application တည်ဆောက်ပြီး စတင်ခြင်း
+
+```bash
+# Build the application
+npm run build
+
+# Start with PM2
+pm2 start npm --name "hr-system" -- run start
+
+# Save PM2 configuration
+pm2 save
+
+# Setup PM2 to start on boot
+pm2 startup
+```
+
+#### Step 4: Configure Nginx / Nginx ပြင်ဆင်ခြင်း
+
+Create Nginx configuration file:
+```bash
+sudo nano /etc/nginx/sites-available/hr-system
+```
+
+Add the following configuration:
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;
+    root /home/ubuntu/your-repository/dist;
+    index index.html;
+
+    # Gzip compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/css text/javascript application/javascript application/json;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    add_header Content-Security-Policy "default-src 'self' https://firebaseapp.com https://*.googleapis.com; script-src 'self' 'unsafe-eval' https://firebaseapp.com; style-src 'self' 'unsafe-inline';" always;
+
+    # Main location
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # API proxy (if using backend server)
+    location /api/ {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Static files
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+```
+
+Enable the site:
+```bash
+sudo ln -s /etc/nginx/sites-available/hr-system /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+#### Step 5: SSL Certificate (Optional) / SSL Certificate (ရွေးချယ်စရာ)
+
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx -y
+
+# Get SSL certificate
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+
+# Auto-renew setup
+sudo crontab -e
+# Add: 0 12 * * * /usr/bin/certbot renew --quiet
+```
+
+#### Step 6: Monitoring and Maintenance / စောင့်ကြည့်ခြင်းနှင့် ပြုပြင်ထိန်းသိမ်းခြင်း
+
+```bash
+# Check PM2 status
+pm2 status
+
+# View application logs
+pm2 logs hr-system
+
+# Restart application
+pm2 restart hr-system
+
+# Update application
+git pull origin main
+npm install
+npm run build
+pm2 restart hr-system
+```
+
+---
+
+### cPanel Hosting Deployment / cPanel Hosting မှာ Deploy လုပ်ခြင်း
+
+#### Prerequisites / လိုအပ်ချက်များ
+
+- Shared hosting with cPanel access
+- Node.js support (version 18+)
+- File Manager access
+- At least 1GB storage space
+
+#### Step 1: Prepare Build Files / Build Files များ ပြင်ဆင်ခြင်း
+
+On your local machine:
+```bash
+# Build the project
+npm run build
+
+# This creates a 'dist' folder with all static files
+```
+
+#### Step 2: Setup cPanel Environment / cPanel Environment ပြင်ဆင်ခြင်း
+
+1. **Login to cPanel**
+2. **Go to "File Manager"**
+3. **Navigate to public_html directory**
+4. **Create a new folder for your app** (e.g., "hr-system")
+
+#### Step 3: Upload Files / Files များ Upload လုပ်ခြင်း
+
+**Method 1: Using File Manager**
+1. Select all files from your `dist` folder
+2. Create a ZIP file
+3. Upload ZIP to cPanel File Manager
+4. Extract in the target directory
+
+**Method 2: Using FTP**
+```bash
+# Use any FTP client (FileZilla, WinSCP, etc.)
+# Upload all files from 'dist' folder to public_html/hr-system/
+```
+
+#### Step 4: Configure Domain/Subdomain / Domain/Subdomain ပြင်ဆင်ခြင်း
+
+**Option A: Main Domain**
+- Upload files directly to `public_html`
+- Access via: `https://yourdomain.com`
+
+**Option B: Subdomain**
+1. Go to cPanel → "Subdomains"
+2. Create subdomain: `hr.yourdomain.com`
+3. Point to `public_html/hr-system`
+4. Access via: `https://hr.yourdomain.com`
+
+**Option C: Subfolder**
+- Upload to `public_html/hr-system`
+- Access via: `https://yourdomain.com/hr-system`
+
+#### Step 5: Setup Redirects (for SPA) / Redirects ပြင်ဆင်ခြင်း
+
+Create `.htaccess` file in your app directory:
+```apache
+RewriteEngine On
+
+# Handle Angular and React Router
+RewriteBase /hr-system/
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /hr-system/index.html [L]
+
+# Security headers
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-XSS-Protection "1; mode=block"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+# Gzip compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache static files
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/ico "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+</IfModule>
+```
+
+#### Step 6: Environment Configuration / Environment ပြင်ဆင်ခြင်း
+
+Since this is a static site, Firebase configuration is built into the JS files. Ensure your Firebase project allows your domain:
+
+1. Go to Firebase Console
+2. Authentication → Settings → Authorized domains
+3. Add your cPanel domain: `yourdomain.com` or `hr.yourdomain.com`
+
+#### Step 7: Testing / Testing လုပ်ခြင်း
+
+1. Open your website in browser
+2. Test all major functions:
+   - Login/logout
+   - Adding personnel
+   - Financial transactions
+   - Reports generation
+3. Check browser console for any errors
+
+#### Common cPanel Issues and Solutions / cPanel ပြဿနာများနှင့် ဖြေရှင်းချက်များ
+
+**Issue: 404 Errors on page refresh**
+```apache
+# Add to .htaccess:
+FallbackResource /index.html
+```
+
+**Issue: Large file upload limits**
+- Use cPanel's "Select Max File Size" option
+- Or compress files before upload
+
+**Issue: Firebase connection blocked**
+- Check if hosting provider blocks Firebase domains
+- Contact support to whitelist Firebase IPs
+
+**Issue: Slow loading**
+- Enable Gzip compression in .htaccess
+- Optimize images before upload
+- Use CDN if available
+
+---
+
 ### Firebase Hosting
 
 1. **Install Firebase CLI:**
