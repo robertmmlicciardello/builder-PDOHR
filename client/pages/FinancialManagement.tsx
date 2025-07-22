@@ -153,6 +153,23 @@ export default function FinancialManagement() {
   const [statusFilter, setStatusFilter] = useState<IncomeStatus | "all">("all");
   const [typeFilter, setTypeFilter] = useState<TransactionType | "all">("all");
 
+  // Load outcome categories from localStorage
+  useEffect(() => {
+    const loadOutcomeCategories = () => {
+      try {
+        const stored = localStorage.getItem("outcome-categories");
+        if (stored) {
+          const categories: OutcomeCategory[] = JSON.parse(stored);
+          setOutcomeCategories(categories.filter(cat => cat.isActive));
+        }
+      } catch (error) {
+        console.error("Failed to load outcome categories:", error);
+      }
+    };
+
+    loadOutcomeCategories();
+  }, []);
+
   // Calculate financial summary
   const financialSummary = useMemo(() => {
     return calculateBalance(transactions);
@@ -681,7 +698,7 @@ export default function FinancialManagement() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="tax">
-                      Tax Income (အခွန်ဝင်ငွေ)
+                      Tax Income (အခွန���ဝင်ငွေ)
                     </SelectItem>
                     <SelectItem value="donation">Donation (အလှူငွေ)</SelectItem>
                   </SelectContent>
