@@ -179,7 +179,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Quick Actions
   quickActionsTitle: "Quick Actions",
-  quickActionsTitleMyanmar: "မြန်ဆန်��ော လုပ်ဆောင်ချက်များ",
+  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
   addPersonnelAction: "Add Personnel",
   addPersonnelActionMyanmar: "ဝန်ထမ်းအသစ်ထည့်ရန်",
   attendanceRecordAction: "Attendance Records",
@@ -386,7 +386,7 @@ export const AdminSettings: React.FC = () => {
             <CardTitle>System Management</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Link to="/income-category-settings">
                 <Button
                   variant="outline"
@@ -396,6 +396,18 @@ export const AdminSettings: React.FC = () => {
                   <span className="text-sm font-medium">Income Categories</span>
                   <span className="text-xs text-gray-500">
                     Manage income types and categories
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/outcome-category-settings">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <MinusCircle className="w-6 h-6" />
+                  <span className="text-sm font-medium">Outcome Categories</span>
+                  <span className="text-xs text-gray-500">
+                    Manage outcome types and categories
                   </span>
                 </Button>
               </Link>
