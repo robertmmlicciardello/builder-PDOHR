@@ -386,7 +386,7 @@ export default function HRDashboard() {
                         dashboardStats.totalEmployees) *
                       100
                     ).toFixed(1)}
-                    % လက��ရှိလ
+                    % လက်ရှိလ
                   </p>
                 </div>
                 <Users className="w-12 h-12 text-myanmar-red" />
@@ -464,25 +464,40 @@ export default function HRDashboard() {
           </Card>
         </div>
 
-        {/* Income Summary */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <Card className="border-myanmar-red/20">
-              <CardHeader>
-                <h3 className="text-lg font-semibold text-myanmar-black">
-                  Recent Activity
-                </h3>
-              </CardHeader>
-              <CardContent>
-                <p className="text-myanmar-gray-dark">
-                  Dashboard activity and analytics will be displayed here.
-                </p>
-              </CardContent>
-            </Card>
+        {/* Financial Summary Section */}
+        <div className="mt-8">
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-myanmar-black mb-2">
+              Financial Overview
+            </h2>
+            <p className="text-sm text-myanmar-gray-dark">
+              Income and outcome summary for this period
+            </p>
           </div>
 
-          <div>
-            <IncomeSummaryWidget />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1">
+              <IncomeSummaryWidget />
+            </div>
+
+            <div className="lg:col-span-1">
+              <OutcomeSummaryWidget />
+            </div>
+
+            <div className="lg:col-span-1">
+              <Card className="border-myanmar-red/20">
+                <CardHeader>
+                  <h3 className="text-lg font-semibold text-myanmar-black">
+                    Recent Activity
+                  </h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-myanmar-gray-dark">
+                    Latest financial transactions and personnel activities will be displayed here.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
