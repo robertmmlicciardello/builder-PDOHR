@@ -279,21 +279,32 @@ export class SecurityUtils {
    * Content Security Policy
    */
   static getCSPHeader(): string {
-    return [
+    const isDevelopment = import.meta.env.DEV;
+
+    const basePolicy = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com",
+      `script-src 'self' 'unsafe-inline' ${isDevelopment ? "'unsafe-eval'" : ''} https://www.gstatic.com https://apis.google.com https://firebase.googleapis.com`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com",
+      "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: https: blob:",
-      "connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com",
-      "frame-src 'self' https://firebase.googleapis.com",
+      "connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss: ws:",
+      "frame-src 'self' https://firebase.googleapis.com https://accounts.google.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "frame-ancestors 'none'",
-      "block-all-mixed-content",
-      "upgrade-insecure-requests"
-    ].join('; ');
+      "worker-src 'self' blob:",
+    ];
+
+    // Add stricter policies for production
+    if (!isDevelopment) {
+      basePolicy.push(
+        "frame-ancestors 'none'",
+        "block-all-mixed-content",
+        "upgrade-insecure-requests"
+      );
+    }
+
+    return basePolicy.filter(Boolean).join('; ');
   }
 }
 
