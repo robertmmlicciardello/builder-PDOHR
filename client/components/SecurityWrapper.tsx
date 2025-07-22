@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { SecurityUtils, SecurityLogger, SessionManager } from '../lib/security';
-import { useSecureAuth } from '../hooks/useSecureAuth';
-import { Alert, AlertDescription } from './ui/alert';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
+import React, { useEffect, useState, useCallback } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { SecurityUtils, SecurityLogger, SessionManager } from "../lib/security";
+import { useSecureAuth } from "../hooks/useSecureAuth";
+import { Alert, AlertDescription } from "./ui/alert";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
 import {
   Shield,
   AlertTriangle,
@@ -15,30 +15,30 @@ import {
   RefreshCw,
   LogOut,
   Settings,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SecurityWrapperProps {
   children: React.ReactNode;
   requiredPermissions?: string[];
-  minSecurityLevel?: 'low' | 'medium' | 'high';
+  minSecurityLevel?: "low" | "medium" | "high";
   requiresPasswordChange?: boolean;
-  allowedRoles?: ('admin' | 'user')[];
+  allowedRoles?: ("admin" | "user")[];
 }
 
 interface SecurityCheck {
   id: string;
   name: string;
-  status: 'pass' | 'fail' | 'warning';
+  status: "pass" | "fail" | "warning";
   message: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
 }
 
 export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
   children,
   requiredPermissions = [],
-  minSecurityLevel = 'medium',
+  minSecurityLevel = "medium",
   requiresPasswordChange = false,
-  allowedRoles = ['admin', 'user'],
+  allowedRoles = ["admin", "user"],
 }) => {
   const auth = useSecureAuth();
   const location = useLocation();
@@ -68,158 +68,173 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
       // 1. Authentication Check
       if (!auth.isAuthenticated) {
         checks.push({
-          id: 'auth',
-          name: 'Authentication',
-          status: 'fail',
-          message: 'User not authenticated',
-          severity: 'critical',
+          id: "auth",
+          name: "Authentication",
+          status: "fail",
+          message: "User not authenticated",
+          severity: "critical",
         });
       } else {
         checks.push({
-          id: 'auth',
-          name: 'Authentication',
-          status: 'pass',
-          message: 'User authenticated successfully',
-          severity: 'low',
+          id: "auth",
+          name: "Authentication",
+          status: "pass",
+          message: "User authenticated successfully",
+          severity: "low",
         });
       }
 
       // 2. Session Validation
       const sessionValid = SessionManager.isSessionValid(auth.user?.sessionId);
       checks.push({
-        id: 'session',
-        name: 'Session Validity',
-        status: sessionValid ? 'pass' : 'fail',
-        message: sessionValid ? 'Session is valid' : 'Session expired or invalid',
-        severity: sessionValid ? 'low' : 'high',
+        id: "session",
+        name: "Session Validity",
+        status: sessionValid ? "pass" : "fail",
+        message: sessionValid
+          ? "Session is valid"
+          : "Session expired or invalid",
+        severity: sessionValid ? "low" : "high",
       });
 
       // 3. Role Authorization
       const hasValidRole = auth.user && allowedRoles.includes(auth.user.role);
       checks.push({
-        id: 'role',
-        name: 'Role Authorization',
-        status: hasValidRole ? 'pass' : 'fail',
-        message: hasValidRole 
-          ? `User has valid role: ${auth.user?.role}` 
-          : 'User does not have required role',
-        severity: hasValidRole ? 'low' : 'high',
+        id: "role",
+        name: "Role Authorization",
+        status: hasValidRole ? "pass" : "fail",
+        message: hasValidRole
+          ? `User has valid role: ${auth.user?.role}`
+          : "User does not have required role",
+        severity: hasValidRole ? "low" : "high",
       });
 
       // 4. Permission Check
-      const hasPermissions = requiredPermissions.every(permission => 
-        auth.hasPermission(permission)
+      const hasPermissions = requiredPermissions.every((permission) =>
+        auth.hasPermission(permission),
       );
       checks.push({
-        id: 'permissions',
-        name: 'Permissions',
-        status: hasPermissions ? 'pass' : 'fail',
-        message: hasPermissions 
-          ? 'All required permissions granted' 
-          : `Missing permissions: ${requiredPermissions.join(', ')}`,
-        severity: hasPermissions ? 'low' : 'medium',
+        id: "permissions",
+        name: "Permissions",
+        status: hasPermissions ? "pass" : "fail",
+        message: hasPermissions
+          ? "All required permissions granted"
+          : `Missing permissions: ${requiredPermissions.join(", ")}`,
+        severity: hasPermissions ? "low" : "medium",
       });
 
       // 5. Security Level Check
-      const meetsSecurity = auth.securityLevel === 'high' || 
-        (minSecurityLevel === 'medium' && ['medium', 'high'].includes(auth.securityLevel)) ||
-        (minSecurityLevel === 'low');
+      const meetsSecurity =
+        auth.securityLevel === "high" ||
+        (minSecurityLevel === "medium" &&
+          ["medium", "high"].includes(auth.securityLevel)) ||
+        minSecurityLevel === "low";
       checks.push({
-        id: 'security_level',
-        name: 'Security Level',
-        status: meetsSecurity ? 'pass' : 'warning',
+        id: "security_level",
+        name: "Security Level",
+        status: meetsSecurity ? "pass" : "warning",
         message: `Current: ${auth.securityLevel}, Required: ${minSecurityLevel}`,
-        severity: meetsSecurity ? 'low' : 'medium',
+        severity: meetsSecurity ? "low" : "medium",
       });
 
       // 6. Password Change Requirement
       if (requiresPasswordChange && auth.requiresPasswordChange) {
         checks.push({
-          id: 'password_change',
-          name: 'Password Change',
-          status: 'fail',
-          message: 'Password change required before accessing this resource',
-          severity: 'high',
+          id: "password_change",
+          name: "Password Change",
+          status: "fail",
+          message: "Password change required before accessing this resource",
+          severity: "high",
         });
       } else {
         checks.push({
-          id: 'password_change',
-          name: 'Password Change',
-          status: 'pass',
-          message: 'Password requirements met',
-          severity: 'low',
+          id: "password_change",
+          name: "Password Change",
+          status: "pass",
+          message: "Password requirements met",
+          severity: "low",
         });
       }
 
       // 7. HTTPS Check
-      const isHTTPS = window.location.protocol === 'https:';
+      const isHTTPS = window.location.protocol === "https:";
       checks.push({
-        id: 'https',
-        name: 'Secure Connection',
-        status: isHTTPS ? 'pass' : 'warning',
-        message: isHTTPS ? 'Connection is encrypted' : 'Connection is not encrypted',
-        severity: isHTTPS ? 'low' : 'medium',
+        id: "https",
+        name: "Secure Connection",
+        status: isHTTPS ? "pass" : "warning",
+        message: isHTTPS
+          ? "Connection is encrypted"
+          : "Connection is not encrypted",
+        severity: isHTTPS ? "low" : "medium",
       });
 
       // 8. Browser Security
       const browserSecure = checkBrowserSecurity();
       checks.push({
-        id: 'browser',
-        name: 'Browser Security',
-        status: browserSecure.secure ? 'pass' : 'warning',
+        id: "browser",
+        name: "Browser Security",
+        status: browserSecure.secure ? "pass" : "warning",
         message: browserSecure.message,
-        severity: browserSecure.secure ? 'low' : 'medium',
+        severity: browserSecure.secure ? "low" : "medium",
       });
 
       // 9. Rate Limiting Check
       const rateLimitOK = auth.rateLimitRemaining > 0;
       checks.push({
-        id: 'rate_limit',
-        name: 'Rate Limiting',
-        status: rateLimitOK ? 'pass' : 'fail',
+        id: "rate_limit",
+        name: "Rate Limiting",
+        status: rateLimitOK ? "pass" : "fail",
         message: `${auth.rateLimitRemaining} requests remaining`,
-        severity: rateLimitOK ? 'low' : 'high',
+        severity: rateLimitOK ? "low" : "high",
       });
 
       // 10. Account Lock Check
       checks.push({
-        id: 'account_lock',
-        name: 'Account Status',
-        status: auth.isAccountLocked ? 'fail' : 'pass',
-        message: auth.isAccountLocked 
+        id: "account_lock",
+        name: "Account Status",
+        status: auth.isAccountLocked ? "fail" : "pass",
+        message: auth.isAccountLocked
           ? `Account locked for ${Math.ceil(auth.lockoutTimeRemaining / 60000)} minutes`
-          : 'Account is not locked',
-        severity: auth.isAccountLocked ? 'critical' : 'low',
+          : "Account is not locked",
+        severity: auth.isAccountLocked ? "critical" : "low",
       });
 
       setSecurityChecks(checks);
 
       // Log security check results
-      const failedChecks = checks.filter(check => check.status === 'fail');
+      const failedChecks = checks.filter((check) => check.status === "fail");
       if (failedChecks.length > 0) {
         SecurityLogger.logEvent({
-          type: 'suspicious_activity',
+          type: "suspicious_activity",
           userId: auth.user?.uid,
           details: {
             location: location.pathname,
-            failedChecks: failedChecks.map(c => c.name),
+            failedChecks: failedChecks.map((c) => c.name),
             userAgent: navigator.userAgent,
           },
-          severity: 'high',
+          severity: "high",
         });
       }
-
     } catch (error) {
-      console.error('Security checks failed:', error);
+      console.error("Security checks failed:", error);
       SecurityLogger.logEvent({
-        type: 'suspicious_activity',
-        details: { error: (error as Error).message, location: location.pathname },
-        severity: 'critical',
+        type: "suspicious_activity",
+        details: {
+          error: (error as Error).message,
+          location: location.pathname,
+        },
+        severity: "critical",
       });
     } finally {
       setIsPerformingChecks(false);
     }
-  }, [auth, location.pathname, requiredPermissions, minSecurityLevel, allowedRoles, requiresPasswordChange]);
+  }, [
+    auth,
+    location.pathname,
+    requiredPermissions,
+    minSecurityLevel,
+    allowedRoles,
+    requiresPasswordChange,
+  ]);
 
   const monitorSecurityThreats = useCallback(() => {
     // Check for suspicious activity patterns
@@ -234,21 +249,21 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
       checkStorageTampering(),
     ];
 
-    const threats = suspiciousPatterns.filter(pattern => pattern.detected);
-    
+    const threats = suspiciousPatterns.filter((pattern) => pattern.detected);
+
     if (threats.length > 0) {
       SecurityLogger.logEvent({
-        type: 'suspicious_activity',
+        type: "suspicious_activity",
         userId: auth.user?.uid,
         details: {
-          threats: threats.map(t => t.type),
+          threats: threats.map((t) => t.type),
           location: location.pathname,
         },
-        severity: 'high',
+        severity: "high",
       });
 
       // Auto-logout on critical threats
-      const criticalThreats = threats.filter(t => t.severity === 'critical');
+      const criticalThreats = threats.filter((t) => t.severity === "critical");
       if (criticalThreats.length > 0) {
         auth.logout();
       }
@@ -257,10 +272,10 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
 
   const checkBrowserSecurity = () => {
     const checks = {
-      localStorage: typeof Storage !== 'undefined',
-      sessionStorage: typeof sessionStorage !== 'undefined',
-      crypto: typeof crypto !== 'undefined',
-      https: window.location.protocol === 'https:',
+      localStorage: typeof Storage !== "undefined",
+      sessionStorage: typeof sessionStorage !== "undefined",
+      crypto: typeof crypto !== "undefined",
+      https: window.location.protocol === "https:",
     };
 
     const passed = Object.values(checks).filter(Boolean).length;
@@ -274,99 +289,127 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
 
   const checkRapidNavigation = () => {
     const navigationHistory = JSON.parse(
-      sessionStorage.getItem('navigation-history') || '[]'
+      sessionStorage.getItem("navigation-history") || "[]",
     );
-    
+
     const now = Date.now();
     const recentNavigation = navigationHistory.filter(
-      (time: number) => now - time < 10000
+      (time: number) => now - time < 10000,
     ); // Last 10 seconds
 
     // Update history
     navigationHistory.push(now);
     const trimmedHistory = navigationHistory.slice(-20); // Keep last 20
-    sessionStorage.setItem('navigation-history', JSON.stringify(trimmedHistory));
+    sessionStorage.setItem(
+      "navigation-history",
+      JSON.stringify(trimmedHistory),
+    );
 
     return {
       detected: recentNavigation.length > 10, // More than 10 navigations in 10 seconds
-      type: 'rapid_navigation',
-      severity: 'medium' as const,
+      type: "rapid_navigation",
+      severity: "medium" as const,
     };
   };
 
   const checkPermissionFailures = () => {
     const failures = JSON.parse(
-      sessionStorage.getItem('permission-failures') || '[]'
+      sessionStorage.getItem("permission-failures") || "[]",
     );
-    
+
     const now = Date.now();
     const recentFailures = failures.filter(
-      (time: number) => now - time < 300000
+      (time: number) => now - time < 300000,
     ); // Last 5 minutes
 
     return {
       detected: recentFailures.length > 5,
-      type: 'permission_enumeration',
-      severity: 'high' as const,
+      type: "permission_enumeration",
+      severity: "high" as const,
     };
   };
 
   const checkUserAgent = () => {
     const knownBots = [
-      'bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python',
+      "bot",
+      "crawler",
+      "spider",
+      "scraper",
+      "curl",
+      "wget",
+      "python",
     ];
-    
+
     const userAgent = navigator.userAgent.toLowerCase();
-    const isBot = knownBots.some(bot => userAgent.includes(bot));
+    const isBot = knownBots.some((bot) => userAgent.includes(bot));
 
     return {
       detected: isBot,
-      type: 'bot_detection',
-      severity: 'medium' as const,
+      type: "bot_detection",
+      severity: "medium" as const,
     };
   };
 
   const checkStorageTampering = () => {
     try {
-      const securityToken = localStorage.getItem('security-token');
+      const securityToken = localStorage.getItem("security-token");
       const expectedToken = SecurityUtils.generateSecureRandom(16);
-      
+
       // First time setup
       if (!securityToken) {
-        localStorage.setItem('security-token', expectedToken);
-        return { detected: false, type: 'storage_tampering', severity: 'low' as const };
+        localStorage.setItem("security-token", expectedToken);
+        return {
+          detected: false,
+          type: "storage_tampering",
+          severity: "low" as const,
+        };
       }
 
       // Check if token was modified
-      const tokenAge = Date.now() - parseInt(localStorage.getItem('token-timestamp') || '0');
-      if (tokenAge > 3600000) { // 1 hour
-        localStorage.setItem('security-token', expectedToken);
-        localStorage.setItem('token-timestamp', Date.now().toString());
+      const tokenAge =
+        Date.now() - parseInt(localStorage.getItem("token-timestamp") || "0");
+      if (tokenAge > 3600000) {
+        // 1 hour
+        localStorage.setItem("security-token", expectedToken);
+        localStorage.setItem("token-timestamp", Date.now().toString());
       }
 
-      return { detected: false, type: 'storage_tampering', severity: 'low' as const };
+      return {
+        detected: false,
+        type: "storage_tampering",
+        severity: "low" as const,
+      };
     } catch (error) {
-      return { detected: true, type: 'storage_tampering', severity: 'high' as const };
+      return {
+        detected: true,
+        type: "storage_tampering",
+        severity: "high" as const,
+      };
     }
   };
 
   // Determine if access should be denied
   const shouldDenyAccess = () => {
     const criticalFailures = securityChecks.filter(
-      check => check.status === 'fail' && 
-      ['critical', 'high'].includes(check.severity)
+      (check) =>
+        check.status === "fail" &&
+        ["critical", "high"].includes(check.severity),
     );
-    
+
     return criticalFailures.length > 0;
   };
 
   // Get security level color
   const getSecurityLevelColor = (level: string) => {
     switch (level) {
-      case 'high': return 'text-green-600 bg-green-50 border-green-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-red-600 bg-red-50 border-red-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case "high":
+        return "text-green-600 bg-green-50 border-green-200";
+      case "medium":
+        return "text-yellow-600 bg-yellow-50 border-yellow-200";
+      case "low":
+        return "text-red-600 bg-red-50 border-red-200";
+      default:
+        return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
 
@@ -388,7 +431,9 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
   // Render access denied
   if (shouldDenyAccess()) {
     const criticalFailures = securityChecks.filter(
-      check => check.status === 'fail' && ['critical', 'high'].includes(check.severity)
+      (check) =>
+        check.status === "fail" &&
+        ["critical", "high"].includes(check.severity),
     );
 
     return (
@@ -411,9 +456,14 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
             <div className="space-y-2">
               <h4 className="font-medium">Security Issues:</h4>
               {criticalFailures.map((failure) => (
-                <div key={failure.id} className="flex items-center space-x-2 text-sm">
+                <div
+                  key={failure.id}
+                  className="flex items-center space-x-2 text-sm"
+                >
                   <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span>{failure.name}: {failure.message}</span>
+                  <span>
+                    {failure.name}: {failure.message}
+                  </span>
                 </div>
               ))}
             </div>
@@ -442,7 +492,7 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
   }
 
   // Render security warnings if any
-  const warnings = securityChecks.filter(check => check.status === 'warning');
+  const warnings = securityChecks.filter((check) => check.status === "warning");
 
   return (
     <div className="relative">
@@ -453,7 +503,8 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
             <div className="flex items-center space-x-2">
               <AlertTriangle className="w-4 h-4 text-yellow-600" />
               <span className="text-sm text-yellow-700">
-                {warnings.length} security warning{warnings.length !== 1 ? 's' : ''}
+                {warnings.length} security warning
+                {warnings.length !== 1 ? "s" : ""}
               </span>
             </div>
             <Button
@@ -463,7 +514,7 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
               className="text-yellow-700 hover:text-yellow-800"
             >
               <Eye className="w-4 h-4 mr-1" />
-              {showSecurityPanel ? 'Hide' : 'View'} Details
+              {showSecurityPanel ? "Hide" : "View"} Details
             </Button>
           </div>
         </div>
@@ -488,25 +539,25 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
                 </Button>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {securityChecks.map((check) => (
                 <div
                   key={check.id}
                   className={`p-3 rounded border text-sm ${
-                    check.status === 'pass'
-                      ? 'bg-green-50 border-green-200 text-green-700'
-                      : check.status === 'warning'
-                      ? 'bg-yellow-50 border-yellow-200 text-yellow-700'
-                      : 'bg-red-50 border-red-200 text-red-700'
+                    check.status === "pass"
+                      ? "bg-green-50 border-green-200 text-green-700"
+                      : check.status === "warning"
+                        ? "bg-yellow-50 border-yellow-200 text-yellow-700"
+                        : "bg-red-50 border-red-200 text-red-700"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-medium">{check.name}</span>
                     <div className="flex items-center">
-                      {check.status === 'pass' ? (
+                      {check.status === "pass" ? (
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      ) : check.status === 'warning' ? (
+                      ) : check.status === "warning" ? (
                         <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                       ) : (
                         <div className="w-2 h-2 bg-red-500 rounded-full"></div>
@@ -545,8 +596,8 @@ export const SecurityWrapper: React.FC<SecurityWrapperProps> = ({
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredPermissions?: string[];
-  requiredRole?: 'admin' | 'user';
-  minSecurityLevel?: 'low' | 'medium' | 'high';
+  requiredRole?: "admin" | "user";
+  minSecurityLevel?: "low" | "medium" | "high";
   requiresPasswordChange?: boolean;
 }
 
@@ -554,7 +605,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredPermissions = [],
   requiredRole,
-  minSecurityLevel = 'medium',
+  minSecurityLevel = "medium",
   requiresPasswordChange = false,
 }) => {
   const auth = useSecureAuth();
@@ -571,7 +622,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   // Role check
-  const allowedRoles = requiredRole ? [requiredRole] : ['admin', 'user'];
+  const allowedRoles = requiredRole ? [requiredRole] : ["admin", "user"];
 
   return (
     <SecurityWrapper

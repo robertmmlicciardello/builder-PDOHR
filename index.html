@@ -6,39 +6,57 @@
     <title>PDF-Technology HR System - Secure Portal</title>
 
     <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta
+      http-equiv="Referrer-Policy"
+      content="strict-origin-when-cross-origin"
+    />
+    <meta
+      http-equiv="Permissions-Policy"
+      content="camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    />
 
     <!-- Content Security Policy (development-friendly while secure) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://firebase.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss: ws:; frame-src 'self' https://firebase.googleapis.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:;">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://firebase.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://firestore.googleapis.com https://firebase.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com wss: ws:; frame-src 'self' https://firebase.googleapis.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:;"
+    />
 
     <!-- Preload critical resources -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- Additional security and SEO meta tags -->
-    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="description" content="PDF Technology HR Management System - Secure Employee Portal">
-    <meta name="author" content="PDF Technology Workshop">
-    <meta name="application-name" content="PDF-HR">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta
+      name="description"
+      content="PDF Technology HR Management System - Secure Employee Portal"
+    />
+    <meta name="author" content="PDF Technology Workshop" />
+    <meta name="application-name" content="PDF-HR" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/placeholder.svg" />
 
     <!-- Prevent caching of sensitive pages -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
     <!-- Theme and mobile optimization -->
-    <meta name="theme-color" content="#B91C1C">
-    <meta name="msapplication-TileColor" content="#B91C1C">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#B91C1C" />
+    <meta name="msapplication-TileColor" content="#B91C1C" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
   </head>
 
   <body>
@@ -50,16 +68,20 @@
     <!-- Security monitoring -->
     <script>
       // Basic security monitoring
-      (function() {
+      (function () {
         // Prevent console access in production
-        if (window.location.hostname !== 'localhost') {
-          console.log = console.warn = console.error = function() {};
+        if (window.location.hostname !== "localhost") {
+          console.log = console.warn = console.error = function () {};
         }
 
         // Monitor for tampering
         var originalLog = console.log;
-        console.log = function() {
-          if (arguments[0] && typeof arguments[0] === 'string' && arguments[0].includes('security')) {
+        console.log = function () {
+          if (
+            arguments[0] &&
+            typeof arguments[0] === "string" &&
+            arguments[0].includes("security")
+          ) {
             return;
           }
           originalLog.apply(console, arguments);

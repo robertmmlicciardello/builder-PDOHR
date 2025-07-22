@@ -21,12 +21,12 @@ export default function SimpleLogin() {
     setIsLoading(true);
 
     try {
-      console.log('Simple login attempt:', { email, password });
+      console.log("Simple login attempt:", { email, password });
       const success = await login(email, password);
-      console.log('Login result:', success);
-      
+      console.log("Login result:", success);
+
       if (success) {
-        console.log('Login successful, navigating to dashboard');
+        console.log("Login successful, navigating to dashboard");
         setTimeout(() => {
           navigate("/dashboard");
         }, 100);
@@ -34,7 +34,7 @@ export default function SimpleLogin() {
         setError("Invalid credentials. Try: admin@pdf.gov.mm / admin123");
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error("Login error:", err);
       setError("Login failed. Please try again.");
     } finally {
       setIsLoading(false);
@@ -75,7 +75,7 @@ export default function SimpleLogin() {
                   required
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="password">Password</Label>
                 <Input
@@ -108,8 +108,12 @@ export default function SimpleLogin() {
             <div className="mt-6 pt-4 border-t text-center">
               <h3 className="text-sm font-medium mb-2">Demo Credentials:</h3>
               <div className="text-xs text-gray-600 space-y-1">
-                <p><strong>Admin:</strong> admin@pdf.gov.mm / admin123</p>
-                <p><strong>User:</strong> user@pdf.gov.mm / user123</p>
+                <p>
+                  <strong>Admin:</strong> admin@pdf.gov.mm / admin123
+                </p>
+                <p>
+                  <strong>User:</strong> user@pdf.gov.mm / user123
+                </p>
               </div>
             </div>
 
@@ -123,7 +127,10 @@ export default function SimpleLogin() {
 
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-500">
-            Authentication State: {state.user?.isAuthenticated ? 'Authenticated' : 'Not authenticated'}
+            Authentication State:{" "}
+            {state.user?.isAuthenticated
+              ? "Authenticated"
+              : "Not authenticated"}
           </p>
           {state.user && (
             <p className="text-xs text-gray-500">

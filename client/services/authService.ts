@@ -10,12 +10,12 @@ import {
   EmailAuthProvider,
   updateProfile,
 } from "firebase/auth";
-import { 
-  doc, 
-  getDoc, 
-  setDoc, 
-  updateDoc, 
-  serverTimestamp 
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db, auth } from "./firebase";
 
@@ -70,7 +70,9 @@ export class EnhancedAuthService {
       // Check if account is locked
       const isLocked = await this.isAccountLocked(email);
       if (isLocked) {
-        throw new Error("Account is temporarily locked due to multiple failed login attempts. Please try again later.");
+        throw new Error(
+          "Account is temporarily locked due to multiple failed login attempts. Please try again later.",
+        );
       }
 
       // Validate input
@@ -83,7 +85,11 @@ export class EnhancedAuthService {
       }
 
       // Attempt authentication
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const user = userCredential.user;
 
       // Log successful login attempt
@@ -120,7 +126,7 @@ export class EnhancedAuthService {
     } catch (error: any) {
       // Log failed login attempt
       await this.logLoginAttempt(email, false);
-      
+
       // Check if account should be locked
       await this.checkAndLockAccount(email);
 
@@ -150,7 +156,7 @@ export class EnhancedAuthService {
    */
   static async changePassword(
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<void> {
     try {
       const user = auth.currentUser;
@@ -164,16 +170,19 @@ export class EnhancedAuthService {
       }
 
       // Re-authenticate user
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword,
+      );
       await reauthenticateWithCredential(user, credential);
 
       // Update password
       await updatePassword(user, newPassword);
 
       // Update user profile to mark password as changed
-      await this.updateUserProfile(user.uid, { 
+      await this.updateUserProfile(user.uid, {
         mustChangePassword: false,
-        passwordLastChanged: new Date().toISOString()
+        passwordLastChanged: new Date().toISOString(),
       });
 
       // Log security event
@@ -193,7 +202,7 @@ export class EnhancedAuthService {
       }
 
       await sendPasswordResetEmail(auth, email);
-      
+
       // Log security event
       await this.logSecurityEvent(null, "password_reset_requested", { email });
     } catch (error: any) {
@@ -205,13 +214,13 @@ export class EnhancedAuthService {
    * Update user profile
    */
   static async updateUserProfile(
-    uid: string, 
+    uid: string,
     updates: Partial<{
       displayName: string;
       mustChangePassword: boolean;
       passwordLastChanged: string;
       role: "admin" | "user";
-    }>
+    }>,
   ): Promise<void> {
     try {
       const userRef = doc(db, "users", uid);
@@ -238,11 +247,11 @@ export class EnhancedAuthService {
     try {
       const userRef = doc(db, "users", uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         return userSnap.data();
       }
-      
+
       return null;
     } catch (error: any) {
       console.error("Failed to get user profile:", error);
@@ -254,19 +263,21 @@ export class EnhancedAuthService {
    * Enhanced auth state observer
    */
   static onAuthStateChange(
-    callback: (user: AuthUser | null) => void
+    callback: (user: AuthUser | null) => void,
   ): () => void {
     return onAuthStateChanged(auth, async (user: User | null) => {
       if (user) {
         try {
           const userProfile = await this.getUserProfile(user.uid);
           const idTokenResult = await user.getIdTokenResult();
-          const role = (idTokenResult.claims.role as "admin" | "user") || "user";
+          const role =
+            (idTokenResult.claims.role as "admin" | "user") || "user";
 
           const authUser: AuthUser = {
             uid: user.uid,
             email: user.email!,
-            displayName: user.displayName || userProfile?.displayName || undefined,
+            displayName:
+              user.displayName || userProfile?.displayName || undefined,
             isAuthenticated: true,
             role,
             customClaims: idTokenResult.claims,
@@ -303,13 +314,15 @@ export class EnhancedAuthService {
    */
   private static validatePassword(password: string): boolean {
     const settings = DEFAULT_SECURITY_SETTINGS;
-    
+
     if (password.length < settings.passwordMinLength) {
       return false;
     }
 
     if (settings.requireSpecialChars) {
-      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+      const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
+        password,
+      );
       const hasNumber = /\d/.test(password);
       const hasUpperCase = /[A-Z]/.test(password);
       const hasLowerCase = /[a-z]/.test(password);
@@ -327,11 +340,17 @@ export class EnhancedAuthService {
     try {
       const attempts = this.loginAttempts.get(email) || [];
       const recentAttempts = attempts.filter(
-        attempt => Date.now() - attempt.timestamp < DEFAULT_SECURITY_SETTINGS.lockoutDuration * 60 * 1000
+        (attempt) =>
+          Date.now() - attempt.timestamp <
+          DEFAULT_SECURITY_SETTINGS.lockoutDuration * 60 * 1000,
       );
 
-      const failedAttempts = recentAttempts.filter(attempt => !attempt.success);
-      return failedAttempts.length >= DEFAULT_SECURITY_SETTINGS.maxLoginAttempts;
+      const failedAttempts = recentAttempts.filter(
+        (attempt) => !attempt.success,
+      );
+      return (
+        failedAttempts.length >= DEFAULT_SECURITY_SETTINGS.maxLoginAttempts
+      );
     } catch (error) {
       console.error("Error checking account lock status:", error);
       return false;
@@ -341,7 +360,10 @@ export class EnhancedAuthService {
   /**
    * Log login attempt
    */
-  private static async logLoginAttempt(email: string, success: boolean): Promise<void> {
+  private static async logLoginAttempt(
+    email: string,
+    success: boolean,
+  ): Promise<void> {
     try {
       const attempt: LoginAttempt = {
         email,
@@ -353,12 +375,12 @@ export class EnhancedAuthService {
 
       const attempts = this.loginAttempts.get(email) || [];
       attempts.push(attempt);
-      
+
       // Keep only recent attempts (last 24 hours)
       const recentAttempts = attempts.filter(
-        a => Date.now() - a.timestamp < 24 * 60 * 60 * 1000
+        (a) => Date.now() - a.timestamp < 24 * 60 * 60 * 1000,
       );
-      
+
       this.loginAttempts.set(email, recentAttempts);
 
       // Log to Firestore for audit trail
@@ -408,11 +430,14 @@ export class EnhancedAuthService {
       clearTimeout(this.sessionTimer);
     }
 
-    this.sessionTimer = setTimeout(async () => {
-      await this.signOut();
-      // Optionally show a session timeout message
-      console.warn("Session expired due to inactivity");
-    }, DEFAULT_SECURITY_SETTINGS.sessionTimeout * 60 * 1000);
+    this.sessionTimer = setTimeout(
+      async () => {
+        await this.signOut();
+        // Optionally show a session timeout message
+        console.warn("Session expired due to inactivity");
+      },
+      DEFAULT_SECURITY_SETTINGS.sessionTimeout * 60 * 1000,
+    );
   }
 
   /**
@@ -421,10 +446,14 @@ export class EnhancedAuthService {
   private static async logSecurityEvent(
     uid: string | null,
     eventType: string,
-    details?: any
+    details?: any,
   ): Promise<void> {
     try {
-      const securityLogRef = doc(db, "securityLogs", `${Date.now()}-${Math.random()}`);
+      const securityLogRef = doc(
+        db,
+        "securityLogs",
+        `${Date.now()}-${Math.random()}`,
+      );
       await setDoc(securityLogRef, {
         uid,
         eventType,
@@ -490,7 +519,8 @@ export class EnhancedAuthService {
       "manage_users",
     ];
 
-    const allowedPermissions = user.role === "admin" ? adminPermissions : userPermissions;
+    const allowedPermissions =
+      user.role === "admin" ? adminPermissions : userPermissions;
     return allowedPermissions.includes(permission);
   }
 }

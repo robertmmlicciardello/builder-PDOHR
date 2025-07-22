@@ -217,11 +217,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     try {
       // Demo credentials - support both old and new passwords
       const validCredentials = {
-        'admin@pdf.gov.mm': ['admin123', 'pdf2024', 'PDF2024!'],
-        'user@pdf.gov.mm': ['user123', 'user2024', 'User2024!']
+        "admin@pdf.gov.mm": ["admin123", "pdf2024", "PDF2024!"],
+        "user@pdf.gov.mm": ["user123", "user2024", "User2024!"],
       };
 
-      const allowedPasswords = validCredentials[email as keyof typeof validCredentials];
+      const allowedPasswords =
+        validCredentials[email as keyof typeof validCredentials];
 
       if (allowedPasswords && allowedPasswords.includes(password)) {
         const isAdmin = email === "admin@pdf.gov.mm";
@@ -246,7 +247,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             timestamp: new Date().toISOString(),
           });
         } catch (auditError) {
-          console.warn('Audit logging failed:', auditError);
+          console.warn("Audit logging failed:", auditError);
         }
 
         showNotification(translations.messages.saved, "success");

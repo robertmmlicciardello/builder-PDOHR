@@ -49,7 +49,8 @@ export default function SecureLogin() {
     score: 0,
     feedback: [] as string[],
   });
-  const [showPasswordChangeDialog, setShowPasswordChangeDialog] = useState(false);
+  const [showPasswordChangeDialog, setShowPasswordChangeDialog] =
+    useState(false);
   const [passwordChangeData, setPasswordChangeData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -74,16 +75,16 @@ export default function SecureLogin() {
   useEffect(() => {
     initializeSecurity();
     checkDeviceSecurity();
-    
+
     // Add keyboard shortcuts for accessibility
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'Enter') {
+      if (e.ctrlKey && e.key === "Enter") {
         handleSubmit(e as any);
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   // Handle authentication state changes
@@ -117,15 +118,15 @@ export default function SecureLogin() {
 
   const initializeSecurity = () => {
     // Set security headers
-    const meta = document.createElement('meta');
-    meta.httpEquiv = 'Content-Security-Policy';
+    const meta = document.createElement("meta");
+    meta.httpEquiv = "Content-Security-Policy";
     meta.content = SecurityUtils.getCSPHeader();
     document.head.appendChild(meta);
 
     // Check HTTPS
-    setSecurityMetrics(prev => ({
+    setSecurityMetrics((prev) => ({
       ...prev,
-      connectionSecure: window.location.protocol === 'https:',
+      connectionSecure: window.location.protocol === "https:",
     }));
   };
 
@@ -133,16 +134,18 @@ export default function SecureLogin() {
     try {
       // Check if device has been used before
       const deviceFingerprint = await generateDeviceFingerprint();
-      const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
-      
-      setSecurityMetrics(prev => ({
+      const trustedDevices = JSON.parse(
+        localStorage.getItem("trusted-devices") || "[]",
+      );
+
+      setSecurityMetrics((prev) => ({
         ...prev,
         deviceTrusted: trustedDevices.includes(deviceFingerprint),
         locationVerified: true, // Mock - in production, check geolocation
         lastLoginCheck: true,
       }));
     } catch (error) {
-      console.error('Device security check failed:', error);
+      console.error("Device security check failed:", error);
     }
   };
 
@@ -150,64 +153,67 @@ export default function SecureLogin() {
     const fingerprint = [
       navigator.userAgent,
       navigator.language,
-      screen.width + 'x' + screen.height,
+      screen.width + "x" + screen.height,
       new Date().getTimezoneOffset().toString(),
-      navigator.hardwareConcurrency?.toString() || '0',
-    ].join('|');
-    
+      navigator.hardwareConcurrency?.toString() || "0",
+    ].join("|");
+
     return SecurityUtils.encrypt(fingerprint);
   };
 
-  const handleInputChange = useCallback((field: 'email' | 'password', value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+  const handleInputChange = useCallback(
+    (field: "email" | "password", value: string) => {
+      setFormData((prev) => ({ ...prev, [field]: value }));
 
-    // Real-time validation - less strict for login
-    if (field === 'email') {
-      const validation = SecurityUtils.validateInput(value, field);
-      setValidationErrors(prev => ({
-        ...prev,
-        [field]: validation.errors,
-      }));
-    } else if (field === 'password') {
-      // Only basic validation for login - not creation
-      const errors: string[] = [];
-      if (value && value.length < 6) {
-        errors.push('Password must be at least 6 characters');
+      // Real-time validation - less strict for login
+      if (field === "email") {
+        const validation = SecurityUtils.validateInput(value, field);
+        setValidationErrors((prev) => ({
+          ...prev,
+          [field]: validation.errors,
+        }));
+      } else if (field === "password") {
+        // Only basic validation for login - not creation
+        const errors: string[] = [];
+        if (value && value.length < 6) {
+          errors.push("Password must be at least 6 characters");
+        }
+        setValidationErrors((prev) => ({
+          ...prev,
+          password: errors,
+        }));
+
+        // Password strength calculation (for display only)
+        const strength = calculatePasswordStrength(value);
+        setPasswordStrength(strength);
       }
-      setValidationErrors(prev => ({
-        ...prev,
-        password: errors,
-      }));
 
-      // Password strength calculation (for display only)
-      const strength = calculatePasswordStrength(value);
-      setPasswordStrength(strength);
-    }
-
-    // Clear auth errors when user types
-    if (auth.error) {
-      auth.clearError();
-    }
-  }, [auth]);
+      // Clear auth errors when user types
+      if (auth.error) {
+        auth.clearError();
+      }
+    },
+    [auth],
+  );
 
   const calculatePasswordStrength = (password: string) => {
     let score = 0;
     const feedback: string[] = [];
 
     if (password.length >= 8) score += 20;
-    else feedback.push('Use at least 8 characters');
+    else feedback.push("Use at least 8 characters");
 
     if (/[a-z]/.test(password)) score += 20;
-    else feedback.push('Add lowercase letters');
+    else feedback.push("Add lowercase letters");
 
     if (/[A-Z]/.test(password)) score += 20;
-    else feedback.push('Add uppercase letters');
+    else feedback.push("Add uppercase letters");
 
     if (/\d/.test(password)) score += 20;
-    else feedback.push('Add numbers');
+    else feedback.push("Add numbers");
 
     if (/[@$!%*?&]/.test(password)) score += 20;
-    else feedback.push('Add special characters');
+    else feedback.push("Add special characters");
 
     return { score, feedback };
   };
@@ -218,14 +224,17 @@ export default function SecureLogin() {
     // Basic validation only
     if (!formData.email || !formData.password) {
       setValidationErrors({
-        email: !formData.email ? ['Email is required'] : [],
-        password: !formData.password ? ['Password is required'] : [],
+        email: !formData.email ? ["Email is required"] : [],
+        password: !formData.password ? ["Password is required"] : [],
       });
       return;
     }
 
     // Email format validation
-    const emailValidation = SecurityUtils.validateInput(formData.email, 'email');
+    const emailValidation = SecurityUtils.validateInput(
+      formData.email,
+      "email",
+    );
     if (!emailValidation.isValid) {
       setValidationErrors({
         email: emailValidation.errors,
@@ -238,7 +247,7 @@ export default function SecureLogin() {
     if (formData.password.length < 6) {
       setValidationErrors({
         email: [],
-        password: ['Password must be at least 6 characters'],
+        password: ["Password must be at least 6 characters"],
       });
       return;
     }
@@ -247,24 +256,32 @@ export default function SecureLogin() {
     setValidationErrors({ email: [], password: [] });
 
     try {
-      console.log('Attempting login with:', emailValidation.sanitized);
+      console.log("Attempting login with:", emailValidation.sanitized);
 
       // Try AppContext login first (for compatibility with existing system)
-      const appSuccess = await appLogin(emailValidation.sanitized, formData.password);
+      const appSuccess = await appLogin(
+        emailValidation.sanitized,
+        formData.password,
+      );
 
-      console.log('AppContext login result:', appSuccess);
+      console.log("AppContext login result:", appSuccess);
 
       if (appSuccess) {
         // Add device to trusted devices
         try {
           const deviceFingerprint = await generateDeviceFingerprint();
-          const trustedDevices = JSON.parse(localStorage.getItem('trusted-devices') || '[]');
+          const trustedDevices = JSON.parse(
+            localStorage.getItem("trusted-devices") || "[]",
+          );
           if (!trustedDevices.includes(deviceFingerprint)) {
             trustedDevices.push(deviceFingerprint);
-            localStorage.setItem('trusted-devices', JSON.stringify(trustedDevices));
+            localStorage.setItem(
+              "trusted-devices",
+              JSON.stringify(trustedDevices),
+            );
           }
         } catch (deviceError) {
-          console.warn('Device fingerprinting failed:', deviceError);
+          console.warn("Device fingerprinting failed:", deviceError);
         }
 
         // Small delay to ensure state is updated
@@ -275,16 +292,16 @@ export default function SecureLogin() {
         return;
       } else {
         // If AppContext login failed, show error
-        console.error('Login failed - invalid credentials');
+        console.error("Login failed - invalid credentials");
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error("Login error:", error);
     }
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const success = await auth.changePassword(passwordChangeData);
     if (success) {
       setShowPasswordChangeDialog(false);
@@ -295,15 +312,19 @@ export default function SecureLogin() {
   const formatTimeRemaining = (milliseconds: number) => {
     const minutes = Math.floor(milliseconds / 60000);
     const seconds = Math.floor((milliseconds % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
   const getSecurityBadgeColor = (level: string) => {
     switch (level) {
-      case 'high': return 'bg-green-600';
-      case 'medium': return 'bg-yellow-600';
-      case 'low': return 'bg-red-600';
-      default: return 'bg-gray-600';
+      case "high":
+        return "bg-green-600";
+      case "medium":
+        return "bg-yellow-600";
+      case "low":
+        return "bg-red-600";
+      default:
+        return "bg-gray-600";
     }
   };
 
@@ -322,23 +343,25 @@ export default function SecureLogin() {
             PDF Technology HR
           </h1>
           <p className="text-myanmar-gray-dark">Secure Access Portal</p>
-          
+
           {/* Security indicators */}
           <div className="flex justify-center space-x-2 mt-4">
-            <Badge 
-              variant={securityMetrics.connectionSecure ? "default" : "destructive"}
+            <Badge
+              variant={
+                securityMetrics.connectionSecure ? "default" : "destructive"
+              }
               className="text-xs"
             >
               {securityMetrics.connectionSecure ? "🔒 Secure" : "⚠️ Insecure"}
             </Badge>
-            <Badge 
+            <Badge
               variant={securityMetrics.deviceTrusted ? "default" : "secondary"}
               className="text-xs"
             >
               {securityMetrics.deviceTrusted ? "✓ Trusted" : "? New Device"}
             </Badge>
           </div>
-          
+
           <div className="flex justify-center mt-4">
             <LanguageSwitcher />
           </div>
@@ -357,7 +380,7 @@ export default function SecureLogin() {
               Multi-layer security protection enabled
             </p>
           </CardHeader>
-          
+
           <CardContent>
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
               {/* Account Lockout Warning */}
@@ -367,7 +390,8 @@ export default function SecureLogin() {
                   <AlertDescription className="text-red-700">
                     Account is locked due to multiple failed attempts.
                     <br />
-                    Try again in: {formatTimeRemaining(auth.lockoutTimeRemaining)}
+                    Try again in:{" "}
+                    {formatTimeRemaining(auth.lockoutTimeRemaining)}
                   </AlertDescription>
                 </Alert>
               )}
@@ -384,7 +408,10 @@ export default function SecureLogin() {
 
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-myanmar-black flex items-center">
+                <Label
+                  htmlFor="email"
+                  className="text-myanmar-black flex items-center"
+                >
                   Email
                   {validationErrors.email.length === 0 && formData.email && (
                     <CheckCircle className="w-4 h-4 text-green-600 ml-1" />
@@ -395,9 +422,9 @@ export default function SecureLogin() {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
                   className={`border-myanmar-red/30 focus:border-myanmar-red ${
-                    validationErrors.email.length > 0 ? 'border-red-500' : ''
+                    validationErrors.email.length > 0 ? "border-red-500" : ""
                   }`}
                   placeholder="admin@pdf.gov.mm"
                   required
@@ -415,15 +442,26 @@ export default function SecureLogin() {
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-myanmar-black flex items-center">
+                <Label
+                  htmlFor="password"
+                  className="text-myanmar-black flex items-center"
+                >
                   Password
                   {formData.password && (
-                    <div className={`ml-2 text-xs px-2 py-1 rounded ${getSecurityBadgeColor(
-                      passwordStrength.score >= 80 ? 'high' : 
-                      passwordStrength.score >= 60 ? 'medium' : 'low'
-                    )} text-white`}>
-                      {passwordStrength.score >= 80 ? 'Strong' : 
-                       passwordStrength.score >= 60 ? 'Medium' : 'Weak'}
+                    <div
+                      className={`ml-2 text-xs px-2 py-1 rounded ${getSecurityBadgeColor(
+                        passwordStrength.score >= 80
+                          ? "high"
+                          : passwordStrength.score >= 60
+                            ? "medium"
+                            : "low",
+                      )} text-white`}
+                    >
+                      {passwordStrength.score >= 80
+                        ? "Strong"
+                        : passwordStrength.score >= 60
+                          ? "Medium"
+                          : "Weak"}
                     </div>
                   )}
                 </Label>
@@ -433,9 +471,13 @@ export default function SecureLogin() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
                     className={`border-myanmar-red/30 focus:border-myanmar-red pr-10 ${
-                      validationErrors.password.length > 0 ? 'border-red-500' : ''
+                      validationErrors.password.length > 0
+                        ? "border-red-500"
+                        : ""
                     }`}
                     placeholder="Enter your password"
                     required
@@ -448,17 +490,18 @@ export default function SecureLogin() {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                     disabled={auth.isLoading || auth.isAccountLocked}
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
-                
+
                 {/* Password Strength Indicator */}
                 {formData.password && (
                   <div className="space-y-1">
-                    <Progress 
-                      value={passwordStrength.score} 
-                      className="h-2"
-                    />
+                    <Progress value={passwordStrength.score} className="h-2" />
                     {passwordStrength.feedback.length > 0 && (
                       <div className="text-xs text-gray-600">
                         {passwordStrength.feedback.map((tip, index) => (
@@ -468,7 +511,7 @@ export default function SecureLogin() {
                     )}
                   </div>
                 )}
-                
+
                 {validationErrors.password.length > 0 && (
                   <div className="text-sm text-red-600">
                     {validationErrors.password.map((error, index) => (
@@ -484,11 +527,19 @@ export default function SecureLogin() {
                   type="checkbox"
                   id="rememberMe"
                   checked={formData.rememberMe}
-                  onChange={(e) => setFormData(prev => ({ ...prev, rememberMe: e.target.checked }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      rememberMe: e.target.checked,
+                    }))
+                  }
                   className="rounded border-myanmar-red/30"
                   disabled={auth.isLoading || auth.isAccountLocked}
                 />
-                <Label htmlFor="rememberMe" className="text-sm text-myanmar-gray-dark">
+                <Label
+                  htmlFor="rememberMe"
+                  className="text-sm text-myanmar-gray-dark"
+                >
                   Remember me for 7 days (trusted devices only)
                 </Label>
               </div>
@@ -505,14 +556,20 @@ export default function SecureLogin() {
 
               {/* Security Status */}
               <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                <div className="text-xs font-medium text-gray-700">Security Status:</div>
+                <div className="text-xs font-medium text-gray-700">
+                  Security Status:
+                </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="flex items-center space-x-1">
-                    <div className={`w-2 h-2 rounded-full ${securityMetrics.connectionSecure ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                    <div
+                      className={`w-2 h-2 rounded-full ${securityMetrics.connectionSecure ? "bg-green-500" : "bg-red-500"}`}
+                    ></div>
                     <span>Connection</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <div className={`w-2 h-2 rounded-full ${securityMetrics.deviceTrusted ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+                    <div
+                      className={`w-2 h-2 rounded-full ${securityMetrics.deviceTrusted ? "bg-green-500" : "bg-yellow-500"}`}
+                    ></div>
                     <span>Device</span>
                   </div>
                   <div className="flex items-center space-x-1">
@@ -529,8 +586,12 @@ export default function SecureLogin() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                disabled={auth.isLoading || auth.isAccountLocked ||
-                         !formData.email || !formData.password}
+                disabled={
+                  auth.isLoading ||
+                  auth.isAccountLocked ||
+                  !formData.email ||
+                  !formData.password
+                }
                 className="w-full bg-myanmar-red hover:bg-myanmar-red-dark text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {auth.isLoading ? (
@@ -582,7 +643,10 @@ export default function SecureLogin() {
       </div>
 
       {/* Password Change Dialog */}
-      <Dialog open={showPasswordChangeDialog} onOpenChange={setShowPasswordChangeDialog}>
+      <Dialog
+        open={showPasswordChangeDialog}
+        onOpenChange={setShowPasswordChangeDialog}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center space-x-2">
@@ -590,12 +654,13 @@ export default function SecureLogin() {
               <span>Password Change Required</span>
             </DialogTitle>
           </DialogHeader>
-          
+
           <form onSubmit={handlePasswordChange} className="space-y-4">
             <Alert className="border-yellow-500 bg-yellow-50">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription className="text-yellow-700">
-                For security reasons, you must change your password before continuing.
+                For security reasons, you must change your password before
+                continuing.
               </AlertDescription>
             </Alert>
 
@@ -605,10 +670,12 @@ export default function SecureLogin() {
                 id="currentPassword"
                 type="password"
                 value={passwordChangeData.currentPassword}
-                onChange={(e) => setPasswordChangeData(prev => ({ 
-                  ...prev, 
-                  currentPassword: e.target.value 
-                }))}
+                onChange={(e) =>
+                  setPasswordChangeData((prev) => ({
+                    ...prev,
+                    currentPassword: e.target.value,
+                  }))
+                }
                 required
               />
             </div>
@@ -619,10 +686,12 @@ export default function SecureLogin() {
                 id="newPassword"
                 type="password"
                 value={passwordChangeData.newPassword}
-                onChange={(e) => setPasswordChangeData(prev => ({ 
-                  ...prev, 
-                  newPassword: e.target.value 
-                }))}
+                onChange={(e) =>
+                  setPasswordChangeData((prev) => ({
+                    ...prev,
+                    newPassword: e.target.value,
+                  }))
+                }
                 required
               />
             </div>
@@ -633,10 +702,12 @@ export default function SecureLogin() {
                 id="confirmPassword"
                 type="password"
                 value={passwordChangeData.confirmPassword}
-                onChange={(e) => setPasswordChangeData(prev => ({ 
-                  ...prev, 
-                  confirmPassword: e.target.value 
-                }))}
+                onChange={(e) =>
+                  setPasswordChangeData((prev) => ({
+                    ...prev,
+                    confirmPassword: e.target.value,
+                  }))
+                }
                 required
               />
             </div>
