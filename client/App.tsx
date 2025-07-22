@@ -167,6 +167,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/meeting-management"
+      element={
+        <ProtectedRoute>
+          <MeetingManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/old-dashboard"
       element={
         <ProtectedRoute>
