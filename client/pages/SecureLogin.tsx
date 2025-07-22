@@ -65,6 +65,7 @@ export default function SecureLogin() {
   const navigate = useNavigate();
   const t = useTranslation();
   const auth = useSecureAuth();
+  const { login: appLogin, state: appState } = useApp();
   const formRef = useRef<HTMLFormElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
