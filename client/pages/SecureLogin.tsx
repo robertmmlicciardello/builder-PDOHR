@@ -88,14 +88,19 @@ export default function SecureLogin() {
 
   // Handle authentication state changes
   useEffect(() => {
-    if (auth.isAuthenticated) {
-      if (auth.requiresPasswordChange) {
-        setShowPasswordChangeDialog(true);
-      } else {
-        navigate("/dashboard");
-      }
+    if (auth.isAuthenticated && !auth.requiresPasswordChange) {
+      navigate("/dashboard");
+    } else if (auth.requiresPasswordChange) {
+      setShowPasswordChangeDialog(true);
     }
   }, [auth.isAuthenticated, auth.requiresPasswordChange, navigate]);
+
+  // Also check AppContext authentication state
+  useEffect(() => {
+    if (appState.user?.isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [appState.user, navigate]);
 
   // Auto-lock account timer display
   useEffect(() => {
