@@ -115,10 +115,10 @@ export default function Login() {
                 Demo Credentials (Legacy):
               </p>
               <p className="text-xs text-myanmar-gray-dark text-center">
-                Admin: admin@pdf.gov.mm / pdf2024
+                Admin: admin@pdf.gov.mm / admin123
               </p>
               <p className="text-xs text-myanmar-gray-dark text-center mt-1">
-                User: user@pdf.gov.mm / user2024
+                User: user@pdf.gov.mm / user123
               </p>
               <p className="text-xs text-red-600 text-center mt-2">
                 Note: Use /login for secure authentication
