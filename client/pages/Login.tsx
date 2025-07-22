@@ -111,11 +111,17 @@ export default function Login() {
             </form>
 
             <div className="mt-6 pt-4 border-t border-myanmar-red/20">
+              <p className="text-xs text-myanmar-gray-dark text-center mb-2">
+                Demo Credentials (Legacy):
+              </p>
               <p className="text-xs text-myanmar-gray-dark text-center">
-                စီမံခန့်ခွဲသူ: admin@pdf.gov.mm / pdf2024
+                Admin: admin@pdf.gov.mm / pdf2024
               </p>
               <p className="text-xs text-myanmar-gray-dark text-center mt-1">
-                အသုံးပြုသူ: user@pdf.gov.mm / user2024
+                User: user@pdf.gov.mm / user2024
+              </p>
+              <p className="text-xs text-red-600 text-center mt-2">
+                Note: Use /login for secure authentication
               </p>
             </div>
           </CardContent>
