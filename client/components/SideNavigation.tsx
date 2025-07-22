@@ -130,6 +130,12 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
       badge: 3,
     },
     {
+      label: "Meetings",
+      labelMyanmar: "အစည်းအဝေးများ",
+      icon: Calendar,
+      href: "/meeting-management",
+    },
+    {
       label: "Financial",
       labelMyanmar: "ငွေကြေးရေးရာ",
       icon: DollarSign,
