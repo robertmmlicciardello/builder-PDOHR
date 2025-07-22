@@ -322,7 +322,7 @@ export default function HRDashboard() {
             </h3>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               <Link to="/personnel-list">
                 <Button
                   variant="outline"
@@ -348,6 +348,15 @@ export default function HRDashboard() {
                 >
                   <DollarSign className="w-6 h-6" />
                   <span className="text-sm font-medium">Financial</span>
+                </Button>
+              </Link>
+              <Link to="/meeting-management">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Calendar className="w-6 h-6" />
+                  <span className="text-sm font-medium">Meetings</span>
                 </Button>
               </Link>
               <Link to="/attendance">
