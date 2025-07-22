@@ -154,15 +154,25 @@ export default function SecureLogin() {
   const handleInputChange = useCallback((field: 'email' | 'password', value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
 
-    // Real-time validation
-    const validation = SecurityUtils.validateInput(value, field);
-    setValidationErrors(prev => ({
-      ...prev,
-      [field]: validation.errors,
-    }));
+    // Real-time validation - less strict for login
+    if (field === 'email') {
+      const validation = SecurityUtils.validateInput(value, field);
+      setValidationErrors(prev => ({
+        ...prev,
+        [field]: validation.errors,
+      }));
+    } else if (field === 'password') {
+      // Only basic validation for login - not creation
+      const errors: string[] = [];
+      if (value && value.length < 6) {
+        errors.push('Password must be at least 6 characters');
+      }
+      setValidationErrors(prev => ({
+        ...prev,
+        password: errors,
+      }));
 
-    // Password strength calculation
-    if (field === 'password') {
+      // Password strength calculation (for display only)
       const strength = calculatePasswordStrength(value);
       setPasswordStrength(strength);
     }
