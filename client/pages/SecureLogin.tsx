@@ -207,15 +207,31 @@ export default function SecureLogin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate form
-    const emailValidation = SecurityUtils.validateInput(formData.email, 'email');
-    const passwordValidation = SecurityUtils.validateInput(formData.password, 'password');
 
-    if (!emailValidation.isValid || !passwordValidation.isValid) {
+    // Basic validation only
+    if (!formData.email || !formData.password) {
+      setValidationErrors({
+        email: !formData.email ? ['Email is required'] : [],
+        password: !formData.password ? ['Password is required'] : [],
+      });
+      return;
+    }
+
+    // Email format validation
+    const emailValidation = SecurityUtils.validateInput(formData.email, 'email');
+    if (!emailValidation.isValid) {
       setValidationErrors({
         email: emailValidation.errors,
-        password: passwordValidation.errors,
+        password: [],
+      });
+      return;
+    }
+
+    // Password length validation (minimum only)
+    if (formData.password.length < 6) {
+      setValidationErrors({
+        email: [],
+        password: ['Password must be at least 6 characters'],
       });
       return;
     }
@@ -225,7 +241,7 @@ export default function SecureLogin() {
 
     // Add device to trusted list on successful login
     const deviceFingerprint = await generateDeviceFingerprint();
-    
+
     const success = await auth.login({
       email: emailValidation.sanitized,
       password: formData.password,
