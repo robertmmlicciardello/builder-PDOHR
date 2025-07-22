@@ -511,7 +511,8 @@ export default function HRDashboard() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-myanmar-gray-dark">
-                    Latest financial transactions and personnel activities will be displayed here.
+                    Latest financial transactions and personnel activities will
+                    be displayed here.
                   </p>
                 </CardContent>
               </Card>

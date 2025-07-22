@@ -160,7 +160,7 @@ export default function FinancialManagement() {
         const stored = localStorage.getItem("outcome-categories");
         if (stored) {
           const categories: OutcomeCategory[] = JSON.parse(stored);
-          setOutcomeCategories(categories.filter(cat => cat.isActive));
+          setOutcomeCategories(categories.filter((cat) => cat.isActive));
         }
       } catch (error) {
         console.error("Failed to load outcome categories:", error);
@@ -855,7 +855,8 @@ export default function FinancialManagement() {
                   </Select>
                   {outcomeCategories.length === 0 && (
                     <p className="text-xs text-amber-600 mt-1">
-                      Configure outcome categories in Admin Settings to enable selection
+                      Configure outcome categories in Admin Settings to enable
+                      selection
                     </p>
                   )}
                 </div>

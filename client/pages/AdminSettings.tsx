@@ -406,7 +406,9 @@ export const AdminSettings: React.FC = () => {
                   className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
                 >
                   <MinusCircle className="w-6 h-6" />
-                  <span className="text-sm font-medium">Outcome Categories</span>
+                  <span className="text-sm font-medium">
+                    Outcome Categories
+                  </span>
                   <span className="text-xs text-gray-500">
                     Manage outcome types and categories
                   </span>
@@ -418,7 +420,9 @@ export const AdminSettings: React.FC = () => {
                   className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
                 >
                   <Calendar className="w-6 h-6" />
-                  <span className="text-sm font-medium">Meeting Management</span>
+                  <span className="text-sm font-medium">
+                    Meeting Management
+                  </span>
                   <span className="text-xs text-gray-500">
                     Schedule and manage meetings
                   </span>

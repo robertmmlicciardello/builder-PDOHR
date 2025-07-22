@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TrendingDown, TrendingUp, ArrowRight, MinusCircle } from "lucide-react";
+import {
+  TrendingDown,
+  TrendingUp,
+  ArrowRight,
+  MinusCircle,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -44,20 +49,24 @@ export const OutcomeSummaryWidget: React.FC<OutcomeSummaryWidgetProps> = ({
         // Load outcome categories from localStorage
         const storedCategories = localStorage.getItem("outcome-categories");
         const categories: OutcomeCategory[] = storedCategories
-          ? JSON.parse(storedCategories).filter((cat: OutcomeCategory) => cat.isActive)
+          ? JSON.parse(storedCategories).filter(
+              (cat: OutcomeCategory) => cat.isActive,
+            )
           : [];
 
         // Generate mock data based on real categories
-        const mockTopCategories = categories.slice(0, 5).map((category, index) => {
-          const amounts = [1200000, 800000, 600000, 400000, 300000];
-          const counts = [5, 3, 4, 2, 2];
-          return {
-            category: category.name,
-            amount: amounts[index] || 200000,
-            count: counts[index] || 1,
-            percentage: 0, // Will be calculated below
-          };
-        });
+        const mockTopCategories = categories
+          .slice(0, 5)
+          .map((category, index) => {
+            const amounts = [1200000, 800000, 600000, 400000, 300000];
+            const counts = [5, 3, 4, 2, 2];
+            return {
+              category: category.name,
+              amount: amounts[index] || 200000,
+              count: counts[index] || 1,
+              percentage: 0, // Will be calculated below
+            };
+          });
 
         const totalOutcomes = mockTopCategories.reduce(
           (sum, cat) => sum + cat.amount,
@@ -65,8 +74,9 @@ export const OutcomeSummaryWidget: React.FC<OutcomeSummaryWidgetProps> = ({
         );
 
         // Calculate percentages
-        mockTopCategories.forEach(cat => {
-          cat.percentage = totalOutcomes > 0 ? (cat.amount / totalOutcomes) * 100 : 0;
+        mockTopCategories.forEach((cat) => {
+          cat.percentage =
+            totalOutcomes > 0 ? (cat.amount / totalOutcomes) * 100 : 0;
         });
 
         const mockData = {

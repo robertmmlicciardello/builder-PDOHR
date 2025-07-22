@@ -143,13 +143,37 @@ export interface MeetingAttachment {
   uploadedAt: string;
 }
 
-export type MeetingType = "general" | "department" | "training" | "planning" | "review" | "emergency";
-export type MeetingStatus = "scheduled" | "ongoing" | "completed" | "cancelled" | "postponed";
-export type ParticipantRole = "organizer" | "presenter" | "required" | "optional";
-export type ParticipantStatus = "invited" | "accepted" | "declined" | "tentative" | "attended" | "absent";
+export type MeetingType =
+  | "general"
+  | "department"
+  | "training"
+  | "planning"
+  | "review"
+  | "emergency";
+export type MeetingStatus =
+  | "scheduled"
+  | "ongoing"
+  | "completed"
+  | "cancelled"
+  | "postponed";
+export type ParticipantRole =
+  | "organizer"
+  | "presenter"
+  | "required"
+  | "optional";
+export type ParticipantStatus =
+  | "invited"
+  | "accepted"
+  | "declined"
+  | "tentative"
+  | "attended"
+  | "absent";
 
 // Default meeting data
-const initialMeetingData: Omit<Meeting, "id" | "createdAt" | "updatedAt" | "createdBy"> = {
+const initialMeetingData: Omit<
+  Meeting,
+  "id" | "createdAt" | "updatedAt" | "createdBy"
+> = {
   title: "",
   titleMyanmar: "",
   description: "",
@@ -185,7 +209,9 @@ export default function MeetingManagement() {
   const [formData, setFormData] = useState(initialMeetingData);
   const [errors, setErrors] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<MeetingStatus | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<MeetingStatus | "all">(
+    "all",
+  );
   const [typeFilter, setTypeFilter] = useState<MeetingType | "all">("all");
   const [activeTab, setActiveTab] = useState("scheduled");
   const [currentTimer, setCurrentTimer] = useState<{
@@ -209,12 +235,18 @@ export default function MeetingManagement() {
               id: "meeting-1",
               title: "Weekly Department Meeting",
               titleMyanmar: "အပတ်စဉ် ဌာနအစည်းအဝေး",
-              description: "Regular weekly meeting to discuss progress and upcoming tasks",
-              descriptionMyanmar: "တိုးတက်မှုနှင့် လာမည့်အလုပ်များကို ဆွေးနွေးရန် ပုံမှန်အပတ်စဉ်အစည်းအဝေး",
+              description:
+                "Regular weekly meeting to discuss progress and upcoming tasks",
+              descriptionMyanmar:
+                "တိုးတက်မှုနှင့် လာမည့်အလုပ်များကို ဆွေးနွေးရန် ပုံမှန်အပတ်စဉ်အစည်းအဝေး",
               type: "department",
               status: "scheduled",
-              startDateTime: new Date(Date.now() + 86400000).toISOString().slice(0, 16),
-              endDateTime: new Date(Date.now() + 86400000 + 3600000).toISOString().slice(0, 16),
+              startDateTime: new Date(Date.now() + 86400000)
+                .toISOString()
+                .slice(0, 16),
+              endDateTime: new Date(Date.now() + 86400000 + 3600000)
+                .toISOString()
+                .slice(0, 16),
               timezone: "Asia/Yangon",
               location: "Conference Room A",
               locationMyanmar: "ညီလာခမ်းခန်း (က)",
@@ -281,10 +313,14 @@ export default function MeetingManagement() {
     let interval: NodeJS.Timeout;
     if (currentTimer?.isRunning) {
       interval = setInterval(() => {
-        setCurrentTimer(prev => prev ? {
-          ...prev,
-          elapsed: Date.now() - prev.startTime
-        } : null);
+        setCurrentTimer((prev) =>
+          prev
+            ? {
+                ...prev,
+                elapsed: Date.now() - prev.startTime,
+              }
+            : null,
+        );
       }, 1000);
     }
     return () => {
@@ -303,15 +339,16 @@ export default function MeetingManagement() {
   };
 
   const filteredMeetings = useMemo(() => {
-    return meetings.filter(meeting => {
-      const matchesSearch = 
+    return meetings.filter((meeting) => {
+      const matchesSearch =
         meeting.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         meeting.titleMyanmar.toLowerCase().includes(searchTerm.toLowerCase()) ||
         meeting.organizer.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesStatus = statusFilter === "all" || meeting.status === statusFilter;
+
+      const matchesStatus =
+        statusFilter === "all" || meeting.status === statusFilter;
       const matchesType = typeFilter === "all" || meeting.type === typeFilter;
-      
+
       return matchesSearch && matchesStatus && matchesType;
     });
   }, [meetings, searchTerm, statusFilter, typeFilter]);
@@ -362,33 +399,33 @@ export default function MeetingManagement() {
 
   const validateMeeting = (data: typeof formData): string[] => {
     const errors: string[] = [];
-    
+
     if (!data.title.trim()) {
       errors.push("Meeting title is required");
     }
-    
+
     if (!data.titleMyanmar.trim()) {
       errors.push("Myanmar title is required");
     }
-    
+
     if (!data.startDateTime) {
       errors.push("Start date and time is required");
     }
-    
+
     if (!data.endDateTime) {
       errors.push("End date and time is required");
     }
-    
+
     if (new Date(data.startDateTime) >= new Date(data.endDateTime)) {
       errors.push("End time must be after start time");
     }
-    
+
     return errors;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validationErrors = validateMeeting(formData);
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
@@ -397,13 +434,13 @@ export default function MeetingManagement() {
 
     try {
       const now = new Date().toISOString();
-      
+
       if (editingMeeting) {
         // Update existing meeting
-        const updatedMeetings = meetings.map(meeting =>
+        const updatedMeetings = meetings.map((meeting) =>
           meeting.id === editingMeeting.id
             ? { ...meeting, ...formData, updatedAt: now }
-            : meeting
+            : meeting,
         );
         saveMeetings(updatedMeetings);
       } else {
@@ -417,7 +454,7 @@ export default function MeetingManagement() {
         };
         saveMeetings([...meetings, newMeeting]);
       }
-      
+
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to save meeting:", error);
@@ -432,7 +469,9 @@ export default function MeetingManagement() {
 
   const confirmDelete = () => {
     if (meetingToDelete) {
-      const updatedMeetings = meetings.filter(m => m.id !== meetingToDelete.id);
+      const updatedMeetings = meetings.filter(
+        (m) => m.id !== meetingToDelete.id,
+      );
       saveMeetings(updatedMeetings);
       setDeleteDialogOpen(false);
       setMeetingToDelete(null);
@@ -446,17 +485,17 @@ export default function MeetingManagement() {
       elapsed: 0,
       isRunning: true,
     });
-    
+
     // Update meeting status to ongoing
-    const updatedMeetings = meetings.map(meeting =>
+    const updatedMeetings = meetings.map((meeting) =>
       meeting.id === meetingId
-        ? { 
-            ...meeting, 
+        ? {
+            ...meeting,
             status: "ongoing" as MeetingStatus,
             actualStartTime: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           }
-        : meeting
+        : meeting,
     );
     saveMeetings(updatedMeetings);
   };
@@ -464,15 +503,15 @@ export default function MeetingManagement() {
   const stopMeetingTimer = (meetingId: string) => {
     if (currentTimer && currentTimer.meetingId === meetingId) {
       // Update meeting status to completed
-      const updatedMeetings = meetings.map(meeting =>
+      const updatedMeetings = meetings.map((meeting) =>
         meeting.id === meetingId
-          ? { 
-              ...meeting, 
+          ? {
+              ...meeting,
               status: "completed" as MeetingStatus,
               actualEndTime: new Date().toISOString(),
-              updatedAt: new Date().toISOString()
+              updatedAt: new Date().toISOString(),
             }
-          : meeting
+          : meeting,
       );
       saveMeetings(updatedMeetings);
       setCurrentTimer(null);
@@ -481,17 +520,21 @@ export default function MeetingManagement() {
 
   const pauseMeetingTimer = () => {
     if (currentTimer) {
-      setCurrentTimer(prev => prev ? { ...prev, isRunning: false } : null);
+      setCurrentTimer((prev) => (prev ? { ...prev, isRunning: false } : null));
     }
   };
 
   const resumeMeetingTimer = () => {
     if (currentTimer) {
-      setCurrentTimer(prev => prev ? { 
-        ...prev, 
-        isRunning: true,
-        startTime: Date.now() - prev.elapsed
-      } : null);
+      setCurrentTimer((prev) =>
+        prev
+          ? {
+              ...prev,
+              isRunning: true,
+              startTime: Date.now() - prev.elapsed,
+            }
+          : null,
+      );
     }
   };
 
@@ -499,11 +542,11 @@ export default function MeetingManagement() {
     const seconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
-    
+
     if (hours > 0) {
-      return `${hours}:${(minutes % 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+      return `${hours}:${(minutes % 60).toString().padStart(2, "0")}:${(seconds % 60).toString().padStart(2, "0")}`;
     }
-    return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
+    return `${minutes}:${(seconds % 60).toString().padStart(2, "0")}`;
   };
 
   const copyMeetingLink = (link: string) => {
@@ -513,23 +556,35 @@ export default function MeetingManagement() {
 
   const getStatusBadgeVariant = (status: MeetingStatus) => {
     switch (status) {
-      case "scheduled": return "default";
-      case "ongoing": return "destructive";
-      case "completed": return "secondary";
-      case "cancelled": return "outline";
-      case "postponed": return "outline";
-      default: return "default";
+      case "scheduled":
+        return "default";
+      case "ongoing":
+        return "destructive";
+      case "completed":
+        return "secondary";
+      case "cancelled":
+        return "outline";
+      case "postponed":
+        return "outline";
+      default:
+        return "default";
     }
   };
 
   const getTypeBadgeColor = (type: MeetingType) => {
     switch (type) {
-      case "emergency": return "bg-red-600";
-      case "training": return "bg-blue-600";
-      case "planning": return "bg-purple-600";
-      case "review": return "bg-orange-600";
-      case "department": return "bg-green-600";
-      default: return "bg-gray-600";
+      case "emergency":
+        return "bg-red-600";
+      case "training":
+        return "bg-blue-600";
+      case "planning":
+        return "bg-purple-600";
+      case "review":
+        return "bg-orange-600";
+      case "department":
+        return "bg-green-600";
+      default:
+        return "bg-gray-600";
     }
   };
 
@@ -593,8 +648,8 @@ export default function MeetingManagement() {
                   </div>
                 </div>
               )}
-              <Button 
-                onClick={() => handleOpenDialog()} 
+              <Button
+                onClick={() => handleOpenDialog()}
                 className="bg-myanmar-red hover:bg-myanmar-red/90"
               >
                 <Plus className="w-4 h-4 mr-2" />
@@ -621,42 +676,42 @@ export default function MeetingManagement() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Scheduled</p>
                   <p className="text-2xl font-bold text-green-600">
-                    {meetings.filter(m => m.status === "scheduled").length}
+                    {meetings.filter((m) => m.status === "scheduled").length}
                   </p>
                 </div>
                 <Clock className="w-8 h-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Ongoing</p>
                   <p className="text-2xl font-bold text-red-600">
-                    {meetings.filter(m => m.status === "ongoing").length}
+                    {meetings.filter((m) => m.status === "ongoing").length}
                   </p>
                 </div>
                 <Video className="w-8 h-8 text-red-600" />
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Completed</p>
                   <p className="text-2xl font-bold text-gray-600">
-                    {meetings.filter(m => m.status === "completed").length}
+                    {meetings.filter((m) => m.status === "completed").length}
                   </p>
                 </div>
                 <Check className="w-8 h-8 text-gray-600" />
@@ -680,10 +735,12 @@ export default function MeetingManagement() {
                   />
                 </div>
               </div>
-              
+
               <Select
                 value={statusFilter}
-                onValueChange={(value) => setStatusFilter(value as MeetingStatus | "all")}
+                onValueChange={(value) =>
+                  setStatusFilter(value as MeetingStatus | "all")
+                }
               >
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Filter by status" />
@@ -697,10 +754,12 @@ export default function MeetingManagement() {
                   <SelectItem value="postponed">Postponed</SelectItem>
                 </SelectContent>
               </Select>
-              
+
               <Select
                 value={typeFilter}
-                onValueChange={(value) => setTypeFilter(value as MeetingType | "all")}
+                onValueChange={(value) =>
+                  setTypeFilter(value as MeetingType | "all")
+                }
               >
                 <SelectTrigger className="w-48">
                   <SelectValue placeholder="Filter by type" />
@@ -759,51 +818,78 @@ export default function MeetingManagement() {
                       <TableCell>
                         <div>
                           <div className="font-medium">{meeting.title}</div>
-                          <div className="text-sm text-gray-500">{meeting.titleMyanmar}</div>
+                          <div className="text-sm text-gray-500">
+                            {meeting.titleMyanmar}
+                          </div>
                           {meeting.meetingLink && (
                             <div className="flex items-center gap-2 mt-1">
                               <LinkIcon className="w-3 h-3 text-blue-600" />
-                              <span className="text-xs text-blue-600">Online Meeting</span>
+                              <span className="text-xs text-blue-600">
+                                Online Meeting
+                              </span>
                             </div>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={`${getTypeBadgeColor(meeting.type)} text-white`}>
-                          {meeting.type.charAt(0).toUpperCase() + meeting.type.slice(1)}
+                        <Badge
+                          className={`${getTypeBadgeColor(meeting.type)} text-white`}
+                        >
+                          {meeting.type.charAt(0).toUpperCase() +
+                            meeting.type.slice(1)}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <div>
                           <div className="text-sm font-medium">
-                            {new Date(meeting.startDateTime).toLocaleDateString()}
+                            {new Date(
+                              meeting.startDateTime,
+                            ).toLocaleDateString()}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {new Date(meeting.startDateTime).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })} - {new Date(meeting.endDateTime).toLocaleTimeString([], {
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            })}
+                            {new Date(meeting.startDateTime).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}{" "}
+                            -{" "}
+                            {new Date(meeting.endDateTime).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        {Math.round((new Date(meeting.endDateTime).getTime() - new Date(meeting.startDateTime).getTime()) / (1000 * 60))} min
+                        {Math.round(
+                          (new Date(meeting.endDateTime).getTime() -
+                            new Date(meeting.startDateTime).getTime()) /
+                            (1000 * 60),
+                        )}{" "}
+                        min
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm">{meeting.participants.length}</span>
+                          <span className="text-sm">
+                            {meeting.participants.length}
+                          </span>
                           {meeting.maxParticipants && (
-                            <span className="text-sm text-gray-500">/{meeting.maxParticipants}</span>
+                            <span className="text-sm text-gray-500">
+                              /{meeting.maxParticipants}
+                            </span>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <Badge variant={getStatusBadgeVariant(meeting.status)}>
-                          {meeting.status.charAt(0).toUpperCase() + meeting.status.slice(1)}
+                          {meeting.status.charAt(0).toUpperCase() +
+                            meeting.status.slice(1)}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -818,17 +904,19 @@ export default function MeetingManagement() {
                               <Play className="w-4 h-4" />
                             </Button>
                           )}
-                          
+
                           {meeting.meetingLink && (
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => copyMeetingLink(meeting.meetingLink!)}
+                              onClick={() =>
+                                copyMeetingLink(meeting.meetingLink!)
+                              }
                             >
                               <Copy className="w-4 h-4" />
                             </Button>
                           )}
-                          
+
                           <Button
                             variant="ghost"
                             size="sm"
@@ -836,7 +924,7 @@ export default function MeetingManagement() {
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
-                          
+
                           <Button
                             variant="ghost"
                             size="sm"
@@ -863,7 +951,7 @@ export default function MeetingManagement() {
               {editingMeeting ? "Edit Meeting" : "Schedule New Meeting"}
             </DialogTitle>
           </DialogHeader>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {errors.length > 0 && (
               <div className="bg-red-50 border border-red-200 rounded-md p-4">
@@ -899,17 +987,26 @@ export default function MeetingManagement() {
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
                       placeholder="e.g., Weekly Department Meeting"
                       required
                     />
                   </div>
                   <div>
-                    <Label htmlFor="titleMyanmar">Meeting Title (Myanmar) *</Label>
+                    <Label htmlFor="titleMyanmar">
+                      Meeting Title (Myanmar) *
+                    </Label>
                     <Input
                       id="titleMyanmar"
                       value={formData.titleMyanmar}
-                      onChange={(e) => setFormData({ ...formData, titleMyanmar: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          titleMyanmar: e.target.value,
+                        })
+                      }
                       placeholder="e.g., အပတ်စဉ် ဌာနအစည်းအဝေး"
                       required
                     />
@@ -921,7 +1018,9 @@ export default function MeetingManagement() {
                     <Label htmlFor="type">Meeting Type</Label>
                     <Select
                       value={formData.type}
-                      onValueChange={(value) => setFormData({ ...formData, type: value as MeetingType })}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, type: value as MeetingType })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select meeting type" />
@@ -942,7 +1041,13 @@ export default function MeetingManagement() {
                       id="maxParticipants"
                       type="number"
                       value={formData.maxParticipants || ""}
-                      onChange={(e) => setFormData({ ...formData, maxParticipants: parseInt(e.target.value) || undefined })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          maxParticipants:
+                            parseInt(e.target.value) || undefined,
+                        })
+                      }
                       placeholder="50"
                       min="1"
                       max="500"
@@ -956,17 +1061,29 @@ export default function MeetingManagement() {
                     <Textarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
                       placeholder="Meeting description..."
                       rows={3}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="descriptionMyanmar">Description (Myanmar)</Label>
+                    <Label htmlFor="descriptionMyanmar">
+                      Description (Myanmar)
+                    </Label>
                     <Textarea
                       id="descriptionMyanmar"
                       value={formData.descriptionMyanmar}
-                      onChange={(e) => setFormData({ ...formData, descriptionMyanmar: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          descriptionMyanmar: e.target.value,
+                        })
+                      }
                       placeholder="အစည်းအဝေးဖော်ပြချက်..."
                       rows={3}
                     />
@@ -982,7 +1099,12 @@ export default function MeetingManagement() {
                       id="startDateTime"
                       type="datetime-local"
                       value={formData.startDateTime}
-                      onChange={(e) => setFormData({ ...formData, startDateTime: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          startDateTime: e.target.value,
+                        })
+                      }
                       required
                     />
                   </div>
@@ -992,7 +1114,12 @@ export default function MeetingManagement() {
                       id="endDateTime"
                       type="datetime-local"
                       value={formData.endDateTime}
-                      onChange={(e) => setFormData({ ...formData, endDateTime: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          endDateTime: e.target.value,
+                        })
+                      }
                       required
                     />
                   </div>
@@ -1004,7 +1131,9 @@ export default function MeetingManagement() {
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, location: e.target.value })
+                      }
                       placeholder="Conference Room A"
                     />
                   </div>
@@ -1013,7 +1142,12 @@ export default function MeetingManagement() {
                     <Input
                       id="locationMyanmar"
                       value={formData.locationMyanmar}
-                      onChange={(e) => setFormData({ ...formData, locationMyanmar: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          locationMyanmar: e.target.value,
+                        })
+                      }
                       placeholder="ညီလာခမ်းခန်း (က)"
                     />
                   </div>
@@ -1025,7 +1159,12 @@ export default function MeetingManagement() {
                     <Input
                       id="meetingLink"
                       value={formData.meetingLink}
-                      onChange={(e) => setFormData({ ...formData, meetingLink: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          meetingLink: e.target.value,
+                        })
+                      }
                       placeholder="https://meet.google.com/xyz-abc-def"
                       type="url"
                     />
@@ -1035,7 +1174,9 @@ export default function MeetingManagement() {
                     <Input
                       id="passcode"
                       value={formData.passcode}
-                      onChange={(e) => setFormData({ ...formData, passcode: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, passcode: e.target.value })
+                      }
                       placeholder="Meeting passcode"
                     />
                   </div>
@@ -1043,10 +1184,17 @@ export default function MeetingManagement() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="reminderMinutes">Reminder (minutes before)</Label>
+                    <Label htmlFor="reminderMinutes">
+                      Reminder (minutes before)
+                    </Label>
                     <Select
                       value={formData.reminderMinutes.toString()}
-                      onValueChange={(value) => setFormData({ ...formData, reminderMinutes: parseInt(value) })}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          reminderMinutes: parseInt(value),
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select reminder time" />
@@ -1067,7 +1215,12 @@ export default function MeetingManagement() {
                         type="checkbox"
                         id="isRecurring"
                         checked={formData.isRecurring}
-                        onChange={(e) => setFormData({ ...formData, isRecurring: e.target.checked })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            isRecurring: e.target.checked,
+                          })
+                        }
                       />
                       <Label htmlFor="isRecurring">Recurring Meeting</Label>
                     </div>
@@ -1076,7 +1229,12 @@ export default function MeetingManagement() {
                         type="checkbox"
                         id="isPrivate"
                         checked={formData.isPrivate}
-                        onChange={(e) => setFormData({ ...formData, isPrivate: e.target.checked })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            isPrivate: e.target.checked,
+                          })
+                        }
                       />
                       <Label htmlFor="isPrivate">Private Meeting</Label>
                     </div>
@@ -1087,7 +1245,9 @@ export default function MeetingManagement() {
               <TabsContent value="participants" className="space-y-4">
                 <div className="text-center py-8 text-gray-500">
                   <Users className="w-12 h-12 mx-auto mb-4" />
-                  <p>Participant management will be available in future updates</p>
+                  <p>
+                    Participant management will be available in future updates
+                  </p>
                 </div>
               </TabsContent>
 
@@ -1100,10 +1260,17 @@ export default function MeetingManagement() {
             </Tabs>
 
             <div className="flex justify-end space-x-2 pt-4 border-t">
-              <Button type="button" variant="outline" onClick={handleCloseDialog}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCloseDialog}
+              >
                 Cancel
               </Button>
-              <Button type="submit" className="bg-myanmar-red hover:bg-myanmar-red/90">
+              <Button
+                type="submit"
+                className="bg-myanmar-red hover:bg-myanmar-red/90"
+              >
                 {editingMeeting ? "Update Meeting" : "Schedule Meeting"}
               </Button>
             </div>
@@ -1117,7 +1284,8 @@ export default function MeetingManagement() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Meeting</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{meetingToDelete?.title}"? This action cannot be undone.
+              Are you sure you want to delete "{meetingToDelete?.title}"? This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

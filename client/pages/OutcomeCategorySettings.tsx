@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Edit, Trash2, ArrowLeft, Save, X, Check, MinusCircle } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  ArrowLeft,
+  Save,
+  X,
+  Check,
+  MinusCircle,
+} from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -50,7 +59,10 @@ export interface OutcomeCategory {
 }
 
 // Default outcome categories
-const DEFAULT_OUTCOME_CATEGORIES: Omit<OutcomeCategory, "id" | "createdAt" | "updatedAt">[] = [
+const DEFAULT_OUTCOME_CATEGORIES: Omit<
+  OutcomeCategory,
+  "id" | "createdAt" | "updatedAt"
+>[] = [
   {
     name: "Office Supplies",
     nameMyanmar: "ရုံးသုံးပစ္စည်းများ",
@@ -96,25 +108,29 @@ const DEFAULT_OUTCOME_CATEGORIES: Omit<OutcomeCategory, "id" | "createdAt" | "up
 ];
 
 // Validation function
-const validateOutcomeCategory = (category: Partial<OutcomeCategory>): string[] => {
+const validateOutcomeCategory = (
+  category: Partial<OutcomeCategory>,
+): string[] => {
   const errors: string[] = [];
-  
+
   if (!category.name?.trim()) {
     errors.push("Category name is required");
   }
-  
+
   if (!category.nameMyanmar?.trim()) {
     errors.push("Myanmar name is required");
   }
-  
+
   return errors;
 };
 
 export default function OutcomeCategorySettings() {
   const [categories, setCategories] = useState<OutcomeCategory[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<OutcomeCategory | null>(null);
-  const [deleteConfirmCategory, setDeleteConfirmCategory] = useState<OutcomeCategory | null>(null);
+  const [editingCategory, setEditingCategory] =
+    useState<OutcomeCategory | null>(null);
+  const [deleteConfirmCategory, setDeleteConfirmCategory] =
+    useState<OutcomeCategory | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -135,14 +151,18 @@ export default function OutcomeCategorySettings() {
           setCategories(JSON.parse(stored));
         } else {
           // Initialize with default categories
-          const defaultCategories: OutcomeCategory[] = DEFAULT_OUTCOME_CATEGORIES.map((cat, index) => ({
-            ...cat,
-            id: `outcome-${index + 1}`,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-          }));
+          const defaultCategories: OutcomeCategory[] =
+            DEFAULT_OUTCOME_CATEGORIES.map((cat, index) => ({
+              ...cat,
+              id: `outcome-${index + 1}`,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            }));
           setCategories(defaultCategories);
-          localStorage.setItem("outcome-categories", JSON.stringify(defaultCategories));
+          localStorage.setItem(
+            "outcome-categories",
+            JSON.stringify(defaultCategories),
+          );
         }
       } catch (error) {
         console.error("Failed to load outcome categories:", error);
@@ -203,7 +223,7 @@ export default function OutcomeCategorySettings() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const errors = validateOutcomeCategory(formData);
     if (errors.length > 0) {
       setFormErrors(errors);
@@ -213,13 +233,13 @@ export default function OutcomeCategorySettings() {
     setIsSaving(true);
     try {
       const now = new Date().toISOString();
-      
+
       if (editingCategory) {
         // Update existing category
-        const updatedCategories = categories.map(cat =>
+        const updatedCategories = categories.map((cat) =>
           cat.id === editingCategory.id
             ? { ...cat, ...formData, updatedAt: now }
-            : cat
+            : cat,
         );
         saveCategories(updatedCategories);
       } else {
@@ -232,7 +252,7 @@ export default function OutcomeCategorySettings() {
         };
         saveCategories([...categories, newCategory]);
       }
-      
+
       handleCloseDialog();
     } catch (error) {
       console.error("Failed to save category:", error);
@@ -248,17 +268,23 @@ export default function OutcomeCategorySettings() {
 
   const confirmDelete = () => {
     if (deleteConfirmCategory) {
-      const updatedCategories = categories.filter(cat => cat.id !== deleteConfirmCategory.id);
+      const updatedCategories = categories.filter(
+        (cat) => cat.id !== deleteConfirmCategory.id,
+      );
       saveCategories(updatedCategories);
       setDeleteConfirmCategory(null);
     }
   };
 
   const toggleCategoryStatus = (category: OutcomeCategory) => {
-    const updatedCategories = categories.map(cat =>
+    const updatedCategories = categories.map((cat) =>
       cat.id === category.id
-        ? { ...cat, isActive: !cat.isActive, updatedAt: new Date().toISOString() }
-        : cat
+        ? {
+            ...cat,
+            isActive: !cat.isActive,
+            updatedAt: new Date().toISOString(),
+          }
+        : cat,
     );
     saveCategories(updatedCategories);
   };
@@ -268,7 +294,9 @@ export default function OutcomeCategorySettings() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-myanmar-red"></div>
-          <p className="mt-4 text-myanmar-gray-dark">Loading outcome categories...</p>
+          <p className="mt-4 text-myanmar-gray-dark">
+            Loading outcome categories...
+          </p>
         </div>
       </div>
     );
@@ -296,7 +324,10 @@ export default function OutcomeCategorySettings() {
                 </p>
               </div>
             </div>
-            <Button onClick={() => handleOpenDialog()} className="bg-myanmar-red hover:bg-myanmar-red/90">
+            <Button
+              onClick={() => handleOpenDialog()}
+              className="bg-myanmar-red hover:bg-myanmar-red/90"
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Category
             </Button>
@@ -317,7 +348,9 @@ export default function OutcomeCategorySettings() {
             {categories.length === 0 ? (
               <div className="text-center py-8">
                 <MinusCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-myanmar-gray-dark">No outcome categories found</p>
+                <p className="text-myanmar-gray-dark">
+                  No outcome categories found
+                </p>
                 <Button
                   onClick={() => handleOpenDialog()}
                   className="mt-4 bg-myanmar-red hover:bg-myanmar-red/90"
@@ -340,7 +373,9 @@ export default function OutcomeCategorySettings() {
                 <TableBody>
                   {categories.map((category) => (
                     <TableRow key={category.id}>
-                      <TableCell className="font-medium">{category.name}</TableCell>
+                      <TableCell className="font-medium">
+                        {category.name}
+                      </TableCell>
                       <TableCell>{category.nameMyanmar}</TableCell>
                       <TableCell className="max-w-xs">
                         <div className="truncate" title={category.description}>
@@ -350,7 +385,9 @@ export default function OutcomeCategorySettings() {
                       <TableCell>
                         <Badge
                           variant={category.isActive ? "default" : "secondary"}
-                          className={category.isActive ? "bg-green-600" : "bg-gray-500"}
+                          className={
+                            category.isActive ? "bg-green-600" : "bg-gray-500"
+                          }
                         >
                           {category.isActive ? "Active" : "Inactive"}
                         </Badge>
@@ -427,7 +464,9 @@ export default function OutcomeCategorySettings() {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="e.g., Office Supplies"
                   required
                 />
@@ -437,7 +476,9 @@ export default function OutcomeCategorySettings() {
                 <Input
                   id="nameMyanmar"
                   value={formData.nameMyanmar}
-                  onChange={(e) => setFormData({ ...formData, nameMyanmar: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, nameMyanmar: e.target.value })
+                  }
                   placeholder="e.g., ရုံးသုံးပစ္စည်းများ"
                   required
                 />
@@ -450,17 +491,26 @@ export default function OutcomeCategorySettings() {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Brief description of this category..."
                   rows={3}
                 />
               </div>
               <div>
-                <Label htmlFor="descriptionMyanmar">Description (Myanmar)</Label>
+                <Label htmlFor="descriptionMyanmar">
+                  Description (Myanmar)
+                </Label>
                 <Textarea
                   id="descriptionMyanmar"
                   value={formData.descriptionMyanmar}
-                  onChange={(e) => setFormData({ ...formData, descriptionMyanmar: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      descriptionMyanmar: e.target.value,
+                    })
+                  }
                   placeholder="ဤအမျိုးအစားအတွက် အကျဉ်းချုပ်ဖော်ပြချက်..."
                   rows={3}
                 />
@@ -472,16 +522,26 @@ export default function OutcomeCategorySettings() {
                 type="checkbox"
                 id="isActive"
                 checked={formData.isActive}
-                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
+                onChange={(e) =>
+                  setFormData({ ...formData, isActive: e.target.checked })
+                }
               />
               <Label htmlFor="isActive">Active Category</Label>
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={handleCloseDialog}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCloseDialog}
+              >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSaving} className="bg-myanmar-red hover:bg-myanmar-red/90">
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="bg-myanmar-red hover:bg-myanmar-red/90"
+              >
                 {isSaving ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -500,12 +560,16 @@ export default function OutcomeCategorySettings() {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!deleteConfirmCategory} onOpenChange={() => setDeleteConfirmCategory(null)}>
+      <AlertDialog
+        open={!!deleteConfirmCategory}
+        onOpenChange={() => setDeleteConfirmCategory(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Category</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{deleteConfirmCategory?.name}"? This action cannot be undone.
+              Are you sure you want to delete "{deleteConfirmCategory?.name}"?
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
