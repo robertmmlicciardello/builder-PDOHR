@@ -202,6 +202,18 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/security-dashboard"
+      element={
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_security", "view_audit_logs"]}
+        >
+          <SecurityDashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/old-dashboard"
       element={
         <ProtectedRoute>
