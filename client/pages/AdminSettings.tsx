@@ -125,7 +125,7 @@ const defaultCustomization: DashboardCustomization = {
   appName: "PDF-Technology",
   appNameMyanmar: "ပကဖ-နည်းပညာ",
   subtitle: "People's Defense Force Technology Workshop",
-  subtitleMyanmar: "ပြည်သူ့ကာကွယ်ရေးတပ်ဖွဲ့ နည်းပညာလက်ရုံးတပ်",
+  subtitleMyanmar: "ပြည်သူ့ကာကွယ်ရေးတပ်ဖွဲ့ နည်းပညာလက်ရ���ံးတပ်",
   logoEmoji: "✊",
 
   // Dashboard Text
@@ -137,7 +137,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Statistics Labels
   totalPersonnelLabel: "Total Personnel",
-  totalPersonnelLabelMyanmar: "စုစုပေါင်း ���န်ထမ်းများ",
+  totalPersonnelLabelMyanmar: "စုစုပေါင်း ဝန်ထမ်းများ",
   activePersonnelLabel: "Active Personnel",
   activePersonnelLabelMyanmar: "လက်ရှိ အလုပ်လုပ်နေသူများ",
   averageAttendanceLabel: "Average Attendance",
@@ -180,7 +180,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Quick Actions
   quickActionsTitle: "Quick Actions",
-  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်��ျက်များ",
+  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
   addPersonnelAction: "Add Personnel",
   addPersonnelActionMyanmar: "ဝန်ထမ်းအသစ်ထည့်ရန်",
   attendanceRecordAction: "Attendance Records",
@@ -409,6 +409,18 @@ export const AdminSettings: React.FC = () => {
                   <span className="text-sm font-medium">Outcome Categories</span>
                   <span className="text-xs text-gray-500">
                     Manage outcome types and categories
+                  </span>
+                </Button>
+              </Link>
+              <Link to="/meeting-management">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto p-4 flex flex-col items-center space-y-2 border-myanmar-red/30 hover:bg-myanmar-red hover:text-white"
+                >
+                  <Calendar className="w-6 h-6" />
+                  <span className="text-sm font-medium">Meeting Management</span>
+                  <span className="text-xs text-gray-500">
+                    Schedule and manage meetings
                   </span>
                 </Button>
               </Link>
@@ -766,7 +778,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="လ��ာစုစုပေါင်း"
+                      placeholder="လစာစုစုပေါင်း"
                     />
                   </div>
                 </div>
@@ -840,7 +852,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="နောက်ကျနေသော သုံးသပ်ချက်များ"
+                      placeholder="နောက်ကျန��သော သုံးသပ်ချက်များ"
                     />
                   </div>
                 </div>
@@ -1065,7 +1077,7 @@ export const AdminSettings: React.FC = () => {
                           e.target.value,
                         )
                       }
-                      placeholder="မြန်ဆန်သော လုပ်ဆောင်ချက်များ"
+                      placeholder="မြန်ဆန်သော လု��်ဆောင်ချက်များ"
                     />
                   </div>
                 </div>
