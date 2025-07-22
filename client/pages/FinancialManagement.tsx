@@ -84,6 +84,7 @@ import {
   getTransactionTypeLabel,
   validateIncomeRecord,
 } from "../../shared/income-system";
+import { OutcomeCategory } from "./OutcomeCategorySettings";
 
 interface TransactionFormData {
   type: TransactionType;
