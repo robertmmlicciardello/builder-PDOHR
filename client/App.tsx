@@ -171,7 +171,11 @@ const AppRoutes = () => (
     <Route
       path="/income-category-settings"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_settings"]}
+        >
           <IncomeCategorySettings />
         </ProtectedRoute>
       }
@@ -179,7 +183,11 @@ const AppRoutes = () => (
     <Route
       path="/outcome-category-settings"
       element={
-        <ProtectedRoute>
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_settings"]}
+        >
           <OutcomeCategorySettings />
         </ProtectedRoute>
       }
