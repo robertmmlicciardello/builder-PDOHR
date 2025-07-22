@@ -23,6 +23,7 @@ import FinancialManagement from "./pages/FinancialManagement";
 import IncomeCategorySettings from "./pages/IncomeCategorySettings";
 import OutcomeCategorySettings from "./pages/OutcomeCategorySettings";
 import MeetingManagement from "./pages/MeetingManagement";
+import SecurityDashboard from "./pages/SecurityDashboard";
 import PersonnelForm from "./pages/PersonnelForm";
 import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
