@@ -215,38 +215,40 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_ERROR", payload: null });
 
     try {
-      // For demo purposes, use simple credentials
-      if (email === "admin@pdf.gov.mm" && password === "pdf2024") {
+      // Demo credentials - support both old and new passwords
+      const validCredentials = {
+        'admin@pdf.gov.mm': ['admin123', 'pdf2024', 'PDF2024!'],
+        'user@pdf.gov.mm': ['user123', 'user2024', 'User2024!']
+      };
+
+      const allowedPasswords = validCredentials[email as keyof typeof validCredentials];
+
+      if (allowedPasswords && allowedPasswords.includes(password)) {
+        const isAdmin = email === "admin@pdf.gov.mm";
         const user: AuthUser = {
-          uid: "admin-123",
+          uid: isAdmin ? "admin-123" : "user-456",
           email,
-          displayName: "PDF Administrator",
+          displayName: isAdmin ? "PDF Administrator" : "PDF User",
           isAuthenticated: true,
-          role: "admin",
+          role: isAdmin ? "admin" : "user",
         };
+
         dispatch({ type: "LOGIN", payload: user });
 
         // Log audit
-        AuditService.logAction({
-          userId: user.uid,
-          userName: user.displayName || user.email,
-          action: "login",
-          resourceType: "personnel",
-          resourceId: "",
-          timestamp: new Date().toISOString(),
-        });
+        try {
+          AuditService.logAction({
+            userId: user.uid,
+            userName: user.displayName || user.email,
+            action: "login",
+            resourceType: "personnel",
+            resourceId: "",
+            timestamp: new Date().toISOString(),
+          });
+        } catch (auditError) {
+          console.warn('Audit logging failed:', auditError);
+        }
 
-        showNotification(translations.messages.saved, "success");
-        return true;
-      } else if (email === "user@pdf.gov.mm" && password === "user2024") {
-        const user: AuthUser = {
-          uid: "user-456",
-          email,
-          displayName: "PDF User",
-          isAuthenticated: true,
-          role: "user",
-        };
-        dispatch({ type: "LOGIN", payload: user });
         showNotification(translations.messages.saved, "success");
         return true;
       }
