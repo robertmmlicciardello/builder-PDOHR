@@ -158,6 +158,14 @@ const AppRoutes = () => (
       }
     />
     <Route
+      path="/outcome-category-settings"
+      element={
+        <ProtectedRoute>
+          <OutcomeCategorySettings />
+        </ProtectedRoute>
+      }
+    />
+    <Route
       path="/old-dashboard"
       element={
         <ProtectedRoute>
