@@ -5,6 +5,7 @@ import { useLanguage, useTranslation } from "../context/LanguageContext";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { DatabaseStatus } from "../components/DatabaseStatus";
 import { IncomeSummaryWidget } from "../components/IncomeSummaryWidget";
+import { OutcomeSummaryWidget } from "../components/OutcomeSummaryWidget";
 import { useDashboardCustomization } from "../hooks/useDashboardCustomization";
 import {
   HRMetrics,
@@ -385,7 +386,7 @@ export default function HRDashboard() {
                         dashboardStats.totalEmployees) *
                       100
                     ).toFixed(1)}
-                    % လက်ရှိလ
+                    % လက��ရှိလ
                   </p>
                 </div>
                 <Users className="w-12 h-12 text-myanmar-red" />
