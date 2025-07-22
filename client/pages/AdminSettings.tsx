@@ -12,6 +12,7 @@ import {
   DollarSign,
   Users,
   Building,
+  MinusCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -178,7 +179,7 @@ const defaultCustomization: DashboardCustomization = {
 
   // Quick Actions
   quickActionsTitle: "Quick Actions",
-  quickActionsTitleMyanmar: "မြန်ဆန်သော လုပ်ဆောင်ချက်များ",
+  quickActionsTitleMyanmar: "မြန်ဆန်��ော လုပ်ဆောင်ချက်များ",
   addPersonnelAction: "Add Personnel",
   addPersonnelActionMyanmar: "ဝန်ထမ်းအသစ်ထည့်ရန်",
   attendanceRecordAction: "Attendance Records",
