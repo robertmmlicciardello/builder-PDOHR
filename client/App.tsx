@@ -10,6 +10,7 @@ import { AppProvider, useApp } from "./context/AppContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import Login from "./pages/Login";
 import SecureLogin from "./pages/SecureLogin";
+import SimpleLogin from "./pages/SimpleLogin";
 import Dashboard from "./pages/Dashboard";
 import HRDashboard from "./pages/HRDashboard";
 import AttendanceSystem from "./pages/AttendanceSystem";
