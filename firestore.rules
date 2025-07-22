@@ -1,0 +1,162 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions for authentication and authorization
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.role == 'admin';
+    }
+    
+    function isOwner(resource) {
+      return isAuthenticated() && 
+             request.auth.uid == resource.data.createdBy;
+    }
+    
+    function isValidUser() {
+      return isAuthenticated() && 
+             (request.auth.token.role == 'admin' || 
+              request.auth.token.role == 'user');
+    }
+    
+    // Personnel collection - Admin only for write, authenticated users for read
+    match /personnel/{personnelId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Income/Financial records - Admin only
+    match /income/{incomeId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Meeting records - Admin can manage all, users can read
+    match /meetings/{meetingId} {
+      allow read: if isValidUser();
+      allow create: if isAdmin();
+      allow update: if isAdmin() || isOwner(resource);
+      allow delete: if isAdmin();
+    }
+    
+    // Categories and settings - Admin only
+    match /income-categories/{categoryId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    match /outcome-categories/{categoryId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Customization settings - Admin only
+    match /customization/{docId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+    }
+    
+    // Audit logs - Admin read only
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server can write audit logs
+    }
+    
+    // User profiles - Users can read/update their own, admins can manage all
+    match /users/{userId} {
+      allow read: if isAuthenticated() && 
+                     (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() && 
+                      (request.auth.uid == userId || isAdmin());
+      allow delete: if isAdmin();
+    }
+    
+    // System settings - Admin only
+    match /settings/{docId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+    }
+    
+    // Department and organizational data - Read for all users, write for admin
+    match /departments/{deptId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+    }
+    
+    match /positions/{positionId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+    }
+    
+    // Attendance records - Users can read their own, admins can manage all
+    match /attendance/{attendanceId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin() || 
+                      (isAuthenticated() && 
+                       request.auth.uid == resource.data.userId);
+    }
+    
+    // Leave requests - Users can manage their own, admins can manage all
+    match /leaveRequests/{requestId} {
+      allow read: if isValidUser();
+      allow create: if isAuthenticated();
+      allow update: if isAdmin() || 
+                       (isAuthenticated() && 
+                        request.auth.uid == resource.data.requestedBy);
+      allow delete: if isAdmin();
+    }
+    
+    // Performance reviews - Admin and user being reviewed can read
+    match /performanceReviews/{reviewId} {
+      allow read: if isAdmin() || 
+                     (isAuthenticated() && 
+                      request.auth.uid == resource.data.employeeId);
+      allow write: if isAdmin();
+    }
+    
+    // Training records - Read for all, write for admin
+    match /training/{trainingId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+    }
+    
+    // Reports - Admin only
+    match /reports/{reportId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+    
+    // File attachments metadata - Based on parent document permissions
+    match /attachments/{attachmentId} {
+      allow read: if isValidUser();
+      allow write: if isAdmin();
+      allow delete: if isAdmin();
+    }
+    
+    // Notifications - Users can read their own
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && 
+                     request.auth.uid == resource.data.userId;
+      allow write: if false; // Only server functions can write notifications
+    }
+    
+    // System analytics - Admin only
+    match /analytics/{analyticsId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server functions can write analytics
+    }
+    
+    // Backup metadata - Admin only
+    match /backups/{backupId} {
+      allow read: if isAdmin();
+      allow write: if false; // Only server functions can manage backups
+    }
+  }
+}
