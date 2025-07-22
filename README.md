@@ -324,6 +324,7 @@ nano .env
 ```
 
 Add your Firebase configuration:
+
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
@@ -352,11 +353,13 @@ pm2 startup
 #### Step 4: Configure Nginx / Nginx ပြင်ဆင်ခြင်း
 
 Create Nginx configuration file:
+
 ```bash
 sudo nano /etc/nginx/sites-available/hr-system
 ```
 
 Add the following configuration:
+
 ```nginx
 server {
     listen 80;
@@ -404,6 +407,7 @@ server {
 ```
 
 Enable the site:
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/hr-system /etc/nginx/sites-enabled/
 sudo nginx -t
@@ -457,6 +461,7 @@ pm2 restart hr-system
 #### Step 1: Prepare Build Files / Build Files များ ပြင်ဆင်ခြင်း
 
 On your local machine:
+
 ```bash
 # Build the project
 npm run build
@@ -474,12 +479,14 @@ npm run build
 #### Step 3: Upload Files / Files များ Upload လုပ်ခြင်း
 
 **Method 1: Using File Manager**
+
 1. Select all files from your `dist` folder
 2. Create a ZIP file
 3. Upload ZIP to cPanel File Manager
 4. Extract in the target directory
 
 **Method 2: Using FTP**
+
 ```bash
 # Use any FTP client (FileZilla, WinSCP, etc.)
 # Upload all files from 'dist' folder to public_html/hr-system/
@@ -488,22 +495,26 @@ npm run build
 #### Step 4: Configure Domain/Subdomain / Domain/Subdomain ပြင်ဆင်ခြင်း
 
 **Option A: Main Domain**
+
 - Upload files directly to `public_html`
 - Access via: `https://yourdomain.com`
 
 **Option B: Subdomain**
+
 1. Go to cPanel → "Subdomains"
 2. Create subdomain: `hr.yourdomain.com`
 3. Point to `public_html/hr-system`
 4. Access via: `https://hr.yourdomain.com`
 
 **Option C: Subfolder**
+
 - Upload to `public_html/hr-system`
 - Access via: `https://yourdomain.com/hr-system`
 
 #### Step 5: Setup Redirects (for SPA) / Redirects ပြင်ဆင်ခြင်း
 
 Create `.htaccess` file in your app directory:
+
 ```apache
 RewriteEngine On
 
@@ -568,20 +579,24 @@ Since this is a static site, Firebase configuration is built into the JS files. 
 #### Common cPanel Issues and Solutions / cPanel ပြဿနာများနှင့် ဖြေရှင်းချက်များ
 
 **Issue: 404 Errors on page refresh**
+
 ```apache
 # Add to .htaccess:
 FallbackResource /index.html
 ```
 
 **Issue: Large file upload limits**
+
 - Use cPanel's "Select Max File Size" option
 - Or compress files before upload
 
 **Issue: Firebase connection blocked**
+
 - Check if hosting provider blocks Firebase domains
 - Contact support to whitelist Firebase IPs
 
 **Issue: Slow loading**
+
 - Enable Gzip compression in .htaccess
 - Optimize images before upload
 - Use CDN if available

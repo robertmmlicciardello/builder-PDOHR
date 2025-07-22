@@ -1,4 +1,5 @@
 # HR Management System Deployment Guide
+
 # ဝန်ထမ်းစီမံခန့်ခွဲမှုစနစ် Deploy လုပ်ခြင်း လမ်းညွှန်
 
 This guide provides detailed instructions for deploying the HR Management System on different hosting platforms.
@@ -19,6 +20,7 @@ This guide provides detailed instructions for deploying the HR Management System
 ### 1. Initial Server Setup / ကန ဦး Server ပြင်ဆင်ခြင်း
 
 #### Ubuntu/Debian
+
 ```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
@@ -36,6 +38,7 @@ npm --version
 ```
 
 #### CentOS/RHEL
+
 ```bash
 # Update system
 sudo yum update -y
@@ -97,6 +100,7 @@ nano .env
 ```
 
 #### Environment Configuration
+
 ```env
 # Firebase Configuration
 VITE_FIREBASE_API_KEY=your_firebase_api_key
@@ -135,16 +139,18 @@ pm2 save
 ### 6. Configure Nginx Reverse Proxy / Nginx Reverse Proxy ပြင်ဆင်ခြင်း
 
 Create Nginx server block:
+
 ```bash
 sudo nano /etc/nginx/sites-available/hr-system
 ```
 
 #### Basic HTTP Configuration
+
 ```nginx
 server {
     listen 80;
     server_name your-domain.com www.your-domain.com;
-    
+
     root /home/hrapp/hr-system/dist;
     index index.html;
 
@@ -216,6 +222,7 @@ server {
 ```
 
 Enable the site:
+
 ```bash
 # Enable the site
 sudo ln -s /etc/nginx/sites-available/hr-system /etc/nginx/sites-enabled/
@@ -263,6 +270,7 @@ sudo ufw status
 ### 9. Database Backup and Monitoring / Database Backup နှင့် Monitoring
 
 Create backup script:
+
 ```bash
 nano /home/hrapp/backup-script.sh
 ```
@@ -314,6 +322,7 @@ sudo crontab -e
 ### 1. Local Build Preparation / Local Build ပြင်ဆင်ခြင်း
 
 On your development machine:
+
 ```bash
 # Ensure all dependencies are installed
 npm install
@@ -362,16 +371,19 @@ rsync -avz dist/ username@your-domain.com:~/public_html/hr-system/
 ### 3. Domain Configuration / Domain ပြင်ဆင်ခြင်း
 
 #### Option A: Main Domain
+
 - Upload files to `public_html` root
 - Access: `https://yourdomain.com`
 
 #### Option B: Subdomain
+
 1. Go to cPanel → **Subdomains**
 2. Create subdomain: `hr`
 3. Document Root: `public_html/hr-system`
 4. Access: `https://hr.yourdomain.com`
 
 #### Option C: Subfolder
+
 - Upload to `public_html/hr-system`
 - Access: `https://yourdomain.com/hr-system`
 
@@ -405,7 +417,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     Header always set X-Content-Type-Options "nosniff"
     Header always set Referrer-Policy "no-referrer-when-downgrade"
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
-    
+
     # CSP for Firebase integration
     Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://firebase.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://firebase.googleapis.com https://firestore.googleapis.com wss://s-usc1f-nss-2077.firebaseio.com;"
 </IfModule>
@@ -427,7 +439,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 # Browser caching
 <IfModule mod_expires.c>
     ExpiresActive on
-    
+
     # Cache static assets for 1 year
     ExpiresByType text/css "access plus 1 year"
     ExpiresByType application/javascript "access plus 1 year"
@@ -444,10 +456,10 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
     ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType application/font-woff "access plus 1 year"
     ExpiresByType application/font-woff2 "access plus 1 year"
-    
+
     # Cache HTML for 1 hour
     ExpiresByType text/html "access plus 1 hour"
-    
+
     # Cache JSON for 1 day
     ExpiresByType application/json "access plus 1 day"
 </IfModule>
@@ -480,6 +492,7 @@ LimitRequestBody 10485760  # 10MB
 ### 6. Testing and Verification / Testing နှင့် စစ်ဆေးခြင်း
 
 #### Functional Testing
+
 1. **Open website in browser**
 2. **Test core features:**
    - User authentication
@@ -489,6 +502,7 @@ LimitRequestBody 10485760  # 10MB
    - Language switching
 
 #### Performance Testing
+
 ```bash
 # Use online tools:
 # - Google PageSpeed Insights
@@ -500,6 +514,7 @@ LimitRequestBody 10485760  # 10MB
 ```
 
 #### Security Testing
+
 - SSL certificate validation
 - Mixed content warnings
 - HTTPS redirection
@@ -508,6 +523,7 @@ LimitRequestBody 10485760  # 10MB
 ### 7. Maintenance and Updates / ပြုပြင်ထိန်းသိမ်းခြင်းနှင့် အပ်ဒိတ်များ
 
 #### Update Process
+
 1. **Build new version locally**
 2. **Backup current files**
 3. **Upload new files**
@@ -515,6 +531,7 @@ LimitRequestBody 10485760  # 10MB
 5. **Clear browser cache**
 
 #### Monitoring
+
 - **Check logs regularly** (cPanel Error Logs)
 - **Monitor disk usage**
 - **Verify backup procedures**
@@ -527,6 +544,7 @@ LimitRequestBody 10485760  # 10MB
 ### Common VPS Issues / VPS ပြဿနာများ
 
 #### Application Won't Start
+
 ```bash
 # Check PM2 status
 pm2 status
@@ -541,6 +559,7 @@ sudo netstat -tlnp | grep :3000
 ```
 
 #### Nginx Issues
+
 ```bash
 # Test Nginx configuration
 sudo nginx -t
@@ -554,6 +573,7 @@ sudo tail -f /var/log/nginx/hr-system.error.log
 ```
 
 #### SSL Certificate Issues
+
 ```bash
 # Check certificate status
 sudo certbot certificates
@@ -568,6 +588,7 @@ sudo certbot renew
 ### Common cPanel Issues / cPanel ပြဿနာများ
 
 #### 404 Errors on Page Refresh
+
 ```apache
 # Add to .htaccess:
 FallbackResource /index.html
@@ -580,17 +601,20 @@ RewriteRule . /index.html [L]
 ```
 
 #### Large File Upload Issues
+
 - **Increase upload limits in cPanel**
 - **Compress files before upload**
 - **Use File Manager's extraction feature**
 
 #### Performance Issues
+
 - **Enable Gzip compression**
 - **Optimize images**
 - **Minimize HTTP requests**
 - **Use browser caching**
 
 #### Firebase Connection Issues
+
 - **Check authorized domains in Firebase Console**
 - **Verify CORS settings**
 - **Check CSP headers**
@@ -601,6 +625,7 @@ RewriteRule . /index.html [L]
 ## 📊 Performance Optimization / စွမ်းဆောင်ရည် မြှင့်တင်ခြင်း
 
 ### Frontend Optimization
+
 ```bash
 # Build with optimization flags
 npm run build -- --mode production
@@ -611,6 +636,7 @@ npx webpack-bundle-analyzer dist/static/js/*.js
 ```
 
 ### Server Optimization (VPS)
+
 ```bash
 # Optimize Nginx
 sudo nano /etc/nginx/nginx.conf
@@ -624,6 +650,7 @@ listen 443 ssl http2;
 ```
 
 ### Database Optimization
+
 - **Use Firebase indexes** for complex queries
 - **Implement pagination** for large datasets
 - **Cache frequently accessed data**
@@ -634,6 +661,7 @@ listen 443 ssl http2;
 ## 🔐 Security Best Practices / လုံခြုံရေး အကောင်းဆုံး အလေ့အကျင့်များ
 
 ### VPS Security
+
 ```bash
 # Update system regularly
 sudo apt update && sudo apt upgrade
@@ -648,6 +676,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 ```
 
 ### cPanel Security
+
 - **Use strong passwords**
 - **Enable two-factor authentication**
 - **Regular file permission checks**
@@ -655,6 +684,7 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 - **Keep cPanel software updated**
 
 ### Application Security
+
 - **Regular dependency updates**
 - **Environment variable protection**
 - **Input validation**
