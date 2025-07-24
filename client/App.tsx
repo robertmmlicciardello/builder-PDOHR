@@ -30,6 +30,9 @@ import PersonnelList from "./pages/PersonnelList";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import GovernmentPayScaleManagement from "./pages/GovernmentPayScaleManagement";
+import ServiceRecordManagement from "./pages/ServiceRecordManagement";
+import ApprovalWorkflowManagement from "./pages/ApprovalWorkflowManagement";
 import { ProtectedRoute } from "./components/SecurityWrapper";
 
 const queryClient = new QueryClient();
