@@ -1,4 +1,5 @@
 # Windows မှာ PDF-Tech HR System ထည့်သွင်းနည်း
+
 # PDF-Tech HR Management System - Windows Setup
 
 မြန်မာ အစိုးရ ဝန်ထမ်းစီမံခန့်ခွဲမှုစနစ် Windows ကွန်ပြုတာမှာ အသုံးပြုရန်
@@ -8,6 +9,7 @@
 ## 📋 **လိုအပ်သော အရာများ**
 
 ### **ကွန်ပြုတာ အနည်းဆုံး လိုအပ်ချက်များ:**
+
 - **Windows 10 သို့မဟုတ် Windows 11**
 - **RAM: အနည်းဆုံး 8GB** (16GB ပိုကောင်းတယ်)
 - **Hard Disk: အနည်းဆုံး 2GB လွတ်နေရာ**
@@ -22,25 +24,29 @@
 1. **ဒီ website ကို သွားပါ:** [https://nodejs.org/](https://nodejs.org/)
 
 2. **"LTS" ဆိုတဲ့ စိမ်းရောင် button ကို နှိပ်ပါ**
+
    - ဒါက အတော်ဆုံး နည်းပညာဗားရှင်းဖြစ်တယ်
    - Windows ကို အလိုအလျောက် သိသွားမယ်
 
 3. **Download ပြီးရင် installer ကို run ပါ**
+
    - "Run" ကို နှိပ်ပါ (Windows က warning ပေးရင်)
    - "Next" ကို နှိပ်ပြီး continue လုပ်ပါ
    - **အရေးကြီး:** "Add to PATH" ကို ✅ check ချထားပါ
 
 4. **Install ပြီးရင် test လုပ်က���ည့်ပါ:**
+
    ```cmd
    # Command Prompt ကို ဖွင့်ပြီး ရိုက်ကြည့်ပါ:
    node --version
    # v18.17.0 လို ပြရမယ်
-   
-   npm --version  
+
+   npm --version
    # 9.6.7 လို ပြရမယ်
    ```
 
 ### **Command Prompt ကို ဘယ်လို ဖွင့်မလဲ:**
+
 1. **Windows Key + R** နှိပ်ပါ
 2. **"cmd"** ရိုက်ပြီး Enter နှိပ်ပါ
 3. သို့မဟုတ် Start Menu မှာ "Command Prompt" ရှာပါ
@@ -58,11 +64,13 @@
 ### **Project files များ ထည့်ခြင်း:**
 
 **Method 1: ZIP file download လုပ်ရင်**
+
 1. ZIP file ကို download လုပ်ပါ
 2. Right-click လုပ်ပြီး "Extract All" နှိပ်ပါ
 3. PDF-HR-System folder ထဲမှာ extract လုပ်ပါ
 
 **Method 2: Git နဲ့ clone လုပ်ရင်**
+
 ```cmd
 # Desktop ကို သွားပါ
 cd C:\Users\%USERNAME%\Desktop
@@ -83,6 +91,7 @@ cd PDF-HR-System
 1. **PDF-HR-System folder ကို ဖွင့်ပါ**
 
 2. **"setup-windows.bat" file ကို double-click လုပ်ပါ**
+
    - ဒါက အလိုအလျောက် အရာအားလုံး ထည့်သွင်းပေးမယ်
    - 2-5 မိနစ် ကြာနိုင်တယ် (internet အရှိန်ပေါ် မူတည်)
 
@@ -162,7 +171,7 @@ copy .env.example .env
      projectId: "pdf-hr-system",
      storageBucket: "pdf-hr-system.appspot.com",
      messagingSenderId: "123456789012",
-     appId: "1:123456789012:web:abcdefghijklmnop"
+     appId: "1:123456789012:web:abcdefghijklmnop",
    };
    ```
 
@@ -171,6 +180,7 @@ copy .env.example .env
 1. **Project folder မှာ ".env" file ကို ဖွင့်ပါ** (Notepad နဲ့)
 
 2. **Firebase config values တွေ ထည့်ပါ:**
+
    ```env
    VITE_FIREBASE_API_KEY=AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    VITE_FIREBASE_AUTH_DOMAIN=pdf-hr-system.firebaseapp.com
@@ -189,11 +199,13 @@ copy .env.example .env
 ### **Development Server စတင်ခြင်း:**
 
 **Method 1: Script file သုံးခြင်း (အလွယ်ဆုံး)**
+
 1. **"start-dev.bat" file ကို double-click လုပ်ပါ**
 2. **Command Prompt window ပွင့်လာမယ်**
 3. **Browser ကို ဖွင့်ပြီး http://localhost:5173/ ကို သွားပါ**
 
 **Method 2: Command Prompt နဲ့ စတင်ခြင်း**
+
 ```cmd
 # Project folder ကို သွားပါ
 cd C:\Users\%USERNAME%\Desktop\PDF-HR-System
@@ -215,12 +227,14 @@ npm run dev
 ### **Login စမ်းကြည့��ခြင်း:**
 
 **Demo အတွက် သုံးလို့ရတဲ့ username/password:**
-- **Admin User:** 
+
+- **Admin User:**
+
   - Email: `admin@pdf.gov.mm`
   - Password: `admin123`
 
 - **Regular User:**
-  - Email: `user@pdf.gov.mm` 
+  - Email: `user@pdf.gov.mm`
   - Password: `user123`
 
 ---
@@ -236,6 +250,7 @@ npm run dev
 3. **"Pay Scale Management" ကို နှိပ်ပါ**
 
 4. **"Generate Defaults" button ကို နှိပ်ပါ**
+
    - ဒါက Grade 1-20, Step 1-10 အားလုံး ဖန်တီးပေးမယ်
 
 5. **Different grades တွေ ကြည့်ကြည့်ပါ**
@@ -270,20 +285,26 @@ npm run dev
 ### **အတော်ဆုံး ကြုံနိုင်တဲ့ ပြဿနာများ:**
 
 #### **❌ "node is not recognized"**
+
 **ဖြေရှင်းချက်:**
+
 1. Node.js ကို ပြန် install လုပ်ပါ
 2. "Add to PATH" ကို check ချပါ
 3. Command Prompt ကို ပိတ်ပြီး ပြန်ဖွင့်ပါ
 4. Computer ကို restart လုပ်ပါ
 
 #### **❌ Firebase connection error**
+
 **ဖြေရှင်းချက်:**
+
 1. .env file မှာ Firebase config စစ်ပါ
 2. Firebase Console မှာ project setting စစ်ပါ
 3. Internet connection စစ်ပါ
 
 #### **❌ Port 5173 already in use**
+
 **ဖြေရှင်းချက်:**
+
 ```cmd
 # Port ကို သုံးနေတဲ့ program ကို ပိတ်ပါ
 netstat -ano | findstr :5173
@@ -294,7 +315,9 @@ npm run dev -- --port 3000
 ```
 
 #### **❌ npm install fails**
+
 **ဖြေရှင်းချက်:**
+
 ```cmd
 # Admin အနေနဲ့ Command Prompt ဖွင့်ပါ
 # Right-click Command Prompt → "Run as administrator"
@@ -322,12 +345,14 @@ npm install
 1. **Computer နဲ့ Mobile ကို same WiFi မှာ ချိတ်ပါ**
 
 2. **Command Prompt မှာ ရိုက်ပါ:**
+
    ```cmd
    # Network access ပွင့်ထ���းပြီး start လုပ်ပါ
    npm run dev:host
    ```
 
 3. **Computer ရဲ့ IP Address ရှာပါ:**
+
    ```cmd
    ipconfig
    ```
@@ -360,15 +385,18 @@ npm install
 ## 🎓 **နောက်ထပ် လေ့လာစရာများ**
 
 ### **အသေးစိတ် လမ်းညွှန်များ:**
+
 - **📖 Local Setup Guide:** `LOCAL_SETUP_GUIDE.md`
 - **📖 Quick Start:** `WINDOWS_QUICK_START.md`
 - **📖 Government Features:** `GOVERNMENT_READINESS_ASSESSMENT.md`
 
 ### **Technical အချက်အလက်များ:**
+
 - **📖 Implementation Plan:** `PRIORITY_IMPLEMENTATION_PLAN.md`
 - **📖 Production Readiness:** `PRODUCTION_READINESS.md`
 
 ### **Daily အသုံးပြုမှု:**
+
 ```cmd
 # စတင်ရန်
 npm run dev
@@ -393,7 +421,7 @@ npm run reset
 ### **နောက်ထပ် လုပ်စရာများ:**
 
 1. **📋 ဝန်ထမ်းများကို စာရင်းပြုစုပါ**
-2. **💰 Pay scales တွေ ပြင်ဆင်ပါ**  
+2. **💰 Pay scales တွေ ပြင်ဆင်ပါ**
 3. **✅ Approval workflows တွေ setup လုပ်ပါ**
 4. **🏖️ Leave policies တွေ configure လုပ်ပါ**
 5. **📊 Reports တွေ generate လုပ်ကြည့်ပါ**

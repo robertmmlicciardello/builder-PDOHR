@@ -1,4 +1,5 @@
 # Local Setup Guide for Windows
+
 # Windows ကွန်ပြုတာမှာ Local Setup လုပ်နည်း
 
 Complete guide to run the HR Management System on your local Windows computer.
@@ -8,6 +9,7 @@ Complete guide to run the HR Management System on your local Windows computer.
 ## 📋 **Prerequisites / လိုအပ်ချက်များ**
 
 ### **1. System Requirements / စနစ် လိုအပ်ချက်များ**
+
 - **Operating System:** Windows 10/11 (64-bit)
 - **RAM:** Minimum 8GB, Recommended 16GB
 - **Storage:** At least 2GB free space
@@ -20,12 +22,14 @@ Complete guide to run the HR Management System on your local Windows computer.
 ### **1.1 Install Node.js**
 
 **Download and Install:**
+
 1. Go to [https://nodejs.org/](https://nodejs.org/)
 2. Download **LTS Version** (Recommended)
 3. Run the installer and follow the setup wizard
 4. **Important:** Check "Add to PATH" during installation
 
 **Verify Installation:**
+
 ```cmd
 # Open Command Prompt (cmd) and type:
 node --version
@@ -39,6 +43,7 @@ npm --version
 ### **1.2 Install Git**
 
 **Download and Install:**
+
 1. Go to [https://git-scm.com/download/win](https://git-scm.com/download/win)
 2. Download and run the installer
 3. **Important Settings during installation:**
@@ -47,6 +52,7 @@ npm --version
    - Select "Windows Command Prompt" as terminal
 
 **Verify Installation:**
+
 ```cmd
 # Open Command Prompt and type:
 git --version
@@ -58,6 +64,7 @@ git --version
 ### **1.3 Install VS Code (Recommended)**
 
 **Download and Install:**
+
 1. Go to [https://code.visualstudio.com/](https://code.visualstudio.com/)
 2. Download and install VS Code
 3. **Recommended Extensions:**
@@ -85,6 +92,7 @@ cd MyProjects
 ### **2.2 Clone the Project**
 
 **Method A: If you have Git repository URL**
+
 ```cmd
 # Replace with your actual repository URL
 git clone https://github.com/your-username/hr-management-system.git
@@ -92,6 +100,7 @@ cd hr-management-system
 ```
 
 **Method B: If you need to create from current files**
+
 ```cmd
 # Create new project folder
 mkdir hr-management-system
@@ -102,6 +111,7 @@ git init
 ```
 
 **Method C: Download ZIP (if available)**
+
 1. Download the project as ZIP file
 2. Extract to `C:\Users\%USERNAME%\Desktop\MyProjects\hr-management-system`
 3. Open Command Prompt in that folder
@@ -135,6 +145,7 @@ notepad .env
 ```
 
 **Edit `.env` file with the following content:**
+
 ```env
 # Firebase Configuration
 VITE_FIREBASE_API_KEY=your_firebase_api_key_here
@@ -189,6 +200,7 @@ VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 7. **Copy the config object** and update your `.env` file
 
 **Example config:**
+
 ```javascript
 const firebaseConfig = {
   apiKey: "AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
@@ -196,11 +208,12 @@ const firebaseConfig = {
   projectId: "pdf-hr-system",
   storageBucket: "pdf-hr-system.appspot.com",
   messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdefghijklmnop"
+  appId: "1:123456789012:web:abcdefghijklmnop",
 };
 ```
 
 **Update your `.env` file:**
+
 ```env
 VITE_FIREBASE_API_KEY=AIzaSyDxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 VITE_FIREBASE_AUTH_DOMAIN=pdf-hr-system.firebaseapp.com
@@ -213,6 +226,7 @@ VITE_FIREBASE_APP_ID=1:123456789012:web:abcdefghijklmnop
 ### **4.5 Setup Firestore Security Rules**
 
 **In Firestore → Rules, replace with:**
+
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -255,6 +269,7 @@ npm run dev
 ### **5.3 Test Login**
 
 **Use demo credentials:**
+
 - **Admin:** admin@pdf.gov.mm / admin123
 - **User:** user@pdf.gov.mm / user123
 
@@ -263,18 +278,21 @@ npm run dev
 ## 🎯 **Step 6: Verify Government Features / အစိုးရ လုပ်ဆောင်ချက်များ စစ်ဆေးခြင်း**
 
 ### **6.1 Test Government Pay Scale**
+
 1. **Login as admin**
 2. **Go to:** Government HR → Pay Scale Management
 3. **Click "Generate Defaults"** to create sample data
 4. **Verify:** Grade 1-20, Step 1-10 tables appear
 
 ### **6.2 Test Service Records**
+
 1. **Go to:** Government HR → Service Records
 2. **Click "Add Service Record"**
 3. **Create a sample promotion record**
 4. **Verify:** Record appears in timeline view
 
 ### **6.3 Test Approval Workflows**
+
 1. **Go to:** Government HR → Approval Workflows
 2. **Check:** Pending approvals section
 3. **Verify:** Multi-level approval structure works
@@ -286,6 +304,7 @@ npm run dev
 ### **Common Issues / သာမန် ပြဿနာများ**
 
 #### **Issue 1: "node" is not recognized**
+
 ```cmd
 # Solution: Add Node.js to PATH
 # 1. Search for "Environment Variables" in Windows Start Menu
@@ -297,6 +316,7 @@ npm run dev
 ```
 
 #### **Issue 2: Firebase connection errors**
+
 ```cmd
 # Check your .env file
 # Make sure all VITE_FIREBASE_* variables are set correctly
@@ -308,6 +328,7 @@ npm run dev
 ```
 
 #### **Issue 3: Port 5173 is already in use**
+
 ```cmd
 # Kill process using the port
 netstat -ano | findstr :5173
@@ -318,12 +339,14 @@ npm run dev -- --port 3000
 ```
 
 #### **Issue 4: Permission denied errors**
+
 ```cmd
 # Run Command Prompt as Administrator
 # Right-click Command Prompt → "Run as administrator"
 ```
 
 #### **Issue 5: npm install fails**
+
 ```cmd
 # Clear npm cache
 npm cache clean --force
@@ -337,6 +360,7 @@ npm install
 ### **Performance Issues / စွမ်းဆောင်ရည် ပြဿနာများ**
 
 #### **Slow Loading**
+
 ```cmd
 # Build for production to test performance
 npm run build
@@ -347,6 +371,7 @@ npm run preview
 ```
 
 #### **Memory Issues**
+
 ```cmd
 # Increase Node.js memory limit
 set NODE_OPTIONS=--max-old-space-size=4096
@@ -463,6 +488,7 @@ npm install
 ### **10.1 VS Code Setup**
 
 **Install recommended extensions:**
+
 ```json
 {
   "recommendations": [
@@ -476,6 +502,7 @@ npm install
 ```
 
 **VS Code Settings (Ctrl+Shift+P → "Preferences: Open Settings JSON"):**
+
 ```json
 {
   "editor.formatOnSave": true,
@@ -493,6 +520,7 @@ npm install
 **Create additional environment files:**
 
 **.env.local** (for local overrides):
+
 ```env
 # Local development overrides
 VITE_API_URL=http://localhost:3000
@@ -500,6 +528,7 @@ VITE_DEBUG=true
 ```
 
 **.env.production** (for production builds):
+
 ```env
 # Production settings
 VITE_API_URL=https://your-production-api.com
@@ -510,6 +539,7 @@ NODE_ENV=production
 ### **10.3 Build Optimization**
 
 **For production builds:**
+
 ```cmd
 # Build for production
 npm run build
