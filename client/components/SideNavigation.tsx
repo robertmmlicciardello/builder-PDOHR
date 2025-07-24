@@ -35,6 +35,11 @@ import {
   Bell,
   Menu,
   X,
+  Scale,
+  CheckCircle,
+  ArrowRightCircle,
+  Briefcase,
+  Shield,
 } from "lucide-react";
 
 interface NavItem {
