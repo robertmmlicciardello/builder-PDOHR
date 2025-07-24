@@ -141,6 +141,32 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
       href: "/meeting-management",
     },
     {
+      label: "Government HR",
+      labelMyanmar: "အစိုးရဝန်ထမ်းရေးရာ",
+      icon: Shield,
+      children: [
+        {
+          label: "Pay Scale Management",
+          labelMyanmar: "လစာစာရင်းစီမံခန့်ခွဲမှု",
+          icon: Scale,
+          href: "/government-pay-scale",
+        },
+        {
+          label: "Service Records",
+          labelMyanmar: "ဝန်ထမ်းမှတ်တမ်း",
+          icon: FileText,
+          href: "/service-records",
+        },
+        {
+          label: "Approval Workflows",
+          labelMyanmar: "အတည်ပြုမှုလုပ်ငန်းစဉ်",
+          icon: CheckCircle,
+          href: "/approval-workflows",
+          badge: 3,
+        },
+      ],
+    },
+    {
       label: "Financial",
       labelMyanmar: "ငွေကြေးရေးရာ",
       icon: DollarSign,
@@ -156,6 +182,12 @@ export const SideNavigation: React.FC<SideNavigationProps> = ({ onLogout }) => {
           labelMyanmar: "ဝင်ငွေအမျိုးအစားများ",
           icon: Settings,
           href: "/income-category-settings",
+        },
+        {
+          label: "Outcome Categories",
+          labelMyanmar: "ထွက်ငွေအမျိုးအစားများ",
+          icon: Settings,
+          href: "/outcome-category-settings",
         },
       ],
     },
