@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDocs, 
-  query, 
+import { useState, useEffect } from "react";
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  query,
   orderBy,
   where,
   limit,
   startAfter,
-  DocumentSnapshot
-} from 'firebase/firestore';
-import { db } from '@/services/firebase';
-import { ServiceRecord, ServiceAttachment, PersonnelServiceSummary } from '@/types/government';
+  DocumentSnapshot,
+} from "firebase/firestore";
+import { db } from "@/services/firebase";
+import {
+  ServiceRecord,
+  ServiceAttachment,
+  PersonnelServiceSummary,
+} from "@/types/government";
 
 export const useServiceRecord = (personnelId?: string) => {
   const [serviceRecords, setServiceRecords] = useState<ServiceRecord[]>([]);
@@ -23,55 +27,62 @@ export const useServiceRecord = (personnelId?: string) => {
   const [hasMore, setHasMore] = useState(true);
   const [lastDoc, setLastDoc] = useState<DocumentSnapshot | null>(null);
 
-  const fetchServiceRecords = async (personnelIdParam?: string, loadMore = false) => {
+  const fetchServiceRecords = async (
+    personnelIdParam?: string,
+    loadMore = false,
+  ) => {
     try {
       setLoading(true);
-      
-      let q = query(collection(db, 'serviceRecords'));
-      
+
+      let q = query(collection(db, "serviceRecords"));
+
       if (personnelIdParam || personnelId) {
-        q = query(q, where('personnelId', '==', personnelIdParam || personnelId));
+        q = query(
+          q,
+          where("personnelId", "==", personnelIdParam || personnelId),
+        );
       }
-      
-      q = query(q, orderBy('effectiveDate', 'desc'), limit(20));
-      
+
+      q = query(q, orderBy("effectiveDate", "desc"), limit(20));
+
       if (loadMore && lastDoc) {
         q = query(q, startAfter(lastDoc));
       }
 
       const querySnapshot = await getDocs(q);
       const records: ServiceRecord[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        records.push({ 
-          id: doc.id, 
+        records.push({
+          id: doc.id,
           ...data,
           effectiveDate: data.effectiveDate?.toDate(),
           endDate: data.endDate?.toDate(),
           createdAt: data.createdAt?.toDate(),
-          updatedAt: data.updatedAt?.toDate()
+          updatedAt: data.updatedAt?.toDate(),
         } as ServiceRecord);
       });
-      
+
       if (loadMore) {
-        setServiceRecords(prev => [...prev, ...records]);
+        setServiceRecords((prev) => [...prev, ...records]);
       } else {
         setServiceRecords(records);
       }
-      
+
       setHasMore(querySnapshot.docs.length === 20);
       setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1] || null);
-      
     } catch (err) {
-      setError('Failed to fetch service records');
-      console.error('Error fetching service records:', err);
+      setError("Failed to fetch service records");
+      console.error("Error fetching service records:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const createServiceRecord = async (record: Omit<ServiceRecord, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const createServiceRecord = async (
+    record: Omit<ServiceRecord, "id" | "createdAt" | "updatedAt">,
+  ) => {
     try {
       // Generate order number if not provided
       if (!record.orderNumber) {
@@ -79,99 +90,119 @@ export const useServiceRecord = (personnelId?: string) => {
         record.orderNumber = `${record.recordType.toUpperCase()}-${timestamp}`;
       }
 
-      const docRef = await addDoc(collection(db, 'serviceRecords'), {
+      const docRef = await addDoc(collection(db, "serviceRecords"), {
         ...record,
-        status: record.status || 'draft',
-        urgency: record.urgency || 'medium',
+        status: record.status || "draft",
+        urgency: record.urgency || "medium",
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
-      
+
       await fetchServiceRecords(record.personnelId);
       return docRef.id;
     } catch (err) {
-      setError('Failed to create service record');
-      console.error('Error creating service record:', err);
+      setError("Failed to create service record");
+      console.error("Error creating service record:", err);
       throw err;
     }
   };
 
-  const updateServiceRecord = async (id: string, updates: Partial<ServiceRecord>) => {
+  const updateServiceRecord = async (
+    id: string,
+    updates: Partial<ServiceRecord>,
+  ) => {
     try {
-      const docRef = doc(db, 'serviceRecords', id);
+      const docRef = doc(db, "serviceRecords", id);
       await updateDoc(docRef, {
         ...updates,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
-      
+
       await fetchServiceRecords(personnelId);
     } catch (err) {
-      setError('Failed to update service record');
-      console.error('Error updating service record:', err);
+      setError("Failed to update service record");
+      console.error("Error updating service record:", err);
       throw err;
     }
   };
 
   const deleteServiceRecord = async (id: string) => {
     try {
-      const docRef = doc(db, 'serviceRecords', id);
+      const docRef = doc(db, "serviceRecords", id);
       await deleteDoc(docRef);
-      
+
       await fetchServiceRecords(personnelId);
     } catch (err) {
-      setError('Failed to delete service record');
-      console.error('Error deleting service record:', err);
+      setError("Failed to delete service record");
+      console.error("Error deleting service record:", err);
       throw err;
     }
   };
 
-  const approveServiceRecord = async (id: string, approverName: string, comments?: string) => {
+  const approveServiceRecord = async (
+    id: string,
+    approverName: string,
+    comments?: string,
+  ) => {
     try {
       await updateServiceRecord(id, {
-        status: 'approved',
+        status: "approved",
         approvedBy: approverName,
-        remarks: comments || ''
+        remarks: comments || "",
       });
     } catch (err) {
-      setError('Failed to approve service record');
+      setError("Failed to approve service record");
       throw err;
     }
   };
 
-  const rejectServiceRecord = async (id: string, rejectorName: string, reason: string) => {
+  const rejectServiceRecord = async (
+    id: string,
+    rejectorName: string,
+    reason: string,
+  ) => {
     try {
       await updateServiceRecord(id, {
-        status: 'rejected',
+        status: "rejected",
         approvedBy: rejectorName,
-        remarks: reason
+        remarks: reason,
       });
     } catch (err) {
-      setError('Failed to reject service record');
+      setError("Failed to reject service record");
       throw err;
     }
   };
 
-  const getRecordsByType = (recordType: ServiceRecord['recordType']): ServiceRecord[] => {
-    return serviceRecords.filter(record => record.recordType === recordType);
+  const getRecordsByType = (
+    recordType: ServiceRecord["recordType"],
+  ): ServiceRecord[] => {
+    return serviceRecords.filter((record) => record.recordType === recordType);
   };
 
-  const getRecordsByStatus = (status: ServiceRecord['status']): ServiceRecord[] => {
-    return serviceRecords.filter(record => record.status === status);
+  const getRecordsByStatus = (
+    status: ServiceRecord["status"],
+  ): ServiceRecord[] => {
+    return serviceRecords.filter((record) => record.status === status);
   };
 
   const getRecentRecords = (count: number = 5): ServiceRecord[] => {
     return serviceRecords
-      .sort((a, b) => new Date(b.effectiveDate).getTime() - new Date(a.effectiveDate).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.effectiveDate).getTime() -
+          new Date(a.effectiveDate).getTime(),
+      )
       .slice(0, count);
   };
 
   const searchRecords = (searchTerm: string): ServiceRecord[] => {
     const term = searchTerm.toLowerCase();
-    return serviceRecords.filter(record => 
-      record.title.toLowerCase().includes(term) ||
-      record.description.toLowerCase().includes(term) ||
-      record.orderNumber.toLowerCase().includes(term) ||
-      record.recordType.toLowerCase().includes(term)
+    return serviceRecords.filter(
+      (record) =>
+        record.title.toLowerCase().includes(term) ||
+        record.description.toLowerCase().includes(term) ||
+        record.orderNumber.toLowerCase().includes(term) ||
+        record.recordType.toLowerCase().includes(term),
     );
   };
 
@@ -202,7 +233,7 @@ export const useServiceRecord = (personnelId?: string) => {
     getRecentRecords,
     searchRecords,
     loadMore,
-    refreshRecords: () => fetchServiceRecords(personnelId)
+    refreshRecords: () => fetchServiceRecords(personnelId),
   };
 };
 
@@ -211,7 +242,11 @@ export const useServiceAttachment = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const uploadAttachment = async (file: File, serviceRecordId: string, description: string = ''): Promise<ServiceAttachment> => {
+  const uploadAttachment = async (
+    file: File,
+    serviceRecordId: string,
+    description: string = "",
+  ): Promise<ServiceAttachment> => {
     try {
       setUploading(true);
       setUploadProgress(0);
@@ -226,19 +261,19 @@ export const useServiceAttachment = () => {
         fileType: file.type,
         fileSize: file.size,
         uploadDate: new Date(),
-        uploadedBy: 'current-user', // Replace with actual user
-        description
+        uploadedBy: "current-user", // Replace with actual user
+        description,
       };
 
       // Simulate upload progress
       for (let i = 0; i <= 100; i += 10) {
         setUploadProgress(i);
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       return attachment;
     } catch (err) {
-      console.error('Error uploading attachment:', err);
+      console.error("Error uploading attachment:", err);
       throw err;
     } finally {
       setUploading(false);
@@ -246,13 +281,21 @@ export const useServiceAttachment = () => {
     }
   };
 
-  const deleteAttachment = async (attachmentId: string, serviceRecordId: string) => {
+  const deleteAttachment = async (
+    attachmentId: string,
+    serviceRecordId: string,
+  ) => {
     try {
       // Implementation for deleting attachment from storage
-      console.log('Deleting attachment:', attachmentId, 'from record:', serviceRecordId);
+      console.log(
+        "Deleting attachment:",
+        attachmentId,
+        "from record:",
+        serviceRecordId,
+      );
       // Add actual deletion logic here
     } catch (err) {
-      console.error('Error deleting attachment:', err);
+      console.error("Error deleting attachment:", err);
       throw err;
     }
   };
@@ -261,7 +304,7 @@ export const useServiceAttachment = () => {
     uploading,
     uploadProgress,
     uploadAttachment,
-    deleteAttachment
+    deleteAttachment,
   };
 };
 
@@ -274,37 +317,43 @@ export const usePersonnelServiceSummary = (personnelId: string) => {
   const calculateServiceSummary = async (id: string) => {
     try {
       setLoading(true);
-      
+
       // Fetch all service records for this personnel
       const q = query(
-        collection(db, 'serviceRecords'),
-        where('personnelId', '==', id),
-        orderBy('effectiveDate', 'asc')
+        collection(db, "serviceRecords"),
+        where("personnelId", "==", id),
+        orderBy("effectiveDate", "asc"),
       );
-      
+
       const querySnapshot = await getDocs(q);
       const records: ServiceRecord[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        records.push({ 
-          id: doc.id, 
+        records.push({
+          id: doc.id,
           ...data,
           effectiveDate: data.effectiveDate?.toDate(),
           endDate: data.endDate?.toDate(),
           createdAt: data.createdAt?.toDate(),
-          updatedAt: data.updatedAt?.toDate()
+          updatedAt: data.updatedAt?.toDate(),
         } as ServiceRecord);
       });
 
       // Calculate service summary
-      const firstAppointment = records.find(r => r.recordType === 'appointment');
-      const appointments = records.filter(r => r.recordType === 'appointment');
-      const promotions = records.filter(r => r.recordType === 'promotion');
-      const transfers = records.filter(r => r.recordType === 'transfer');
-      const disciplinary = records.filter(r => r.recordType === 'disciplinary');
-      const awards = records.filter(r => r.recordType === 'award');
-      const trainings = records.filter(r => r.recordType === 'training');
+      const firstAppointment = records.find(
+        (r) => r.recordType === "appointment",
+      );
+      const appointments = records.filter(
+        (r) => r.recordType === "appointment",
+      );
+      const promotions = records.filter((r) => r.recordType === "promotion");
+      const transfers = records.filter((r) => r.recordType === "transfer");
+      const disciplinary = records.filter(
+        (r) => r.recordType === "disciplinary",
+      );
+      const awards = records.filter((r) => r.recordType === "award");
+      const trainings = records.filter((r) => r.recordType === "training");
 
       const startDate = firstAppointment?.effectiveDate || new Date();
       const currentDate = new Date();
@@ -314,47 +363,56 @@ export const usePersonnelServiceSummary = (personnelId: string) => {
       const serviceMonths = Math.floor((serviceDays % 365) / 30);
 
       // Get current position from latest promotion or appointment
-      const latestPositionRecord = [...promotions, ...appointments]
-        .sort((a, b) => new Date(b.effectiveDate).getTime() - new Date(a.effectiveDate).getTime())[0];
+      const latestPositionRecord = [...promotions, ...appointments].sort(
+        (a, b) =>
+          new Date(b.effectiveDate).getTime() -
+          new Date(a.effectiveDate).getTime(),
+      )[0];
 
       const calculatedSummary: PersonnelServiceSummary = {
         personnelId: id,
         totalServiceYears: serviceYears,
         totalServiceMonths: serviceMonths,
         totalServiceDays: serviceDays,
-        currentPosition: latestPositionRecord?.toPosition || 'Not assigned',
-        currentDepartment: latestPositionRecord?.toDepartment || 'Not assigned',
+        currentPosition: latestPositionRecord?.toPosition || "Not assigned",
+        currentDepartment: latestPositionRecord?.toDepartment || "Not assigned",
         currentGrade: 1, // This should be fetched from personnel grade record
-        currentStep: 1,  // This should be fetched from personnel grade record
+        currentStep: 1, // This should be fetched from personnel grade record
         currentSalary: 0, // This should be calculated from pay scale
-        lastPromotionDate: promotions.length > 0 ? promotions[promotions.length - 1].effectiveDate : undefined,
+        lastPromotionDate:
+          promotions.length > 0
+            ? promotions[promotions.length - 1].effectiveDate
+            : undefined,
         nextEligiblePromotionDate: undefined, // Calculate based on promotion rules
-        nextStepIncrementDate: undefined,     // Calculate based on step increment rules
-        
+        nextStepIncrementDate: undefined, // Calculate based on step increment rules
+
         // Leave summary - these should be calculated from leave records
         annualLeaveBalance: 20, // Default - should be calculated
-        medicalLeaveUsed: 0,    // Should be calculated from leave records
-        casualLeaveBalance: 10,  // Default - should be calculated
-        
+        medicalLeaveUsed: 0, // Should be calculated from leave records
+        casualLeaveBalance: 10, // Default - should be calculated
+
         // Performance & Disciplinary
         performanceRating: undefined, // Should be fetched from performance records
         disciplinaryActions: disciplinary.length,
         awards: awards.length,
         trainingsCompleted: trainings.length,
         transferHistory: transfers.length,
-        
+
         // Calculated fields
-        pensionEligibilityDate: new Date(startDate.getTime() + (25 * 365 * 24 * 60 * 60 * 1000)), // 25 years service
-        retirementDate: new Date(startDate.getTime() + (35 * 365 * 24 * 60 * 60 * 1000)), // 35 years service
-        
-        lastUpdated: new Date()
+        pensionEligibilityDate: new Date(
+          startDate.getTime() + 25 * 365 * 24 * 60 * 60 * 1000,
+        ), // 25 years service
+        retirementDate: new Date(
+          startDate.getTime() + 35 * 365 * 24 * 60 * 60 * 1000,
+        ), // 35 years service
+
+        lastUpdated: new Date(),
       };
 
       setSummary(calculatedSummary);
-      
     } catch (err) {
-      setError('Failed to calculate service summary');
-      console.error('Error calculating service summary:', err);
+      setError("Failed to calculate service summary");
+      console.error("Error calculating service summary:", err);
     } finally {
       setLoading(false);
     }
@@ -370,6 +428,6 @@ export const usePersonnelServiceSummary = (personnelId: string) => {
     summary,
     loading,
     error,
-    refreshSummary: () => calculateServiceSummary(personnelId)
+    refreshSummary: () => calculateServiceSummary(personnelId),
   };
 };

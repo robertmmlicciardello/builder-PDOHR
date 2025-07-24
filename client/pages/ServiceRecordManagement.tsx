@@ -1,139 +1,234 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Search, 
-  Calendar, 
-  FileText, 
-  Award, 
-  AlertTriangle, 
-  GraduationCap, 
-  ArrowRight, 
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Search,
+  Calendar,
+  FileText,
+  Award,
+  AlertTriangle,
+  GraduationCap,
+  ArrowRight,
   User,
   CheckCircle,
   XCircle,
   Clock,
   Filter,
   Download,
-  Upload
-} from 'lucide-react';
-import { useServiceRecord, usePersonnelServiceSummary } from '@/hooks/useServiceRecord';
-import { ServiceRecord } from '@/types/government';
-import { useToast } from '@/hooks/use-toast';
+  Upload,
+} from "lucide-react";
+import {
+  useServiceRecord,
+  usePersonnelServiceSummary,
+} from "@/hooks/useServiceRecord";
+import { ServiceRecord } from "@/types/government";
+import { useToast } from "@/hooks/use-toast";
 
 interface ServiceRecordManagementProps {
   personnelId?: string;
   showAllRecords?: boolean;
 }
 
-export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = ({ 
-  personnelId, 
-  showAllRecords = false 
-}) => {
-  const { serviceRecords, loading, createServiceRecord, updateServiceRecord, deleteServiceRecord, approveServiceRecord, rejectServiceRecord, getRecordsByType, searchRecords } = useServiceRecord(personnelId);
-  const { summary: serviceSummary, loading: summaryLoading } = usePersonnelServiceSummary(personnelId || '');
+export const ServiceRecordManagement: React.FC<
+  ServiceRecordManagementProps
+> = ({ personnelId, showAllRecords = false }) => {
+  const {
+    serviceRecords,
+    loading,
+    createServiceRecord,
+    updateServiceRecord,
+    deleteServiceRecord,
+    approveServiceRecord,
+    rejectServiceRecord,
+    getRecordsByType,
+    searchRecords,
+  } = useServiceRecord(personnelId);
+  const { summary: serviceSummary, loading: summaryLoading } =
+    usePersonnelServiceSummary(personnelId || "");
   const { toast } = useToast();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingRecord, setEditingRecord] = useState<ServiceRecord | null>(null);
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedStatus, setSelectedStatus] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [editingRecord, setEditingRecord] = useState<ServiceRecord | null>(
+    null,
+  );
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [newRecord, setNewRecord] = useState<Partial<ServiceRecord>>({
-    recordType: 'appointment',
-    title: '',
-    titleMyanmar: '',
-    description: '',
-    descriptionMyanmar: '',
+    recordType: "appointment",
+    title: "",
+    titleMyanmar: "",
+    description: "",
+    descriptionMyanmar: "",
     effectiveDate: new Date(),
-    orderNumber: '',
-    issuedBy: '',
-    approvedBy: '',
-    status: 'draft',
-    urgency: 'medium',
-    remarks: '',
-    remarksMyanmar: '',
-    attachments: []
+    orderNumber: "",
+    issuedBy: "",
+    approvedBy: "",
+    status: "draft",
+    urgency: "medium",
+    remarks: "",
+    remarksMyanmar: "",
+    attachments: [],
   });
 
   const recordTypes = [
-    { value: 'appointment', label: 'Appointment', labelMy: 'ခန့်အပ်မှု', icon: FileText },
-    { value: 'promotion', label: 'Promotion', labelMy: 'ရာထူးတိုးမြှင့်မှু', icon: ArrowRight },
-    { value: 'transfer', label: 'Transfer', labelMy: 'နေရာပြောင်းမှု', icon: ArrowRight },
-    { value: 'disciplinary', label: 'Disciplinary', labelMy: 'စည်းကမ်းခွဲခြင်း', icon: AlertTriangle },
-    { value: 'training', label: 'Training', labelMy: 'လေ့ကျင့်မှု', icon: GraduationCap },
-    { value: 'award', label: 'Award', labelMy: 'ဆုချီးမြှင့်မှု', icon: Award },
-    { value: 'leave', label: 'Leave', labelMy: 'လပ်ရက်', icon: Calendar },
-    { value: 'resignation', label: 'Resignation', labelMy: '���ာထူးမှနုတ်ထွက်မှု', icon: FileText }
+    {
+      value: "appointment",
+      label: "Appointment",
+      labelMy: "ခန့်အပ်မှု",
+      icon: FileText,
+    },
+    {
+      value: "promotion",
+      label: "Promotion",
+      labelMy: "ရာထူးတိုးမြှင့်မှু",
+      icon: ArrowRight,
+    },
+    {
+      value: "transfer",
+      label: "Transfer",
+      labelMy: "နေရာပြောင်းမှု",
+      icon: ArrowRight,
+    },
+    {
+      value: "disciplinary",
+      label: "Disciplinary",
+      labelMy: "စည်းကမ်းခွဲခြင်း",
+      icon: AlertTriangle,
+    },
+    {
+      value: "training",
+      label: "Training",
+      labelMy: "လေ့ကျင့်မှု",
+      icon: GraduationCap,
+    },
+    { value: "award", label: "Award", labelMy: "ဆုချီးမြှင့်မှု", icon: Award },
+    { value: "leave", label: "Leave", labelMy: "လပ်ရက်", icon: Calendar },
+    {
+      value: "resignation",
+      label: "Resignation",
+      labelMy: "���ာထူးမှနုတ်ထွက်မှု",
+      icon: FileText,
+    },
   ];
 
   const getRecordIcon = (type: string) => {
-    const recordType = recordTypes.find(rt => rt.value === type);
+    const recordType = recordTypes.find((rt) => rt.value === type);
     const IconComponent = recordType?.icon || FileText;
     return <IconComponent className="w-4 h-4" />;
   };
 
   const getRecordColor = (type: string) => {
     switch (type) {
-      case 'appointment': return 'bg-blue-100 text-blue-800';
-      case 'promotion': return 'bg-green-100 text-green-800';
-      case 'transfer': return 'bg-yellow-100 text-yellow-800';
-      case 'disciplinary': return 'bg-red-100 text-red-800';
-      case 'training': return 'bg-purple-100 text-purple-800';
-      case 'award': return 'bg-orange-100 text-orange-800';
-      case 'leave': return 'bg-teal-100 text-teal-800';
-      case 'resignation': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "appointment":
+        return "bg-blue-100 text-blue-800";
+      case "promotion":
+        return "bg-green-100 text-green-800";
+      case "transfer":
+        return "bg-yellow-100 text-yellow-800";
+      case "disciplinary":
+        return "bg-red-100 text-red-800";
+      case "training":
+        return "bg-purple-100 text-purple-800";
+      case "award":
+        return "bg-orange-100 text-orange-800";
+      case "leave":
+        return "bg-teal-100 text-teal-800";
+      case "resignation":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'approved': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'rejected': return <XCircle className="w-4 h-4 text-red-600" />;
-      case 'pending': return <Clock className="w-4 h-4 text-yellow-600" />;
-      default: return <FileText className="w-4 h-4 text-gray-400" />;
+      case "approved":
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
+      case "rejected":
+        return <XCircle className="w-4 h-4 text-red-600" />;
+      case "pending":
+        return <Clock className="w-4 h-4 text-yellow-600" />;
+      default:
+        return <FileText className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'cancelled': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-blue-100 text-blue-800';
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "cancelled":
+        return "bg-gray-100 text-gray-800";
+      default:
+        return "bg-blue-100 text-blue-800";
     }
   };
 
   const getFilteredRecords = () => {
     let filtered = serviceRecords;
 
-    if (selectedType !== 'all') {
-      filtered = filtered.filter(record => record.recordType === selectedType);
+    if (selectedType !== "all") {
+      filtered = filtered.filter(
+        (record) => record.recordType === selectedType,
+      );
     }
 
-    if (selectedStatus !== 'all') {
-      filtered = filtered.filter(record => record.status === selectedStatus);
+    if (selectedStatus !== "all") {
+      filtered = filtered.filter((record) => record.status === selectedStatus);
     }
 
     if (searchTerm) {
       filtered = searchRecords(searchTerm);
     }
 
-    return filtered.sort((a, b) => new Date(b.effectiveDate).getTime() - new Date(a.effectiveDate).getTime());
+    return filtered.sort(
+      (a, b) =>
+        new Date(b.effectiveDate).getTime() -
+        new Date(a.effectiveDate).getTime(),
+    );
   };
 
   const handleCreateRecord = async () => {
@@ -142,7 +237,7 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
         toast({
           title: "Validation Error",
           description: "Personnel ID is required",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -151,7 +246,7 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
         toast({
           title: "Validation Error",
           description: "Title and Record Type are required",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -159,22 +254,22 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       await createServiceRecord({
         ...newRecord,
         personnelId: personnelId || newRecord.personnelId!,
-        createdBy: 'current-user' // Replace with actual user
-      } as Omit<ServiceRecord, 'id' | 'createdAt' | 'updatedAt'>);
-      
+        createdBy: "current-user", // Replace with actual user
+      } as Omit<ServiceRecord, "id" | "createdAt" | "updatedAt">);
+
       toast({
         title: "Success",
         description: "Service record created successfully",
-        variant: "default"
+        variant: "default",
       });
-      
+
       setIsDialogOpen(false);
       resetForm();
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to create service record",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -184,13 +279,13 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       if (!editingRecord) return;
 
       await updateServiceRecord(editingRecord.id, newRecord);
-      
+
       toast({
         title: "Success",
         description: "Service record updated successfully",
-        variant: "default"
+        variant: "default",
       });
-      
+
       setIsDialogOpen(false);
       setEditingRecord(null);
       resetForm();
@@ -198,13 +293,15 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       toast({
         title: "Error",
         description: error.message || "Failed to update service record",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const handleDeleteRecord = async (id: string, title: string) => {
-    if (!confirm(`Are you sure you want to delete the service record "${title}"?`)) {
+    if (
+      !confirm(`Are you sure you want to delete the service record "${title}"?`)
+    ) {
       return;
     }
 
@@ -213,67 +310,71 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       toast({
         title: "Success",
         description: "Service record deleted successfully",
-        variant: "default"
+        variant: "default",
       });
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to delete service record",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const handleApproveRecord = async (id: string) => {
     try {
-      await approveServiceRecord(id, 'current-user', 'Approved via web interface');
+      await approveServiceRecord(
+        id,
+        "current-user",
+        "Approved via web interface",
+      );
       toast({
         title: "Success",
         description: "Service record approved successfully",
-        variant: "default"
+        variant: "default",
       });
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to approve service record",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const handleRejectRecord = async (id: string, reason: string) => {
     try {
-      await rejectServiceRecord(id, 'current-user', reason);
+      await rejectServiceRecord(id, "current-user", reason);
       toast({
         title: "Success",
         description: "Service record rejected",
-        variant: "default"
+        variant: "default",
       });
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to reject service record",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
 
   const resetForm = () => {
     setNewRecord({
-      recordType: 'appointment',
-      title: '',
-      titleMyanmar: '',
-      description: '',
-      descriptionMyanmar: '',
+      recordType: "appointment",
+      title: "",
+      titleMyanmar: "",
+      description: "",
+      descriptionMyanmar: "",
       effectiveDate: new Date(),
-      orderNumber: '',
-      issuedBy: '',
-      approvedBy: '',
-      status: 'draft',
-      urgency: 'medium',
-      remarks: '',
-      remarksMyanmar: '',
-      attachments: []
+      orderNumber: "",
+      issuedBy: "",
+      approvedBy: "",
+      status: "draft",
+      urgency: "medium",
+      remarks: "",
+      remarksMyanmar: "",
+      attachments: [],
     });
   };
 
@@ -299,7 +400,7 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       status: record.status,
       urgency: record.urgency,
       remarks: record.remarks,
-      remarksMyanmar: record.remarksMyanmar
+      remarksMyanmar: record.remarksMyanmar,
     });
     setIsDialogOpen(true);
   };
@@ -328,8 +429,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Service Record Management</h1>
-          <h2 className="text-2xl font-bold text-red-600 mt-1">ဝန်ထမ်းမှတ်တမ်း စီမံခန့်ခွဲမှု</h2>
-          <p className="text-gray-600 mt-2">Manage personnel service records and career history</p>
+          <h2 className="text-2xl font-bold text-red-600 mt-1">
+            ဝန်ထမ်းမှတ်တမ်း စီမံခန့်ခွဲမှု
+          </h2>
+          <p className="text-gray-600 mt-2">
+            Manage personnel service records and career history
+          </p>
         </div>
         <Button onClick={openCreateDialog}>
           <Plus className="w-4 h-4 mr-2" />
@@ -346,32 +451,44 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
           <CardContent>
             <div className="grid grid-cols-6 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{serviceSummary.totalServiceYears}</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {serviceSummary.totalServiceYears}
+                </div>
                 <p className="text-sm text-gray-600">Years of Service</p>
                 <p className="text-xs text-gray-500">နှစ်ပေါင်း</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{serviceSummary.transferHistory}</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {serviceSummary.transferHistory}
+                </div>
                 <p className="text-sm text-gray-600">Transfers</p>
                 <p className="text-xs text-gray-500">နေရာပြောင်းမှု</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">{serviceSummary.trainingsCompleted}</div>
+                <div className="text-2xl font-bold text-purple-600">
+                  {serviceSummary.trainingsCompleted}
+                </div>
                 <p className="text-sm text-gray-600">Trainings</p>
                 <p className="text-xs text-gray-500">လေ့ကျင့်မှု</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">{serviceSummary.awards}</div>
+                <div className="text-2xl font-bold text-orange-600">
+                  {serviceSummary.awards}
+                </div>
                 <p className="text-sm text-gray-600">Awards</p>
                 <p className="text-xs text-gray-500">ဆုချီးမြှင့်မှု</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">{serviceSummary.disciplinaryActions}</div>
+                <div className="text-2xl font-bold text-red-600">
+                  {serviceSummary.disciplinaryActions}
+                </div>
                 <p className="text-sm text-gray-600">Disciplinary</p>
                 <p className="text-xs text-gray-500">စည်းကမ်းခွဲ</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-teal-600">Grade {serviceSummary.currentGrade}</div>
+                <div className="text-2xl font-bold text-teal-600">
+                  Grade {serviceSummary.currentGrade}
+                </div>
                 <p className="text-sm text-gray-600">Current Grade</p>
                 <p className="text-xs text-gray-500">လက်ရှိအဆင့်</p>
               </div>
@@ -395,14 +512,14 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 />
               </div>
             </div>
-            
+
             <Select value={selectedType} onValueChange={setSelectedType}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Filter by type" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Types</SelectItem>
-                {recordTypes.map(type => (
+                {recordTypes.map((type) => (
                   <SelectItem key={type.value} value={type.value}>
                     {type.label}
                   </SelectItem>
@@ -455,21 +572,27 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredRecords.map(record => (
+                {filteredRecords.map((record) => (
                   <TableRow key={record.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <div className={`p-1 rounded ${getRecordColor(record.recordType)}`}>
+                        <div
+                          className={`p-1 rounded ${getRecordColor(record.recordType)}`}
+                        >
                           {getRecordIcon(record.recordType)}
                         </div>
-                        <span className="text-sm capitalize">{record.recordType}</span>
+                        <span className="text-sm capitalize">
+                          {record.recordType}
+                        </span>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div>
                         <div className="font-medium">{record.title}</div>
                         {record.titleMyanmar && (
-                          <div className="text-sm text-gray-500">{record.titleMyanmar}</div>
+                          <div className="text-sm text-gray-500">
+                            {record.titleMyanmar}
+                          </div>
                         )}
                       </div>
                     </TableCell>
@@ -490,40 +613,49 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className={
-                        record.urgency === 'urgent' ? 'border-red-200 text-red-700' :
-                        record.urgency === 'high' ? 'border-orange-200 text-orange-700' :
-                        record.urgency === 'medium' ? 'border-yellow-200 text-yellow-700' :
-                        'border-gray-200 text-gray-700'
-                      }>
+                      <Badge
+                        variant="outline"
+                        className={
+                          record.urgency === "urgent"
+                            ? "border-red-200 text-red-700"
+                            : record.urgency === "high"
+                              ? "border-orange-200 text-orange-700"
+                              : record.urgency === "medium"
+                                ? "border-yellow-200 text-yellow-700"
+                                : "border-gray-200 text-gray-700"
+                        }
+                      >
                         {record.urgency}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-1">
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
                           onClick={() => openEditDialog(record)}
                         >
                           <Edit className="w-3 h-3" />
                         </Button>
-                        {record.status === 'pending' && (
+                        {record.status === "pending" && (
                           <>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => handleApproveRecord(record.id)}
                               className="text-green-600 hover:text-green-700"
                             >
                               <CheckCircle className="w-3 h-3" />
                             </Button>
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => {
-                                const reason = prompt('Enter rejection reason:');
-                                if (reason) handleRejectRecord(record.id, reason);
+                                const reason = prompt(
+                                  "Enter rejection reason:",
+                                );
+                                if (reason)
+                                  handleRejectRecord(record.id, reason);
                               }}
                               className="text-red-600 hover:text-red-700"
                             >
@@ -531,10 +663,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                             </Button>
                           </>
                         )}
-                        <Button 
-                          variant="outline" 
+                        <Button
+                          variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteRecord(record.id, record.title)}
+                          onClick={() =>
+                            handleDeleteRecord(record.id, record.title)
+                          }
                           className="text-red-600 hover:text-red-700"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -549,8 +683,8 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
             <div className="text-center py-8">
               <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No service records found</p>
-              <Button 
-                onClick={openCreateDialog} 
+              <Button
+                onClick={openCreateDialog}
                 className="mt-4"
                 variant="outline"
               >
@@ -567,13 +701,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {editingRecord ? 'Edit Service Record' : 'Add New Service Record'}
+              {editingRecord ? "Edit Service Record" : "Add New Service Record"}
             </DialogTitle>
             <DialogDescription>
-              {editingRecord 
-                ? 'Update the service record information'
-                : 'Create a new service record entry'
-              }
+              {editingRecord
+                ? "Update the service record information"
+                : "Create a new service record entry"}
             </DialogDescription>
           </DialogHeader>
 
@@ -582,19 +715,26 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Record Type / မှတ်တမ်းအမျိုးအစား</Label>
-                <Select 
-                  value={newRecord.recordType} 
-                  onValueChange={(value) => setNewRecord({...newRecord, recordType: value as ServiceRecord['recordType']})}
+                <Select
+                  value={newRecord.recordType}
+                  onValueChange={(value) =>
+                    setNewRecord({
+                      ...newRecord,
+                      recordType: value as ServiceRecord["recordType"],
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {recordTypes.map(type => (
+                    {recordTypes.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         <div className="flex items-center gap-2">
                           {getRecordIcon(type.value)}
-                          <span>{type.label} / {type.labelMy}</span>
+                          <span>
+                            {type.label} / {type.labelMy}
+                          </span>
                         </div>
                       </SelectItem>
                     ))}
@@ -605,8 +745,19 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Effective Date / အသက်ဝင်သည့်နေ့</Label>
                 <Input
                   type="date"
-                  value={newRecord.effectiveDate ? new Date(newRecord.effectiveDate).toISOString().split('T')[0] : ''}
-                  onChange={(e) => setNewRecord({...newRecord, effectiveDate: new Date(e.target.value)})}
+                  value={
+                    newRecord.effectiveDate
+                      ? new Date(newRecord.effectiveDate)
+                          .toISOString()
+                          .split("T")[0]
+                      : ""
+                  }
+                  onChange={(e) =>
+                    setNewRecord({
+                      ...newRecord,
+                      effectiveDate: new Date(e.target.value),
+                    })
+                  }
                 />
               </div>
             </div>
@@ -616,7 +767,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Title (English)</Label>
                 <Input
                   value={newRecord.title}
-                  onChange={(e) => setNewRecord({...newRecord, title: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, title: e.target.value })
+                  }
                   placeholder="Enter record title"
                 />
               </div>
@@ -624,7 +777,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Title (Myanmar) / ခေါင်းစဉ်</Label>
                 <Input
                   value={newRecord.titleMyanmar}
-                  onChange={(e) => setNewRecord({...newRecord, titleMyanmar: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, titleMyanmar: e.target.value })
+                  }
                   placeholder="မြန်မာဘာသာ ခေါင်းစဉ် ရေးပါ"
                 />
               </div>
@@ -635,7 +790,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Description (English)</Label>
                 <Textarea
                   value={newRecord.description}
-                  onChange={(e) => setNewRecord({...newRecord, description: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, description: e.target.value })
+                  }
                   placeholder="Enter detailed description"
                   rows={3}
                 />
@@ -644,7 +801,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Description (Myanmar) / ဖော်ပြချက်</Label>
                 <Textarea
                   value={newRecord.descriptionMyanmar}
-                  onChange={(e) => setNewRecord({...newRecord, descriptionMyanmar: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({
+                      ...newRecord,
+                      descriptionMyanmar: e.target.value,
+                    })
+                  }
                   placeholder="မြန်မာဘာသာ ဖော်ပြချက် ရေးပါ"
                   rows={3}
                 />
@@ -652,10 +814,13 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
             </div>
 
             {/* Position/Department Changes (for transfers and promotions) */}
-            {(newRecord.recordType === 'transfer' || newRecord.recordType === 'promotion') && (
+            {(newRecord.recordType === "transfer" ||
+              newRecord.recordType === "promotion") && (
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Position Changes / ရာထူးပြောင်းလဲမှု</CardTitle>
+                  <CardTitle className="text-lg">
+                    Position Changes / ရာထူးပြောင်းလဲမှု
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
@@ -663,7 +828,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                       <Label>From Position / မူလရာထူး</Label>
                       <Input
                         value={newRecord.fromPosition}
-                        onChange={(e) => setNewRecord({...newRecord, fromPosition: e.target.value})}
+                        onChange={(e) =>
+                          setNewRecord({
+                            ...newRecord,
+                            fromPosition: e.target.value,
+                          })
+                        }
                         placeholder="Previous position"
                       />
                     </div>
@@ -671,7 +841,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                       <Label>To Position / အသစ်ရာထူး</Label>
                       <Input
                         value={newRecord.toPosition}
-                        onChange={(e) => setNewRecord({...newRecord, toPosition: e.target.value})}
+                        onChange={(e) =>
+                          setNewRecord({
+                            ...newRecord,
+                            toPosition: e.target.value,
+                          })
+                        }
                         placeholder="New position"
                       />
                     </div>
@@ -679,7 +854,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                       <Label>From Department / မူလဌာန</Label>
                       <Input
                         value={newRecord.fromDepartment}
-                        onChange={(e) => setNewRecord({...newRecord, fromDepartment: e.target.value})}
+                        onChange={(e) =>
+                          setNewRecord({
+                            ...newRecord,
+                            fromDepartment: e.target.value,
+                          })
+                        }
                         placeholder="Previous department"
                       />
                     </div>
@@ -687,7 +867,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                       <Label>To Department / အသစ်ဌာန</Label>
                       <Input
                         value={newRecord.toDepartment}
-                        onChange={(e) => setNewRecord({...newRecord, toDepartment: e.target.value})}
+                        onChange={(e) =>
+                          setNewRecord({
+                            ...newRecord,
+                            toDepartment: e.target.value,
+                          })
+                        }
                         placeholder="New department"
                       />
                     </div>
@@ -702,7 +887,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Order Number / အမိန့်နံပါတ်</Label>
                 <Input
                   value={newRecord.orderNumber}
-                  onChange={(e) => setNewRecord({...newRecord, orderNumber: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, orderNumber: e.target.value })
+                  }
                   placeholder="e.g., ORDER-2024-001"
                 />
               </div>
@@ -710,7 +897,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Issued By / အမိန့်ထုတ်သူ</Label>
                 <Input
                   value={newRecord.issuedBy}
-                  onChange={(e) => setNewRecord({...newRecord, issuedBy: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, issuedBy: e.target.value })
+                  }
                   placeholder="Issuing authority"
                 />
               </div>
@@ -718,7 +907,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Approved By / အတည်ပြုသူ</Label>
                 <Input
                   value={newRecord.approvedBy}
-                  onChange={(e) => setNewRecord({...newRecord, approvedBy: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, approvedBy: e.target.value })
+                  }
                   placeholder="Approving authority"
                 />
               </div>
@@ -727,9 +918,14 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Status / အခြေအနေ</Label>
-                <Select 
-                  value={newRecord.status} 
-                  onValueChange={(value) => setNewRecord({...newRecord, status: value as ServiceRecord['status']})}
+                <Select
+                  value={newRecord.status}
+                  onValueChange={(value) =>
+                    setNewRecord({
+                      ...newRecord,
+                      status: value as ServiceRecord["status"],
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -745,9 +941,14 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
               </div>
               <div>
                 <Label>Urgency / အရေးကြီးမှု</Label>
-                <Select 
-                  value={newRecord.urgency} 
-                  onValueChange={(value) => setNewRecord({...newRecord, urgency: value as ServiceRecord['urgency']})}
+                <Select
+                  value={newRecord.urgency}
+                  onValueChange={(value) =>
+                    setNewRecord({
+                      ...newRecord,
+                      urgency: value as ServiceRecord["urgency"],
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -767,7 +968,9 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Remarks (English)</Label>
                 <Textarea
                   value={newRecord.remarks}
-                  onChange={(e) => setNewRecord({...newRecord, remarks: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({ ...newRecord, remarks: e.target.value })
+                  }
                   placeholder="Additional remarks"
                   rows={3}
                 />
@@ -776,7 +979,12 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
                 <Label>Remarks (Myanmar) / မှတ်ချက်</Label>
                 <Textarea
                   value={newRecord.remarksMyanmar}
-                  onChange={(e) => setNewRecord({...newRecord, remarksMyanmar: e.target.value})}
+                  onChange={(e) =>
+                    setNewRecord({
+                      ...newRecord,
+                      remarksMyanmar: e.target.value,
+                    })
+                  }
                   placeholder="မြန်မာဘာသာ မှတ်ချက်"
                   rows={3}
                 />
@@ -788,8 +996,10 @@ export const ServiceRecordManagement: React.FC<ServiceRecordManagementProps> = (
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={editingRecord ? handleUpdateRecord : handleCreateRecord}>
-              {editingRecord ? 'Update' : 'Create'} Service Record
+            <Button
+              onClick={editingRecord ? handleUpdateRecord : handleCreateRecord}
+            >
+              {editingRecord ? "Update" : "Create"} Service Record
             </Button>
           </DialogFooter>
         </DialogContent>

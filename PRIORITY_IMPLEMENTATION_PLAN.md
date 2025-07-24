@@ -1,4 +1,5 @@
 # Priority Implementation Plan for Government HR System
+
 # အစိုးရ ဝန်ထမ်းစီမံခန့်ခွဲမှုစနစ် ဦးစားပေး အကောင်အထည်ဖော်မှု အစီအစဉ်
 
 Specific implementation roadmap with code examples for critical government features.
@@ -10,19 +11,20 @@ Specific implementation roadmap with code examples for critical government featu
 ### **1.1 Government Pay Scale System Implementation**
 
 #### **Database Schema Enhancement**
+
 ```typescript
 // client/types/government.ts
 export interface GovernmentPayScale {
   id: string;
-  grade: number;           // Grade 1-20
-  step: number;           // Step 1-10 within each grade
-  basicSalary: number;    // Base salary amount
-  effectiveDate: Date;    // When this scale became effective
+  grade: number; // Grade 1-20
+  step: number; // Step 1-10 within each grade
+  basicSalary: number; // Base salary amount
+  effectiveDate: Date; // When this scale became effective
   allowances: {
-    positionAllowance: number;     // Based on position level
-    locationAllowance: number;     // Based on township/state
+    positionAllowance: number; // Based on position level
+    locationAllowance: number; // Based on township/state
     responsibilityAllowance: number; // For supervisory roles
-    riskAllowance: number;         // For dangerous positions
+    riskAllowance: number; // For dangerous positions
   };
   benefits: {
     medicalAllowance: number;
@@ -52,7 +54,7 @@ export interface GradeHistory {
   toGrade: number;
   toStep: number;
   effectiveDate: Date;
-  promotionType: 'automatic' | 'merit' | 'special';
+  promotionType: "automatic" | "merit" | "special";
   approvedBy: string;
   orderNumber: string;
   remarks: string;
@@ -60,6 +62,7 @@ export interface GradeHistory {
 ```
 
 #### **Pay Scale Management Component**
+
 ```typescript
 // client/pages/PayScaleManagement.tsx
 import React, { useState, useEffect } from 'react';
@@ -92,7 +95,7 @@ export const PayScaleManagement: React.FC = () => {
 
   const calculateTotalSalary = (scale: GovernmentPayScale): number => {
     const { basicSalary, allowances, benefits } = scale;
-    return basicSalary + 
+    return basicSalary +
            Object.values(allowances).reduce((sum, val) => sum + val, 0) +
            Object.values(benefits).reduce((sum, val) => sum + val, 0);
   };
@@ -226,7 +229,7 @@ export const PayScaleManagement: React.FC = () => {
                 type="number"
                 value={newScale.allowances?.positionAllowance}
                 onChange={(e) => setNewScale({
-                  ...newScale, 
+                  ...newScale,
                   allowances: {...newScale.allowances!, positionAllowance: parseInt(e.target.value)}
                 })}
               />
@@ -244,22 +247,23 @@ export const PayScaleManagement: React.FC = () => {
 ```
 
 #### **Pay Scale Hook**
+
 ```typescript
 // client/hooks/useGovernmentPayScale.ts
-import { useState, useEffect } from 'react';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDocs, 
-  query, 
+import { useState, useEffect } from "react";
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  query,
   orderBy,
-  where 
-} from 'firebase/firestore';
-import { db } from '@/services/firebase';
-import { GovernmentPayScale } from '@/types/government';
+  where,
+} from "firebase/firestore";
+import { db } from "@/services/firebase";
+import { GovernmentPayScale } from "@/types/government";
 
 export const useGovernmentPayScale = () => {
   const [payScales, setPayScales] = useState<GovernmentPayScale[]>([]);
@@ -270,84 +274,94 @@ export const useGovernmentPayScale = () => {
     try {
       setLoading(true);
       const q = query(
-        collection(db, 'governmentPayScales'), 
-        orderBy('grade', 'asc'),
-        orderBy('step', 'asc')
+        collection(db, "governmentPayScales"),
+        orderBy("grade", "asc"),
+        orderBy("step", "asc"),
       );
       const querySnapshot = await getDocs(q);
       const scales: GovernmentPayScale[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         scales.push({ id: doc.id, ...doc.data() } as GovernmentPayScale);
       });
-      
+
       setPayScales(scales);
     } catch (err) {
-      setError('Failed to fetch pay scales');
-      console.error('Error fetching pay scales:', err);
+      setError("Failed to fetch pay scales");
+      console.error("Error fetching pay scales:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const createPayScale = async (payScale: Omit<GovernmentPayScale, 'id'>) => {
+  const createPayScale = async (payScale: Omit<GovernmentPayScale, "id">) => {
     try {
-      const docRef = await addDoc(collection(db, 'governmentPayScales'), {
+      const docRef = await addDoc(collection(db, "governmentPayScales"), {
         ...payScale,
         isActive: true,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
-      
+
       await fetchPayScales(); // Refresh data
       return docRef.id;
     } catch (err) {
-      setError('Failed to create pay scale');
-      console.error('Error creating pay scale:', err);
+      setError("Failed to create pay scale");
+      console.error("Error creating pay scale:", err);
       throw err;
     }
   };
 
-  const updatePayScale = async (id: string, updates: Partial<GovernmentPayScale>) => {
+  const updatePayScale = async (
+    id: string,
+    updates: Partial<GovernmentPayScale>,
+  ) => {
     try {
-      const docRef = doc(db, 'governmentPayScales', id);
+      const docRef = doc(db, "governmentPayScales", id);
       await updateDoc(docRef, {
         ...updates,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
-      
+
       await fetchPayScales(); // Refresh data
     } catch (err) {
-      setError('Failed to update pay scale');
-      console.error('Error updating pay scale:', err);
+      setError("Failed to update pay scale");
+      console.error("Error updating pay scale:", err);
       throw err;
     }
   };
 
   const deletePayScale = async (id: string) => {
     try {
-      const docRef = doc(db, 'governmentPayScales', id);
+      const docRef = doc(db, "governmentPayScales", id);
       await deleteDoc(docRef);
-      
+
       await fetchPayScales(); // Refresh data
     } catch (err) {
-      setError('Failed to delete pay scale');
-      console.error('Error deleting pay scale:', err);
+      setError("Failed to delete pay scale");
+      console.error("Error deleting pay scale:", err);
       throw err;
     }
   };
 
-  const getPayScaleByGradeStep = (grade: number, step: number): GovernmentPayScale | undefined => {
-    return payScales.find(scale => scale.grade === grade && scale.step === step);
+  const getPayScaleByGradeStep = (
+    grade: number,
+    step: number,
+  ): GovernmentPayScale | undefined => {
+    return payScales.find(
+      (scale) => scale.grade === grade && scale.step === step,
+    );
   };
 
   const calculateSalary = (grade: number, step: number): number => {
     const scale = getPayScaleByGradeStep(grade, step);
     if (!scale) return 0;
 
-    return scale.basicSalary + 
-           Object.values(scale.allowances).reduce((sum, val) => sum + val, 0) +
-           Object.values(scale.benefits).reduce((sum, val) => sum + val, 0);
+    return (
+      scale.basicSalary +
+      Object.values(scale.allowances).reduce((sum, val) => sum + val, 0) +
+      Object.values(scale.benefits).reduce((sum, val) => sum + val, 0)
+    );
   };
 
   useEffect(() => {
@@ -363,7 +377,7 @@ export const useGovernmentPayScale = () => {
     deletePayScale,
     getPayScaleByGradeStep,
     calculateSalary,
-    refreshPayScales: fetchPayScales
+    refreshPayScales: fetchPayScales,
   };
 };
 ```
@@ -371,12 +385,20 @@ export const useGovernmentPayScale = () => {
 ### **1.2 Service Record Management System**
 
 #### **Service Record Types**
+
 ```typescript
 // client/types/serviceRecord.ts
 export interface ServiceRecord {
   id: string;
   personnelId: string;
-  recordType: 'appointment' | 'promotion' | 'transfer' | 'disciplinary' | 'training' | 'award' | 'leave';
+  recordType:
+    | "appointment"
+    | "promotion"
+    | "transfer"
+    | "disciplinary"
+    | "training"
+    | "award"
+    | "leave";
   title: string;
   description: string;
   effectiveDate: Date;
@@ -389,7 +411,7 @@ export interface ServiceRecord {
   issuedBy: string;
   approvedBy: string;
   attachments: ServiceAttachment[];
-  status: 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled';
+  status: "draft" | "pending" | "approved" | "rejected" | "cancelled";
   remarks: string;
   createdAt: Date;
   updatedAt: Date;
@@ -423,6 +445,7 @@ export interface PersonnelServiceSummary {
 ```
 
 #### **Service Record Component**
+
 ```typescript
 // client/components/ServiceRecordManager.tsx
 import React, { useState } from 'react';
@@ -465,8 +488,8 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
     }
   };
 
-  const filteredRecords = selectedType === 'all' 
-    ? serviceRecords 
+  const filteredRecords = selectedType === 'all'
+    ? serviceRecords
     : serviceRecords.filter(record => record.recordType === selectedType);
 
   return (
@@ -508,12 +531,12 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
                 {index < filteredRecords.length - 1 && (
                   <div className="absolute left-6 top-12 w-0.5 h-16 bg-gray-200"></div>
                 )}
-                
+
                 <div className="flex items-start gap-4 p-4 border rounded-lg bg-white">
                   <div className={`p-2 rounded-full ${getRecordColor(record.recordType)}`}>
                     {getRecordIcon(record.recordType)}
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold">{record.title}</h3>
@@ -521,9 +544,9 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
                         {record.recordType}
                       </Badge>
                     </div>
-                    
+
                     <p className="text-sm text-gray-600 mt-1">{record.description}</p>
-                    
+
                     {(record.fromPosition || record.toPosition) && (
                       <div className="flex items-center gap-2 mt-2 text-sm">
                         <span className="text-gray-500">From:</span>
@@ -533,7 +556,7 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
                         <span className="font-medium">{record.toPosition || record.toDepartment}</span>
                       </div>
                     )}
-                    
+
                     <div className="flex items-center gap-4 mt-3 text-xs text-gray-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
@@ -543,7 +566,7 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
                       <span>Approved by: {record.approvedBy}</span>
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">View</Button>
                     <Button variant="outline" size="sm">Edit</Button>
@@ -562,27 +585,34 @@ export const ServiceRecordManager: React.FC<ServiceRecordManagerProps> = ({ pers
 ### **1.3 Multi-level Approval Workflow System**
 
 #### **Workflow Types**
+
 ```typescript
 // client/types/workflow.ts
 export interface ApprovalWorkflow {
   id: string;
   requestId: string;
-  requestType: 'leave' | 'promotion' | 'transfer' | 'disciplinary' | 'training' | 'expense';
+  requestType:
+    | "leave"
+    | "promotion"
+    | "transfer"
+    | "disciplinary"
+    | "training"
+    | "expense";
   requestTitle: string;
   requestedBy: string;
   requestedFor: string; // Personnel ID if different from requestedBy
   currentLevel: number;
   totalLevels: number;
-  status: 'pending' | 'approved' | 'rejected' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  
+  status: "pending" | "approved" | "rejected" | "cancelled";
+  priority: "low" | "medium" | "high" | "urgent";
+
   approvalLevels: ApprovalLevel[];
   workflowHistory: WorkflowHistory[];
-  
+
   createdAt: Date;
   updatedAt: Date;
   deadline?: Date;
-  
+
   attachments: WorkflowAttachment[];
   comments: WorkflowComment[];
 }
@@ -594,7 +624,7 @@ export interface ApprovalLevel {
   approverId?: string;
   isRequired: boolean;
   canDelegate: boolean;
-  status: 'pending' | 'approved' | 'rejected' | 'skipped' | 'delegated';
+  status: "pending" | "approved" | "rejected" | "skipped" | "delegated";
   actionDate?: Date;
   comments?: string;
   delegation?: DelegationInfo;
@@ -611,7 +641,13 @@ export interface DelegationInfo {
 
 export interface WorkflowHistory {
   id: string;
-  action: 'submitted' | 'approved' | 'rejected' | 'delegated' | 'escalated' | 'withdrawn';
+  action:
+    | "submitted"
+    | "approved"
+    | "rejected"
+    | "delegated"
+    | "escalated"
+    | "withdrawn";
   performedBy: string;
   performedAt: Date;
   level: number;
@@ -622,6 +658,7 @@ export interface WorkflowHistory {
 ```
 
 #### **Approval Workflow Component**
+
 ```typescript
 // client/components/ApprovalWorkflowManager.tsx
 import React, { useState } from 'react';
@@ -639,10 +676,10 @@ interface ApprovalWorkflowManagerProps {
   currentUserRole?: string;
 }
 
-export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({ 
-  workflowId, 
+export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({
+  workflowId,
   canApprove = false,
-  currentUserRole 
+  currentUserRole
 }) => {
   const { workflow, loading, approveRequest, rejectRequest, delegateRequest } = useApprovalWorkflow(workflowId);
   const [actionComments, setActionComments] = useState('');
@@ -669,7 +706,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
   const isCurrentApprover = () => {
     const currentLevel = getCurrentApprovalLevel();
     return currentLevel && (
-      currentLevel.approverRole === currentUserRole || 
+      currentLevel.approverRole === currentUserRole ||
       currentLevel.approverId === 'current-user-id' // Replace with actual user ID
     );
   };
@@ -697,7 +734,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
             <div>
               <CardTitle className="flex items-center gap-2">
                 {workflow.requestTitle}
-                <Badge variant={workflow.status === 'approved' ? 'default' : 
+                <Badge variant={workflow.status === 'approved' ? 'default' :
                              workflow.status === 'rejected' ? 'destructive' : 'secondary'}>
                   {workflow.status}
                 </Badge>
@@ -726,39 +763,39 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
                 {index < workflow.approvalLevels.length - 1 && (
                   <div className="absolute left-6 top-12 w-0.5 h-16 bg-gray-200"></div>
                 )}
-                
+
                 <div className={`flex items-start gap-4 p-4 border rounded-lg ${
                   level.level === workflow.currentLevel ? 'bg-blue-50 border-blue-200' : 'bg-white'
                 }`}>
                   <div className="p-2 rounded-full bg-gray-100">
                     {getStatusIcon(level.status)}
                   </div>
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <h3 className="font-semibold">Level {level.level}: {level.approverRole}</h3>
                       <Badge variant="outline">{level.status}</Badge>
                     </div>
-                    
+
                     {level.approverName && (
                       <p className="text-sm text-gray-600 mt-1">
                         <User className="w-3 h-3 inline mr-1" />
                         {level.approverName}
                       </p>
                     )}
-                    
+
                     {level.actionDate && (
                       <p className="text-xs text-gray-500 mt-1">
                         Action taken: {new Date(level.actionDate).toLocaleString()}
                       </p>
                     )}
-                    
+
                     {level.comments && (
                       <p className="text-sm bg-gray-50 p-2 rounded mt-2">
                         "{level.comments}"
                       </p>
                     )}
-                    
+
                     {level.delegation && (
                       <div className="text-xs text-blue-600 mt-2">
                         Delegated to: {level.delegation.delegatedTo}
@@ -767,7 +804,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
                       </div>
                     )}
                   </div>
-                  
+
                   {level.level === workflow.currentLevel && isCurrentApprover() && (
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" onClick={() => setShowDelegation(true)}>
@@ -801,16 +838,16 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
                 required
               />
             </div>
-            
+
             <div className="flex gap-4">
-              <Button 
+              <Button
                 onClick={handleApprove}
                 disabled={!actionComments.trim()}
                 className="bg-green-600 hover:bg-green-700"
               >
                 Approve / အတည်ပြုခြင်း
               </Button>
-              <Button 
+              <Button
                 variant="destructive"
                 onClick={handleReject}
                 disabled={!actionComments.trim()}
@@ -866,6 +903,7 @@ export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = (
 ### **2.1 Government Leave Policy Implementation**
 
 #### **Myanmar Government Leave Types**
+
 ```typescript
 // client/types/governmentLeave.ts
 export interface GovernmentLeavePolicy {
@@ -888,73 +926,81 @@ export interface GovernmentLeavePolicy {
 // Standard Myanmar Government Leave Types
 export const GOVERNMENT_LEAVE_TYPES: GovernmentLeavePolicy[] = [
   {
-    id: 'annual-leave',
-    leaveType: 'Annual Leave',
-    leaveTypeMyanmar: '��ှစ်ပတ်လပ်ရက်',
+    id: "annual-leave",
+    leaveType: "Annual Leave",
+    leaveTypeMyanmar: "��ှစ်ပတ်လပ်ရက်",
     entitlementPerYear: 20,
     carryForwardLimit: 5,
     canCarryForward: true,
     requiresMedicalCertificate: false,
     maxConsecutiveDays: 15,
     minimumServiceRequired: 12,
-    applicableGrades: Array.from({length: 20}, (_, i) => i + 1),
-    approvalLevels: ['immediate_supervisor', 'department_head'],
-    description: 'Annual vacation leave for personal purposes',
-    descriptionMyanmar: 'ကိုယ်ရေးကိုယ်တာ ရည်ရွယ်ချက်အတွက် နှစ်ပတ်လပ်ရက်',
-    isActive: true
+    applicableGrades: Array.from({ length: 20 }, (_, i) => i + 1),
+    approvalLevels: ["immediate_supervisor", "department_head"],
+    description: "Annual vacation leave for personal purposes",
+    descriptionMyanmar: "ကိုယ်ရေးကိုယ်တာ ရည်ရွယ်ချက်အတွက် နှစ်ပတ်လပ်ရက်",
+    isActive: true,
   },
   {
-    id: 'medical-leave',
-    leaveType: 'Medical Leave',
-    leaveTypeMyanmar: 'ဆေးဘက်ဆိုင်ရာ လပ်ရက်',
+    id: "medical-leave",
+    leaveType: "Medical Leave",
+    leaveTypeMyanmar: "ဆေးဘက်ဆိုင်ရာ လပ်ရက်",
     entitlementPerYear: 365,
     carryForwardLimit: 0,
     canCarryForward: false,
     requiresMedicalCertificate: true,
     maxConsecutiveDays: 90,
     minimumServiceRequired: 0,
-    applicableGrades: Array.from({length: 20}, (_, i) => i + 1),
-    approvalLevels: ['immediate_supervisor', 'department_head', 'medical_officer'],
-    description: 'Leave for medical treatment and recovery',
-    descriptionMyanmar: 'ကုသမှုနှင့် ပြန်လည်ကောင်းမွန်ရေးအတွက် လပ်ရက်',
-    isActive: true
+    applicableGrades: Array.from({ length: 20 }, (_, i) => i + 1),
+    approvalLevels: [
+      "immediate_supervisor",
+      "department_head",
+      "medical_officer",
+    ],
+    description: "Leave for medical treatment and recovery",
+    descriptionMyanmar: "ကုသမှုနှင့် ပြန်လည်ကောင်းမွန်ရေးအတွက် လပ်ရက်",
+    isActive: true,
   },
   {
-    id: 'maternity-leave',
-    leaveType: 'Maternity Leave',
-    leaveTypeMyanmar: 'မီးယပ်လပ်ရက်',
+    id: "maternity-leave",
+    leaveType: "Maternity Leave",
+    leaveTypeMyanmar: "မီးယပ်လပ်ရက်",
     entitlementPerYear: 90,
     carryForwardLimit: 0,
     canCarryForward: false,
     requiresMedicalCertificate: true,
     maxConsecutiveDays: 90,
     minimumServiceRequired: 6,
-    applicableGrades: Array.from({length: 20}, (_, i) => i + 1),
-    approvalLevels: ['immediate_supervisor', 'department_head', 'hr_department'],
-    description: 'Maternity leave for female employees',
-    descriptionMyanmar: 'အမျိုးသမီး ဝန်ထမ်းများအတွက် မီးယပ်လပ်ရက်',
-    isActive: true
+    applicableGrades: Array.from({ length: 20 }, (_, i) => i + 1),
+    approvalLevels: [
+      "immediate_supervisor",
+      "department_head",
+      "hr_department",
+    ],
+    description: "Maternity leave for female employees",
+    descriptionMyanmar: "အမျိုးသမီး ဝန်ထမ်းများအတွက် မီးယပ်လပ်ရက်",
+    isActive: true,
   },
   {
-    id: 'casual-leave',
-    leaveType: 'Casual Leave',
-    leaveTypeMyanmar: 'ခေတ္တ လပ်ရက်',
+    id: "casual-leave",
+    leaveType: "Casual Leave",
+    leaveTypeMyanmar: "ခေတ္တ လပ်ရက်",
     entitlementPerYear: 10,
     carryForwardLimit: 0,
     canCarryForward: false,
     requiresMedicalCertificate: false,
     maxConsecutiveDays: 3,
     minimumServiceRequired: 3,
-    applicableGrades: Array.from({length: 20}, (_, i) => i + 1),
-    approvalLevels: ['immediate_supervisor'],
-    description: 'Short-term leave for urgent personal matters',
-    descriptionMyanmar: 'အရေးပေါ် ကိုယ်ရေးကိုယ်တာ ကိစ္စများအတွက် ခဏတာလပ်���က်',
-    isActive: true
+    applicableGrades: Array.from({ length: 20 }, (_, i) => i + 1),
+    approvalLevels: ["immediate_supervisor"],
+    description: "Short-term leave for urgent personal matters",
+    descriptionMyanmar: "အရေးပေါ် ကိုယ်ရေးကိုယ်တာ ကိစ္စများအတွက် ခဏတာလပ်���က်",
+    isActive: true,
   },
   {
-    id: 'study-leave',
-    leaveType: 'Study Leave',
-    leaveTypeMyanmar: 'ပညာသင်ကြားမှု လပ်ရက်',
+    id: "study-leave",
+    leaveType: "Study Leave",
+    leaveTypeMyanmar: "ပညာသင်ကြားမှု လပ်ရက်",
     entitlementPerYear: 365,
     carryForwardLimit: 0,
     canCarryForward: false,
@@ -962,17 +1008,23 @@ export const GOVERNMENT_LEAVE_TYPES: GovernmentLeavePolicy[] = [
     maxConsecutiveDays: 365,
     minimumServiceRequired: 24,
     applicableGrades: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Lower grades only
-    approvalLevels: ['department_head', 'ministry_approval', 'cabinet_approval'],
-    description: 'Leave for higher education and professional development',
-    descriptionMyanmar: 'အဆင့်မြင့်ပညာရေးနှင့် အသက်မွေးဝမ်းကြောင်း ဖွံ့ဖြိုးတိုးတက်မှုအတွက် လပ်ရက်',
-    isActive: true
-  }
+    approvalLevels: [
+      "department_head",
+      "ministry_approval",
+      "cabinet_approval",
+    ],
+    description: "Leave for higher education and professional development",
+    descriptionMyanmar:
+      "အဆင့်မြင့်ပညာရေးနှင့် အသက်မွေးဝမ်းကြောင်း ဖွံ့ဖြိုးတိုးတက်မှုအတွက် လပ်ရက်",
+    isActive: true,
+  },
 ];
 ```
 
 ### **2.2 Government Reporting Templates**
 
 #### **Personnel Statistics Report**
+
 ```typescript
 // client/components/reports/PersonnelStatisticsReport.tsx
 import React, { useState, useEffect } from 'react';
@@ -1166,18 +1218,21 @@ export const PersonnelStatisticsReport: React.FC = () => {
 ## ⚡ **Quick Implementation Priority List**
 
 ### **Week 1-2: Immediate Government Features**
+
 1. ✅ **Government Pay Scale System** - Critical for salary calculations
 2. ✅ **Enhanced User Roles** - Department heads, regional admins
 3. ✅ **Service Record Tracking** - Basic promotion/transfer history
 4. ✅ **Government Leave Types** - Standard Myanmar government leave policies
 
 ### **Week 3-4: Workflow and Compliance**
+
 1. ✅ **Multi-level Approval Workflows** - Essential for government processes
 2. ✅ **Government Reporting Templates** - Required monthly/annual reports
 3. ✅ **Legal Compliance Features** - Myanmar civil service law compliance
 4. ✅ **Enhanced Security** - Government-grade security standards
 
 ### **Week 5-8: Advanced Features**
+
 1. Employee Self-Service Portal
 2. Mobile Application for Field Personnel
 3. Integration APIs for other Government Systems
