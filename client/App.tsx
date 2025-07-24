@@ -281,6 +281,51 @@ const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
+    <Route
+      path="/government-pay-scale"
+      element={
+        <ProtectedRoute
+          requiredRole="admin"
+          minSecurityLevel="high"
+          requiredPermissions={["manage_pay_scales"]}
+        >
+          <GovernmentPayScaleManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/service-records"
+      element={
+        <ProtectedRoute
+          minSecurityLevel="medium"
+          requiredPermissions={["view_service_records"]}
+        >
+          <ServiceRecordManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/service-records/:personnelId"
+      element={
+        <ProtectedRoute
+          minSecurityLevel="medium"
+          requiredPermissions={["view_service_records"]}
+        >
+          <ServiceRecordManagement />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/approval-workflows"
+      element={
+        <ProtectedRoute
+          minSecurityLevel="medium"
+          requiredPermissions={["manage_approvals"]}
+        >
+          <ApprovalWorkflowManagement />
+        </ProtectedRoute>
+      }
+    />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
