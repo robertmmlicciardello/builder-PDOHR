@@ -81,6 +81,10 @@ export const settingsCollection = db ? collection(db, "settings") : null;
 // Authentication services
 export class AuthService {
   static async signIn(email: string, password: string): Promise<AuthUser> {
+    if (!auth) {
+      throw new Error("Firebase not available - running in offline mode");
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
