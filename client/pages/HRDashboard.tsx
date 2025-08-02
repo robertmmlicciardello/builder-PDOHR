@@ -250,7 +250,9 @@ export default function HRDashboard() {
                 {showNotifications && (
                   <div className="absolute right-0 top-8 w-80 bg-white border border-myanmar-red/20 rounded-lg shadow-lg z-50">
                     <div className="p-4 border-b border-myanmar-red/20">
-                      <h4 className="font-semibold text-myanmar-black">Notifications</h4>
+                      <h4 className="font-semibold text-myanmar-black">
+                        Notifications
+                      </h4>
                     </div>
                     <div className="max-h-96 overflow-y-auto">
                       {/* Pending Leave Requests */}
@@ -260,11 +262,16 @@ export default function HRDashboard() {
                             <Calendar className="w-5 h-5 text-blue-500 mt-0.5" />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900">
-                                {dashboardStats.pendingLeaves} pending leave requests
+                                {dashboardStats.pendingLeaves} pending leave
+                                requests
                               </p>
-                              <p className="text-xs text-gray-500">Require your approval</p>
+                              <p className="text-xs text-gray-500">
+                                Require your approval
+                              </p>
                             </div>
-                            <Badge variant="secondary">{dashboardStats.pendingLeaves}</Badge>
+                            <Badge variant="secondary">
+                              {dashboardStats.pendingLeaves}
+                            </Badge>
                           </div>
                         </div>
                       )}
@@ -276,11 +283,16 @@ export default function HRDashboard() {
                             <AlertTriangle className="w-5 h-5 text-orange-500 mt-0.5" />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900">
-                                {dashboardStats.overdueReviews} overdue performance reviews
+                                {dashboardStats.overdueReviews} overdue
+                                performance reviews
                               </p>
-                              <p className="text-xs text-gray-500">Need to be completed</p>
+                              <p className="text-xs text-gray-500">
+                                Need to be completed
+                              </p>
                             </div>
-                            <Badge variant="destructive">{dashboardStats.overdueReviews}</Badge>
+                            <Badge variant="destructive">
+                              {dashboardStats.overdueReviews}
+                            </Badge>
                           </div>
                         </div>
                       )}
@@ -292,11 +304,14 @@ export default function HRDashboard() {
                             <Award className="w-5 h-5 text-green-500 mt-0.5" />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900">
-                                {dashboardStats.upcomingBirthdays} upcoming birthdays
+                                {dashboardStats.upcomingBirthdays} upcoming
+                                birthdays
                               </p>
                               <p className="text-xs text-gray-500">This week</p>
                             </div>
-                            <Badge variant="outline">{dashboardStats.upcomingBirthdays}</Badge>
+                            <Badge variant="outline">
+                              {dashboardStats.upcomingBirthdays}
+                            </Badge>
                           </div>
                         </div>
                       )}
@@ -308,17 +323,25 @@ export default function HRDashboard() {
                             <UserPlus className="w-5 h-5 text-blue-500 mt-0.5" />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-gray-900">
-                                {dashboardStats.newHiresThisMonth} new hires this month
+                                {dashboardStats.newHiresThisMonth} new hires
+                                this month
                               </p>
-                              <p className="text-xs text-gray-500">Welcome them to the team</p>
+                              <p className="text-xs text-gray-500">
+                                Welcome them to the team
+                              </p>
                             </div>
-                            <Badge variant="outline">{dashboardStats.newHiresThisMonth}</Badge>
+                            <Badge variant="outline">
+                              {dashboardStats.newHiresThisMonth}
+                            </Badge>
                           </div>
                         </div>
                       )}
 
                       {/* No notifications */}
-                      {(dashboardStats.pendingLeaves + dashboardStats.overdueReviews + dashboardStats.upcomingBirthdays) === 0 && (
+                      {dashboardStats.pendingLeaves +
+                        dashboardStats.overdueReviews +
+                        dashboardStats.upcomingBirthdays ===
+                        0 && (
                         <div className="p-6 text-center text-gray-500">
                           <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-500" />
                           <p className="text-sm">All caught up!</p>
@@ -328,7 +351,10 @@ export default function HRDashboard() {
                     </div>
 
                     <div className="p-3 border-t border-myanmar-red/20">
-                      <Link to="/notifications" className="text-xs text-myanmar-red hover:underline">
+                      <Link
+                        to="/notifications"
+                        className="text-xs text-myanmar-red hover:underline"
+                      >
                         View all notifications
                       </Link>
                     </div>

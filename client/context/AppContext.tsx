@@ -187,7 +187,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             : "",
         }));
         dispatch({ type: "SET_PERSONNEL", payload: decryptedPersonnel });
-        console.log("Loaded personnel data:", decryptedPersonnel.length, "records");
+        console.log(
+          "Loaded personnel data:",
+          decryptedPersonnel.length,
+          "records",
+        );
       } else {
         // If no saved data, load sample data immediately
         console.log("No saved personnel data, loading sample data");

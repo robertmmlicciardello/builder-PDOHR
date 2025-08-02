@@ -4,7 +4,12 @@ import { useApp } from "../context/AppContext";
 import { Button } from "../components/ui/button";
 import { Card, CardHeader, CardContent } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
 import {
   ArrowLeft,
   Bell,
@@ -46,7 +51,9 @@ export default function Notifications() {
         type: "leave_request",
         title: "Leave Request Pending",
         message: `${["ဦးမြင့်မြတ်", "ဒေါ်ခင်ဇော်", "ဦးသန့်ဝင်း", "ဒေါ်နှင်းလေး", "ဦးကျော်ထူး", "ဒေါ်မီမီသန့်", "ဦးအောင်မြင့်", "ဒေါ်သင်းသင်း"][i]} has requested annual leave from ${new Date(Date.now() + Math.random() * 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}`,
-        timestamp: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString(),
+        timestamp: new Date(
+          Date.now() - Math.random() * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         isRead: Math.random() > 0.6,
         priority: "medium",
       });
@@ -59,7 +66,9 @@ export default function Notifications() {
         type: "overdue_review",
         title: "Performance Review Overdue",
         message: `Performance review for ${["ဦးမြင့်မြတ်", "ဒေါ်ခင်ဇော်", "ဦးသန့်ဝင��း"][i]} is ${Math.floor(Math.random() * 30) + 1} days overdue`,
-        timestamp: new Date(Date.now() - (Math.random() * 5 + 1) * 24 * 60 * 60 * 1000).toISOString(),
+        timestamp: new Date(
+          Date.now() - (Math.random() * 5 + 1) * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         isRead: false,
         priority: "high",
       });
@@ -72,7 +81,9 @@ export default function Notifications() {
         type: "birthday",
         title: "Upcoming Birthday",
         message: `${["ဒေါ်နှင်းလေး", "ဦးကျော်ထူး", "ဒေါ်မီမီသန့်", "ဦးအောင်မြင့်", "ဒေါ်သင်းသင်း"][i]}'s birthday is coming up this week`,
-        timestamp: new Date(Date.now() - Math.random() * 12 * 60 * 60 * 1000).toISOString(),
+        timestamp: new Date(
+          Date.now() - Math.random() * 12 * 60 * 60 * 1000,
+        ).toISOString(),
         isRead: Math.random() > 0.4,
         priority: "low",
       });
@@ -81,7 +92,8 @@ export default function Notifications() {
     // New hires (if any)
     const newHires = state.personnel.filter((p) => {
       const joinDate = new Date(p.dateOfJoining);
-      const monthsAgo = (now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
+      const monthsAgo =
+        (now.getTime() - joinDate.getTime()) / (1000 * 60 * 60 * 24 * 30);
       return monthsAgo < 1 && p.status === "active";
     });
 
@@ -109,7 +121,10 @@ export default function Notifications() {
       priority: "low",
     });
 
-    return notifications.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return notifications.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
   }, [state.personnel]);
 
   const filteredNotifications = notifications.filter((notification) => {
@@ -211,7 +226,8 @@ export default function Notifications() {
                     Unread ({unreadCount})
                   </TabsTrigger>
                   <TabsTrigger value="high">
-                    High Priority ({notifications.filter(n => n.priority === "high").length})
+                    High Priority (
+                    {notifications.filter((n) => n.priority === "high").length})
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -257,7 +273,7 @@ export default function Notifications() {
                     <div className="flex-shrink-0 mt-1">
                       {getIcon(notification.type)}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -277,12 +293,15 @@ export default function Notifications() {
                             <span className="text-xs text-myanmar-gray">
                               {formatTimestamp(notification.timestamp)}
                             </span>
-                            <Badge variant={getPriorityColor(notification.priority)} className="text-xs">
+                            <Badge
+                              variant={getPriorityColor(notification.priority)}
+                              className="text-xs"
+                            >
                               {notification.priority}
                             </Badge>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center space-x-1 ml-4">
                           {!notification.isRead && (
                             <Button variant="ghost" size="sm">
@@ -305,7 +324,10 @@ export default function Notifications() {
         {/* Load More */}
         {filteredNotifications.length > 0 && (
           <div className="mt-8 text-center">
-            <Button variant="outline" className="border-myanmar-red text-myanmar-red">
+            <Button
+              variant="outline"
+              className="border-myanmar-red text-myanmar-red"
+            >
               Load More Notifications
             </Button>
           </div>

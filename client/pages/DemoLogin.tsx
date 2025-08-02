@@ -7,15 +7,15 @@ import { Label } from "../components/ui/label";
 import { Card, CardHeader, CardContent } from "../components/ui/card";
 import { Alert, AlertDescription } from "../components/ui/alert";
 import { Badge } from "../components/ui/badge";
-import { 
-  User, 
-  Shield, 
-  Eye, 
-  EyeOff, 
+import {
+  User,
+  Shield,
+  Eye,
+  EyeOff,
   LogIn,
   UserCheck,
   Settings,
-  Database
+  Database,
 } from "lucide-react";
 
 const DEMO_ACCOUNTS = [
@@ -23,16 +23,21 @@ const DEMO_ACCOUNTS = [
     email: "admin@pdf.gov.mm",
     password: "PDF2024!",
     role: "Administrator",
-    permissions: ["Full System Access", "User Management", "Settings", "Reports"],
-    description: "ဝန်ကြီးမျ���း နှင့် အထက်အရာရှိများအတွက်"
+    permissions: [
+      "Full System Access",
+      "User Management",
+      "Settings",
+      "Reports",
+    ],
+    description: "ဝန်ကြီးမျ���း နှင့် အထက်အရာရှိများအတွက်",
   },
   {
-    email: "user@pdf.gov.mm", 
+    email: "user@pdf.gov.mm",
     password: "User2024!",
     role: "HR Officer",
     permissions: ["Personnel Management", "View Reports", "Basic Operations"],
-    description: "HR အရာရှိများ နှင့် ပုံမှန်အသုံးပြုသူများအတွက်"
-  }
+    description: "HR အရာရှိများ နှင့် ပုံမှန်အသုံးပြုသူများအတွက်",
+  },
 ];
 
 export default function DemoLogin() {
@@ -41,7 +46,7 @@ export default function DemoLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
-  
+
   const { login, state } = useApp();
   const navigate = useNavigate();
 
@@ -61,7 +66,7 @@ export default function DemoLogin() {
     }
   };
 
-  const handleDemoLogin = async (account: typeof DEMO_ACCOUNTS[0]) => {
+  const handleDemoLogin = async (account: (typeof DEMO_ACCOUNTS)[0]) => {
     setEmail(account.email);
     setPassword(account.password);
     setSelectedDemo(account.email);
@@ -99,7 +104,8 @@ export default function DemoLogin() {
           <Alert className="border-myanmar-gold/50 bg-myanmar-gold/10">
             <Database className="w-4 h-4" />
             <AlertDescription className="text-myanmar-black">
-              <strong>Demo Version:</strong> ဤသည်မှာ နမူနာပြစနစ်ဖြစ်ပြီး နမူနာအချက်အလက်များပါဝင်ပါသည်။
+              <strong>Demo Version:</strong> ဤသည်မှာ နမူနာပြစနစ်ဖြစ်ပြီး
+              နမူနာအချက်အလက်များပါဝင်ပါသည်။
             </AlertDescription>
           </Alert>
 
@@ -108,12 +114,14 @@ export default function DemoLogin() {
               <UserCheck className="w-5 h-5 mr-2 text-myanmar-red" />
               Demo Accounts (စမ်းသပ်အကောင့်များ)
             </h3>
-            
+
             {DEMO_ACCOUNTS.map((account, index) => (
-              <Card 
+              <Card
                 key={account.email}
                 className={`border-myanmar-red/20 cursor-pointer transition-all hover:shadow-md ${
-                  selectedDemo === account.email ? "ring-2 ring-myanmar-red" : ""
+                  selectedDemo === account.email
+                    ? "ring-2 ring-myanmar-red"
+                    : ""
                 }`}
                 onClick={() => handleDemoLogin(account)}
               >
@@ -121,30 +129,49 @@ export default function DemoLogin() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <Badge variant={index === 0 ? "destructive" : "secondary"}>
+                        <Badge
+                          variant={index === 0 ? "destructive" : "secondary"}
+                        >
                           {account.role}
                         </Badge>
-                        {index === 0 && <Shield className="w-4 h-4 text-myanmar-red" />}
+                        {index === 0 && (
+                          <Shield className="w-4 h-4 text-myanmar-red" />
+                        )}
                       </div>
-                      
+
                       <div className="space-y-1 text-sm">
-                        <div><strong>Email:</strong> {account.email}</div>
-                        <div><strong>Password:</strong> <code className="bg-gray-100 px-1 rounded">{account.password}</code></div>
-                        <div className="text-myanmar-gray-dark">{account.description}</div>
+                        <div>
+                          <strong>Email:</strong> {account.email}
+                        </div>
+                        <div>
+                          <strong>Password:</strong>{" "}
+                          <code className="bg-gray-100 px-1 rounded">
+                            {account.password}
+                          </code>
+                        </div>
+                        <div className="text-myanmar-gray-dark">
+                          {account.description}
+                        </div>
                       </div>
-                      
+
                       <div className="mt-2">
-                        <div className="text-xs text-myanmar-gray-dark mb-1">Permissions:</div>
+                        <div className="text-xs text-myanmar-gray-dark mb-1">
+                          Permissions:
+                        </div>
                         <div className="flex flex-wrap gap-1">
                           {account.permissions.map((permission) => (
-                            <Badge key={permission} variant="outline" className="text-xs">
+                            <Badge
+                              key={permission}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {permission}
                             </Badge>
                           ))}
                         </div>
                       </div>
                     </div>
-                    
+
                     <Button
                       size="sm"
                       className="bg-myanmar-red hover:bg-myanmar-red-dark text-white ml-4"
@@ -184,7 +211,7 @@ export default function DemoLogin() {
               သို့မဟုတ် ကိုယ်တိုင်လက်ဖြင့် ဝင်ရောက်နိုင်ပါသည်
             </p>
           </CardHeader>
-          
+
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -261,7 +288,10 @@ export default function DemoLogin() {
 
             <div className="mt-6 pt-4 border-t border-myanmar-red/20">
               <div className="text-xs text-myanmar-gray-dark text-center">
-                <p><strong>For Demo:</strong> Use accounts above or contact PDF-Tech for access</p>
+                <p>
+                  <strong>For Demo:</strong> Use accounts above or contact
+                  PDF-Tech for access
+                </p>
                 <p className="mt-1">Demo data will reset periodically</p>
               </div>
             </div>

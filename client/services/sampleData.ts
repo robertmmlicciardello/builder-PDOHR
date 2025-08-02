@@ -1,5 +1,10 @@
 import { Personnel, PersonnelStatus } from "@shared/personnel";
-import { GovernmentPayScale, ServiceRecord, ApprovalWorkflow, GovernmentLeavePolicy } from "../types/government";
+import {
+  GovernmentPayScale,
+  ServiceRecord,
+  ApprovalWorkflow,
+  GovernmentLeavePolicy,
+} from "../types/government";
 
 // Sample Personnel Data for Demo
 export const SAMPLE_PERSONNEL: Personnel[] = [
@@ -8,14 +13,15 @@ export const SAMPLE_PERSONNEL: Personnel[] = [
     name: "ဦးမြင့်မြတ်",
     rank: "Director",
     dateOfJoining: "2020-01-15T00:00:00.000Z",
-    assignedDuties: "Overall management and strategic planning for the department",
+    assignedDuties:
+      "Overall management and strategic planning for the department",
     status: "active" as PersonnelStatus,
     organization: "Ministry of Planning and Finance",
     createdAt: "2024-01-15T08:00:00.000Z",
     updatedAt: "2024-01-15T08:00:00.000Z",
   },
   {
-    id: "P14002", 
+    id: "P14002",
     name: "ဒေါ်ခင်ဇော်",
     rank: "Deputy Director",
     dateOfJoining: "2021-03-20T00:00:00.000Z",
@@ -51,7 +57,7 @@ export const SAMPLE_PERSONNEL: Personnel[] = [
     id: "P14005",
     name: "ဦးကျော်ထူး",
     rank: "Officer",
-    dateOfJoining: "2023-02-28T00:00:00.000Z", 
+    dateOfJoining: "2023-02-28T00:00:00.000Z",
     assignedDuties: "Data entry and document processing",
     status: "active" as PersonnelStatus,
     organization: "Administrative Department",
@@ -61,7 +67,7 @@ export const SAMPLE_PERSONNEL: Personnel[] = [
   {
     id: "P14006",
     name: "ဒေါ်မီမီသန့်",
-    rank: "Junior Officer", 
+    rank: "Junior Officer",
     dateOfJoining: "2023-08-15T00:00:00.000Z",
     assignedDuties: "Filing and basic administrative support",
     status: "active" as PersonnelStatus,
@@ -91,7 +97,7 @@ export const SAMPLE_PERSONNEL: Personnel[] = [
     organization: "Training Department",
     createdAt: "2024-01-22T08:00:00.000Z",
     updatedAt: "2024-01-22T08:00:00.000Z",
-  }
+  },
 ];
 
 // Sample Government Pay Scales
@@ -114,7 +120,7 @@ export const SAMPLE_PAY_SCALES: GovernmentPayScale[] = [
     updatedAt: "2024-01-01T08:00:00.000Z",
   },
   {
-    id: "pay-2", 
+    id: "pay-2",
     grade: 2,
     step: 3,
     basicSalary: 1800000,
@@ -146,7 +152,7 @@ export const SAMPLE_PAY_SCALES: GovernmentPayScale[] = [
     isActive: true,
     createdAt: "2024-01-01T08:00:00.000Z",
     updatedAt: "2024-01-01T08:00:00.000Z",
-  }
+  },
 ];
 
 // Sample Service Records
@@ -156,7 +162,8 @@ export const SAMPLE_SERVICE_RECORDS: ServiceRecord[] = [
     personnelId: "P14001",
     recordType: "promotion",
     title: "Promoted to Director Position",
-    description: "Promoted from Deputy Director to Director based on excellent performance and leadership skills",
+    description:
+      "Promoted from Deputy Director to Director based on excellent performance and leadership skills",
     date: "2023-01-15T00:00:00.000Z",
     attachments: [],
     createdBy: "admin",
@@ -168,10 +175,11 @@ export const SAMPLE_SERVICE_RECORDS: ServiceRecord[] = [
     personnelId: "P14002",
     recordType: "training",
     title: "Leadership Development Program",
-    description: "Successfully completed 3-month leadership development training program",
+    description:
+      "Successfully completed 3-month leadership development training program",
     date: "2023-06-30T00:00:00.000Z",
     attachments: [],
-    createdBy: "admin", 
+    createdBy: "admin",
     createdAt: "2023-06-30T08:00:00.000Z",
     updatedAt: "2023-06-30T08:00:00.000Z",
   },
@@ -180,13 +188,14 @@ export const SAMPLE_SERVICE_RECORDS: ServiceRecord[] = [
     personnelId: "P14003",
     recordType: "award",
     title: "Best Employee of the Year 2023",
-    description: "Awarded for outstanding contribution to financial planning and budget management",
+    description:
+      "Awarded for outstanding contribution to financial planning and budget management",
     date: "2023-12-31T00:00:00.000Z",
     attachments: [],
     createdBy: "admin",
-    createdAt: "2023-12-31T08:00:00.000Z", 
+    createdAt: "2023-12-31T08:00:00.000Z",
     updatedAt: "2023-12-31T08:00:00.000Z",
-  }
+  },
 ];
 
 // Sample Leave Policies
@@ -220,7 +229,7 @@ export const SAMPLE_LEAVE_POLICIES: GovernmentLeavePolicy[] = [
     isActive: true,
     createdAt: "2024-01-01T08:00:00.000Z",
     updatedAt: "2024-01-01T08:00:00.000Z",
-  }
+  },
 ];
 
 // Function to load sample data to localStorage
@@ -238,13 +247,19 @@ export const loadSampleData = () => {
   // Load service records
   const existingServiceRecords = localStorage.getItem("pdf-service-records");
   if (!existingServiceRecords) {
-    localStorage.setItem("pdf-service-records", JSON.stringify(SAMPLE_SERVICE_RECORDS));
+    localStorage.setItem(
+      "pdf-service-records",
+      JSON.stringify(SAMPLE_SERVICE_RECORDS),
+    );
   }
 
   // Load leave policies
   const existingLeavePolicies = localStorage.getItem("pdf-leave-policies");
   if (!existingLeavePolicies) {
-    localStorage.setItem("pdf-leave-policies", JSON.stringify(SAMPLE_LEAVE_POLICIES));
+    localStorage.setItem(
+      "pdf-leave-policies",
+      JSON.stringify(SAMPLE_LEAVE_POLICIES),
+    );
   }
 
   console.log("Sample data loaded successfully!");

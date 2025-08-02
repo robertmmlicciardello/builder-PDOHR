@@ -36,12 +36,18 @@ import {
 
 // Firebase configuration - Use environment variables or demo config
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDemoKeyForTesting123456789",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "pdf-hrm-demo.firebaseapp.com",
+  apiKey:
+    import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDemoKeyForTesting123456789",
+  authDomain:
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "pdf-hrm-demo.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "pdf-hrm-demo",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "pdf-hrm-demo.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789012:web:abcdefghijklmnop",
+  storageBucket:
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "pdf-hrm-demo.appspot.com",
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789012",
+  appId:
+    import.meta.env.VITE_FIREBASE_APP_ID ||
+    "1:123456789012:web:abcdefghijklmnop",
 };
 
 // Initialize Firebase with error handling
@@ -59,13 +65,18 @@ try {
     enableIndexedDbPersistence(db);
   } catch (err: any) {
     if (err.code === "failed-precondition") {
-      console.warn("Multiple tabs open, persistence can only be enabled in one tab at a time.");
+      console.warn(
+        "Multiple tabs open, persistence can only be enabled in one tab at a time.",
+      );
     } else if (err.code === "unimplemented") {
       console.warn("The current browser does not support offline persistence");
     }
   }
 } catch (error) {
-  console.warn("Firebase initialization failed, running in offline mode:", error);
+  console.warn(
+    "Firebase initialization failed, running in offline mode:",
+    error,
+  );
   // Create mock objects to prevent errors
   auth = null;
   db = null;
