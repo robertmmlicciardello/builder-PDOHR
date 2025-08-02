@@ -58,7 +58,7 @@ export default function Notifications() {
         id: `review-${i + 1}`,
         type: "overdue_review",
         title: "Performance Review Overdue",
-        message: `Performance review for ${["ဦးမြင့်မြတ်", "ဒေါ်ခင်ဇော်", "ဦးသန့်ဝင်း"][i]} is ${Math.floor(Math.random() * 30) + 1} days overdue`,
+        message: `Performance review for ${["ဦးမြင့်မြတ်", "ဒေါ်ခင်ဇော်", "ဦးသန့်ဝင��း"][i]} is ${Math.floor(Math.random() * 30) + 1} days overdue`,
         timestamp: new Date(Date.now() - (Math.random() * 5 + 1) * 24 * 60 * 60 * 1000).toISOString(),
         isRead: false,
         priority: "high",
@@ -286,7 +286,7 @@ export default function Notifications() {
                         <div className="flex items-center space-x-1 ml-4">
                           {!notification.isRead && (
                             <Button variant="ghost" size="sm">
-                              <MarkAsRead className="w-4 h-4" />
+                              <Check className="w-4 h-4" />
                             </Button>
                           )}
                           <Button variant="ghost" size="sm">
