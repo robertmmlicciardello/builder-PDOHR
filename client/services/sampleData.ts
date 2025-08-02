@@ -225,13 +225,11 @@ export const SAMPLE_LEAVE_POLICIES: GovernmentLeavePolicy[] = [
 
 // Function to load sample data to localStorage
 export const loadSampleData = () => {
-  // Load personnel data
-  const existingPersonnel = localStorage.getItem("pdf-personnel");
-  if (!existingPersonnel) {
-    localStorage.setItem("pdf-personnel", JSON.stringify(SAMPLE_PERSONNEL));
-  }
+  // Always load personnel data for demo (overwrite existing)
+  localStorage.setItem("pdf-personnel", JSON.stringify(SAMPLE_PERSONNEL));
+  console.log("Loaded", SAMPLE_PERSONNEL.length, "sample personnel records");
 
-  // Load pay scale data  
+  // Load pay scale data
   const existingPayScales = localStorage.getItem("pdf-pay-scales");
   if (!existingPayScales) {
     localStorage.setItem("pdf-pay-scales", JSON.stringify(SAMPLE_PAY_SCALES));
