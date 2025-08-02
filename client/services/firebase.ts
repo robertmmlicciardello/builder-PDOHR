@@ -44,23 +44,34 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789012:web:abcdefghijklmnop",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Initialize Firebase with error handling
+let app: any = null;
+let auth: any = null;
+let db: any = null;
 
-// Enable offline persistence
 try {
-  enableIndexedDbPersistence(db);
-} catch (err: any) {
-  if (err.code === "failed-precondition") {
-    console.warn(
-      "Multiple tabs open, persistence can only be enabled in one tab at a time.",
-    );
-  } else if (err.code === "unimplemented") {
-    console.warn("The current browser does not support offline persistence");
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+
+  // Enable offline persistence
+  try {
+    enableIndexedDbPersistence(db);
+  } catch (err: any) {
+    if (err.code === "failed-precondition") {
+      console.warn("Multiple tabs open, persistence can only be enabled in one tab at a time.");
+    } else if (err.code === "unimplemented") {
+      console.warn("The current browser does not support offline persistence");
+    }
   }
+} catch (error) {
+  console.warn("Firebase initialization failed, running in offline mode:", error);
+  // Create mock objects to prevent errors
+  auth = null;
+  db = null;
 }
+
+export { auth, db };
 
 // Collection references
 export const personnelCollection = collection(db, "personnel");
