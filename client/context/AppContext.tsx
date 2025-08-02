@@ -133,8 +133,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     // Load sample data for demo
     loadSampleData();
 
-    // Load saved data for offline support
-    loadOfflineData();
+    // Load saved data for offline support (after sample data)
+    setTimeout(() => {
+      loadOfflineData();
+    }, 100);
 
     // Monitor network status
     const handleOnline = () =>
