@@ -101,6 +101,7 @@ export default function HRDashboard() {
   const { customization, getText } = useDashboardCustomization();
   const [selectedPeriod, setSelectedPeriod] = useState("thisMonth");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Calculate comprehensive HR metrics
   const dashboardStats = useMemo((): DashboardStats => {
@@ -237,10 +238,102 @@ export default function HRDashboard() {
               <DatabaseStatus />
               <LanguageSwitcher />
               <div className="relative">
-                <Bell className="w-6 h-6 text-myanmar-red cursor-pointer" />
+                <Bell
+                  className="w-6 h-6 text-myanmar-red cursor-pointer hover:text-myanmar-red-dark transition-colors"
+                  onClick={() => setShowNotifications(!showNotifications)}
+                />
                 <span className="absolute -top-1 -right-1 bg-myanmar-red text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {dashboardStats.pendingLeaves + dashboardStats.overdueReviews}
                 </span>
+
+                {/* Notification Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 top-8 w-80 bg-white border border-myanmar-red/20 rounded-lg shadow-lg z-50">
+                    <div className="p-4 border-b border-myanmar-red/20">
+                      <h4 className="font-semibold text-myanmar-black">Notifications</h4>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {/* Pending Leave Requests */}
+                      {dashboardStats.pendingLeaves > 0 && (
+                        <div className="p-3 border-b border-gray-100 hover:bg-gray-50">
+                          <div className="flex items-start space-x-3">
+                            <Calendar className="w-5 h-5 text-blue-500 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900">
+                                {dashboardStats.pendingLeaves} pending leave requests
+                              </p>
+                              <p className="text-xs text-gray-500">Require your approval</p>
+                            </div>
+                            <Badge variant="secondary">{dashboardStats.pendingLeaves}</Badge>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Overdue Reviews */}
+                      {dashboardStats.overdueReviews > 0 && (
+                        <div className="p-3 border-b border-gray-100 hover:bg-gray-50">
+                          <div className="flex items-start space-x-3">
+                            <AlertTriangle className="w-5 h-5 text-orange-500 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900">
+                                {dashboardStats.overdueReviews} overdue performance reviews
+                              </p>
+                              <p className="text-xs text-gray-500">Need to be completed</p>
+                            </div>
+                            <Badge variant="destructive">{dashboardStats.overdueReviews}</Badge>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Upcoming Birthdays */}
+                      {dashboardStats.upcomingBirthdays > 0 && (
+                        <div className="p-3 border-b border-gray-100 hover:bg-gray-50">
+                          <div className="flex items-start space-x-3">
+                            <Award className="w-5 h-5 text-green-500 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900">
+                                {dashboardStats.upcomingBirthdays} upcoming birthdays
+                              </p>
+                              <p className="text-xs text-gray-500">This week</p>
+                            </div>
+                            <Badge variant="outline">{dashboardStats.upcomingBirthdays}</Badge>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* New Hires */}
+                      {dashboardStats.newHiresThisMonth > 0 && (
+                        <div className="p-3 border-b border-gray-100 hover:bg-gray-50">
+                          <div className="flex items-start space-x-3">
+                            <UserPlus className="w-5 h-5 text-blue-500 mt-0.5" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-gray-900">
+                                {dashboardStats.newHiresThisMonth} new hires this month
+                              </p>
+                              <p className="text-xs text-gray-500">Welcome them to the team</p>
+                            </div>
+                            <Badge variant="outline">{dashboardStats.newHiresThisMonth}</Badge>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* No notifications */}
+                      {(dashboardStats.pendingLeaves + dashboardStats.overdueReviews + dashboardStats.upcomingBirthdays) === 0 && (
+                        <div className="p-6 text-center text-gray-500">
+                          <CheckCircle className="w-12 h-12 mx-auto mb-2 text-green-500" />
+                          <p className="text-sm">All caught up!</p>
+                          <p className="text-xs">No pending notifications</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-3 border-t border-myanmar-red/20">
+                      <Link to="/notifications" className="text-xs text-myanmar-red hover:underline">
+                        View all notifications
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
