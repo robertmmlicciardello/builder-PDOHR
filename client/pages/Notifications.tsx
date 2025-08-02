@@ -218,7 +218,7 @@ export default function Notifications() {
 
               <div className="flex space-x-2">
                 <Button variant="outline" size="sm">
-                  <MarkAsRead className="w-4 h-4 mr-2" />
+                  <Check className="w-4 h-4 mr-2" />
                   Mark All Read
                 </Button>
                 <Button variant="outline" size="sm">
