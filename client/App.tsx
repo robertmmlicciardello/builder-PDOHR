@@ -34,6 +34,7 @@ import NotFound from "./pages/NotFound";
 import GovernmentPayScaleManagement from "./pages/GovernmentPayScaleManagement";
 import ServiceRecordManagement from "./pages/ServiceRecordManagement";
 import ApprovalWorkflowManagement from "./pages/ApprovalWorkflowManagement";
+import Notifications from "./pages/Notifications";
 import { ProtectedRoute } from "./components/SecurityWrapper";
 
 const queryClient = new QueryClient();
