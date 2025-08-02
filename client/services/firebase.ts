@@ -73,10 +73,10 @@ try {
 
 export { auth, db };
 
-// Collection references
-export const personnelCollection = collection(db, "personnel");
-export const auditLogsCollection = collection(db, "auditLogs");
-export const settingsCollection = collection(db, "settings");
+// Collection references with null checks
+export const personnelCollection = db ? collection(db, "personnel") : null;
+export const auditLogsCollection = db ? collection(db, "auditLogs") : null;
+export const settingsCollection = db ? collection(db, "settings") : null;
 
 // Authentication services
 export class AuthService {
