@@ -7,6 +7,8 @@ import {
   DEFAULT_ORGANIZATIONS,
   PersonnelStatus,
   getStatusInEnglish,
+  Organization,
+  Rank,
 } from "@shared/personnel";
 import { TerminationReason } from "../../shared/hr-system";
 import { Button } from "../components/ui/button";
@@ -48,8 +50,35 @@ export default function PersonnelForm() {
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [ranks, setRanks] = useState<Rank[]>([]);
 
   useEffect(() => {
+    // Load organizations and ranks from localStorage (Settings)
+    const savedOrgs = localStorage.getItem("pdf-organizations");
+    const savedRanks = localStorage.getItem("pdf-ranks");
+
+    const loadedOrganizations = savedOrgs
+      ? JSON.parse(savedOrgs)
+      : DEFAULT_ORGANIZATIONS.map((org, index) => ({
+          ...org,
+          id: `org-${index + 1}`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
+
+    const loadedRanks = savedRanks
+      ? JSON.parse(savedRanks)
+      : DEFAULT_RANKS.map((rank, index) => ({
+          ...rank,
+          id: `rank-${index + 1}`,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        }));
+
+    setOrganizations(loadedOrganizations);
+    setRanks(loadedRanks);
+
     if (isEditing && id) {
       const existing = state.personnel.find((p) => p.id === id);
       if (existing) {
@@ -280,8 +309,8 @@ export default function PersonnelForm() {
                       <SelectValue placeholder="Select organization" />
                     </SelectTrigger>
                     <SelectContent>
-                      {DEFAULT_ORGANIZATIONS.map((org) => (
-                        <SelectItem key={org.name} value={org.name}>
+                      {organizations.map((org) => (
+                        <SelectItem key={org.id} value={org.name}>
                           {org.name}
                         </SelectItem>
                       ))}
@@ -346,8 +375,8 @@ export default function PersonnelForm() {
                       <SelectValue placeholder="Select rank" />
                     </SelectTrigger>
                     <SelectContent>
-                      {DEFAULT_RANKS.map((rank) => (
-                        <SelectItem key={rank.name} value={rank.name}>
+                      {ranks.map((rank) => (
+                        <SelectItem key={rank.id} value={rank.name}>
                           {rank.name}
                         </SelectItem>
                       ))}
