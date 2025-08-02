@@ -111,6 +111,11 @@ export class AuthService {
   }
 
   static async signOut(): Promise<void> {
+    if (!auth) {
+      console.warn("Firebase not available for sign out");
+      return;
+    }
+
     try {
       await signOut(auth);
     } catch (error: any) {
@@ -121,6 +126,12 @@ export class AuthService {
   static onAuthStateChange(
     callback: (user: AuthUser | null) => void,
   ): () => void {
+    if (!auth) {
+      // Return empty unsubscribe function if Firebase not available
+      callback(null);
+      return () => {};
+    }
+
     return onAuthStateChanged(auth, async (user: User | null) => {
       if (user) {
         try {
