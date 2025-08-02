@@ -58,7 +58,7 @@ const initialState: AppState = {
     { id: "4", name: "ဒုတပ်မှူး", order: 4 },
     { id: "5", name: "တပ်မှူး", order: 5 },
     { id: "6", name: "အရာရှိ", order: 6 },
-    { id: "7", name: "တာ���န်ခံ", order: 7 },
+    { id: "7", name: "တာဝန်ခံ", order: 7 },
   ],
   organizations: [
     { id: "1", name: "ပ���ဖ နည်းပညာလက်ရုံးတပ်", type: "headquarters" },
@@ -129,6 +129,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Initialize encryption
     EncryptionService.initialize();
+
+    // Load sample data for demo
+    loadSampleData();
 
     // Load saved data for offline support
     loadOfflineData();
